@@ -1,0 +1,5 @@
+#include "%POUND_INCL%"
+
+%NAMESPACE%
+
+%CLASS_NAME%

@@ -19,7 +19,7 @@ function! MakeTemplate()
     "call system("cp ~/.vim/bundle/vim-template/templates/t.cpp " . getcwd() . "./src/". template_relative_path . "/" . template_filename_stub . ".cpp")
 
     let template_cwd=getcwd()
-    let template_vim_path="~/.vim/bundle/vim-template/templates/"
+    let template_vim_path="~/.vim/bundle/vim-magic-template/templates/"
 
     execute "tabnew " . template_cwd . "/src/" . template_relative_path . "/" . template_filename_stub . ".cpp"
     execute "r " . template_vim_path . "t.cpp"

@@ -1,5 +1,19 @@
-%INCL_GUARD%
+#ifndef %INCL_GUARD%
+#define %INCL_GUARD%
 
-%NAMESPACE%
+namespace %NAMESPACE%{
 
-%CLASS_NAME%
+/* %CLASS_NAME%
+ *  ...
+ */
+class %CLASS_NAME%{
+public:
+    %CLASS_NAME%();
+
+private:
+    // ...
+};
+
+}//end namespace %NAMESPACE%
+
+#endif //%INCL_GUARD%

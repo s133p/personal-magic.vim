@@ -5,7 +5,7 @@
 "  = src/test/folder/my_awesome_class.h
 "    src/test/folder/my_awesome_class.cpp
 "    header guard: _VOID_ENGINE_TEST_FOLDER_MY_AWESOME_HEADER_H_
-function! MakeTemplate()
+function! MakeCppTemplate()
     let template_relative_path=input("Path> src/")
     let template_namespace=input("namespace> ")
     let template_class_name=input("ClassName> ")
@@ -41,4 +41,40 @@ function! MakeTemplate()
     execute "w"
 endfunction
 " }}}
-nnoremap <leader>z :call MakeTemplate()<cr>
+"nnoremap <leader>z :call MakeCppTemplate()<cr>
+
+
+
+" MAKE_HTML_NOTES {{{
+function! MakeHtmlPreview()
+    let template_vim_path="~/.vim/bundle/vim-magic-template/templates/"
+    let personal_notes_path="~/Dropbox/vim-notes/"
+    let personal_notes_files=split(globpath(personal_notes_path, "**/*.md"), '\n')
+    
+    call system("cp " . template_vim_path . "header.html " . personal_notes_path . "index.html" )
+
+    "Table of Contents
+    call system("echo \"<div class='toc'><h1>TOC<\/h1>\" >> " . personal_notes_path . "index.html")
+    for p_file in personal_notes_files
+       let shortname=substitute(p_file, "\\v\/(.+\/)(.+\..+)", "\\2", "g")
+       let toc_link="<a href='#" . shortname .  "'>" . shortname . "</a><br>"
+       call system("echo '". toc_link . "' >> " . personal_notes_path . "index.html")
+    endfor
+    call system("echo \"<\/div>\" >> " . personal_notes_path . "index.html")
+
+
+    "Each 'post'
+    for p_file in personal_notes_files
+       let shortname=substitute(p_file, "\\v\/(.+\/)(.+\..+)", "\\2", "g")
+       let post="<div class='content' id='" .shortname . "'>"
+       call system("echo '". post . "' >> " . personal_notes_path . "index.html")
+       call system("markdown " . personal_notes_path . shortname . " >> " .personal_notes_path . "index.html")
+       call system("echo \"<\/div>\" >> " . personal_notes_path . "index.html")
+    endfor
+
+    "Cap it all off w/ the footer
+    call system("cat " . template_vim_path . "footer.html >> " . personal_notes_path . "index.html" )
+
+endfunction
+" }}}
+nnoremap <leader>z :call MakeHtmlPreview()<cr>

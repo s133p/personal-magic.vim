@@ -12,7 +12,7 @@
 
 namespace %NAMESPACE%{
 
-**CLASSNAME**::**CLASSNAME**(Globals& g)
+%CLASSNAME%::%CLASSNAME%(Globals& g)
 	: ds::ui::Sprite(g.mEngine)
 	, mGlobals(g)
 	, mEventClient(g.mEngine.getNotifier(), [this](const ds::Event *m){ if(m) this->onAppEvent(*m); })
@@ -20,7 +20,7 @@ namespace %NAMESPACE%{
 	animateOn();
 }
 
-void **CLASSNAME**::onAppEvent(const ds::Event& in_e){
+void %CLASSNAME%::onAppEvent(const ds::Event& in_e){
 	if(in_e.mWhat == IdleEndedEvent::WHAT()){
 		const IdleEndedEvent& e((const IdleEndedEvent&)in_e);
 		animateOn();
@@ -29,10 +29,10 @@ void **CLASSNAME**::onAppEvent(const ds::Event& in_e){
 	}
 }
 
-void **CLASSNAME**::layout(){
+void %CLASSNAME%::layout(){
 }
 
-void **CLASSNAME**::animateOn(){
+void %CLASSNAME%::animateOn(){
 	show();
 	tweenOpacity(1.0f, mGlobals.getAnimDur());
 
@@ -40,11 +40,11 @@ void **CLASSNAME**::animateOn(){
 	//tweenAnimateOn(true, 0.0f, 0.05f);
 }
 
-void **CLASSNAME**::animateOff(){
+void %CLASSNAME%::animateOff(){
 	tweenOpacity(0.0f, mGlobals.getAnimDur(), 0.0f, ci::EaseNone(), [this]{hide(); });
 }
 
-void **CLASSNAME**::updateServer(const ds::UpdateParams& p){
+void %CLASSNAME%::updateServer(const ds::UpdateParams& p){
 	ds::ui::Sprite::updateServer(p);
 
 	// any changes for this frame happen here

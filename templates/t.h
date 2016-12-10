@@ -5,17 +5,17 @@
 #include <ds/ui/sprite/sprite.h>
 #include <ds/app/event_client.h>
 
-namespace %NAMESPACE%{
+namespace %NAMESPACE% {
 
 class Globals;
 
-/**
-* \class %NAMESPACE%::%CLASSNAME%
-*
-*/
-class **CLASSNAME** final : public ds::ui::Sprite  {
+/*
+ * \class %NAMESPACE%::%CLASSNAME%
+ *
+ */
+class %CLASSNAME% final : public ds::ui::Sprite  {
 public:
-	**CLASSNAME**(Globals& g);
+	%CLASSNAME%(Globals& g);
 
 private:
 	void								onAppEvent(const ds::Event&);

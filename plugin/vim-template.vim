@@ -29,14 +29,14 @@ function! MakeTemplate()
 
     execute "%s\/%INCL_GUARD%\/" . template_header_guard . "\/g"
     execute "%s\/%NAMESPACE%\/" . template_namespace . "\/g"
-    execute "%s\/%CLASS_NAME%\/" . template_class_name . "\/g"
+    execute "%s\/%CLASSNAME%\/" . template_class_name . "\/g"
     execute "normal! ggdd"
     execute "w"
 
     execute "normal gs"
     execute "%s\/%POUND_INCL%\/" . template_filename_stub . ".h" . "\/g"
     execute "%s\/%NAMESPACE%\/" . template_namespace . "\/g"
-    execute "%s\/%CLASS_NAME%\/" . template_class_name . "\/g"
+    execute "%s\/%CLASSNAME%\/" . template_class_name . "\/g"
     execute "normal! ggdd"
     execute "w"
 endfunction

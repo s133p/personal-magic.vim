@@ -1,19 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 
 <head>
     <title>Void Engine</title>
+    <!-- gruvbox colors:
+        Background: #262626
+        Powder blue: #88afaf
+        Orange bright: #fd8724
+        Orange light: #f5ab2b
+        Status bar: #4e4e4e
+        Salmon: #cc5a57
+        Powder pink: #b87fa0
+        "White": #dbc9ad
+        ebceb4
+        light grey: #949494
+        Green: ada823
+
+        font-family: Raleway;
+    -->
+
     <style type="text/css">
         body {
             margin: 40px auto;
             max-width: 860px;
             line-height: 1.6;
-            font-size: 16px;
-            color: #444;
+            font-size: 15px;
+            letter-spacing: 1px;
+            color: #fed7b1;
             padding: 0 10px;
-            font-family: sans-serif;
+            font-family: Raleway, Helvetica Neue, Helvetica, sans-serif;
+            font-weight: 300;
+            background-color: #262626;
         }
         .toc {
-            background-color: #eeeeee;
+            background-color: rgba(128,128,128, .1);
             padding-right: 40px;
             padding-left: 40px;
             padding-top: 20px;
@@ -24,12 +45,17 @@
             width: auto;
         }
         .toc a {
-            color: #145;
+            color: #88afaf;
             padding-left: 40px;
             padding-top: 8px;
+            font-size: 18px;  
+        }
+        a {
+            color: #88afaf;
+            text-decoration: none;
         }
         .content {
-            background-color: #eeeeee;
+            background-color: rgba(128,128,128, .1);
             padding-right: 40px;
             padding-left: 40px;
             padding-top: 20px;
@@ -37,39 +63,40 @@
             padding-bottom: 20px;
             width: auto;
         }
-        a {
-            text-decoration: none;
-            font-size: 18px;
-        }
-        h1, h2, h3 {
-            line-height: 1.2
-        }
         code {
             font-family: monospace;
             font-size: 14px;
             padding: 2px;
-            background-color: #ffffff;
+            background-color: #cccccc;
+            color: #222222;
         }
         pre {
-            background-color: #ffffff;
+            color: #222222;
+            background-color: #cccccc;
             display: block;
             padding: 10px 20px;
-            border-left: solid 5px #ddd;
         }
         img {
             width: 610px;
         }
+        h1, h2, h3, h4 {
+            padding-left: 12px;
+        }
         h1, h2 {
-            background: #ddd;
+            font-weight: 200;
+            background: #262626;
             padding: 5px 12px;
-            10px;
-            border-right: solid 10px #bbb;
+            border-right: solid 8px #d56061;
+            border-bottom: dashed 1px #d56061;
         }
         ul {
             list-style-type: circle;
         }
         li>ul {
             list-style-type: circle;
+        }
+        div>p {
+            padding-left: 22px;
         }
     </style>
 

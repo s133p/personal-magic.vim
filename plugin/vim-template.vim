@@ -33,7 +33,7 @@ function! MakeCppTemplate()
     execute "normal! ggdd"
     execute "w"
 
-    execute "normal gs"
+    execute "normal gww"
     execute "%s\/%POUND_INCL%\/" . template_filename_stub . ".h" . "\/g"
     execute "%s\/%NAMESPACE%\/" . template_namespace . "\/g"
     execute "%s\/%CLASSNAME%\/" . template_class_name . "\/g"

@@ -33,6 +33,7 @@
             font-weight: 300;
             background-color: #262626;
         }
+
         .toc {
             background-color: rgba(128,128,128, .1);
             padding-right: 40px;
@@ -48,7 +49,7 @@
             color: #88afaf;
             padding-left: 40px;
             padding-top: 8px;
-            font-size: 18px;  
+            font-size: 18px;
         }
         a {
             color: #88afaf;
@@ -67,12 +68,12 @@
             font-family: monospace;
             font-size: 14px;
             padding: 2px;
-            background-color: #cccccc;
-            color: #222222;
+            background-color: #443939;
+            color: #cee;
         }
         pre {
-            color: #222222;
-            background-color: #cccccc;
+            color: #cee;
+            background-color: #443939;
             display: block;
             padding: 10px 20px;
         }
@@ -80,26 +81,63 @@
             width: 610px;
         }
         h1, h2, h3, h4 {
-            padding-left: 12px;
-        }
-        h1, h2 {
             font-weight: 200;
             background: #262626;
             padding: 5px 12px;
-            border-right: solid 8px #d56061;
+            margin-left: 12px;
+            border-top: dashed 1px #d56061;
+            /* border-left: solid 12px #262626; */
+        }
+        h1 {
+            text-align: center;
+            margin-left: 0px;
+            border-right: solid 12px #d56061;
+            border-left: solid 12px #d56061;
             border-bottom: dashed 1px #d56061;
         }
+        h3, h4, h5 {
+            width: 90%;
+        }
+        h2 {
+            margin-left: 0px;
+            border-left: solid 8px #d56061;
+        } hr {
+            width: 90%;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            border-color: #d56061;
+        }
         ul {
-            list-style-type: circle;
+            margin-bottom: 20px;
+            /* list-style-type: circle; */
         }
         li {
-            line-height: 1.8em;
+            /* line-height: 1.8em; */
+            padding: 3px;
+            padding-left: 8px;
+            width: 90%;
         }
-        li>ul {
-            list-style-type: circle;
+        li p {
+            padding-left: 16px;
+            width: 45%;
+        }
+        ul>li:nth-child(odd) {
+            background-color: rgba(20,20,20, .1);
+        }
+
+        ul>li:nth-child(even) {
+            background-color: rgba(0,0,0, .175);
         }
         div>p {
             padding-left: 22px;
+        }
+        strong {
+            color: #ada823;
+        }
+        blockquote {
+            text-align: center;
+            width: 70%;
+            margin: auto;
         }
     </style>
 

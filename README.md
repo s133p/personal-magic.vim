@@ -1,7 +1,7 @@
 # vim-magic-template
-A personal Vim plugin for C++ templates
+A personal Vim plugin for C++ templates ( And quickly becoming the vim-magic-suite )
 
-## Short description
+## Short description (Outdated!)
 
 This plugin defines a mapping for <leader>z that asks for a *file-path* (relative to ./src/), a *namespace*, and a *class name*. 
 Those parameters are then used to generate a .cpp and .h in the directory specified

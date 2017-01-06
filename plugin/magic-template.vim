@@ -50,17 +50,17 @@ function! MakeHtmlPreview()
     let template_vim_path="~/.vim/bundle/vim-magic-template/templates/"
     let personal_notes_path="~/Dropbox/vim-notes/"
     let personal_notes_files=split(globpath(personal_notes_path, "**/*.md"), '\n')
-    
+
     call system("cp " . template_vim_path . "header.html " . personal_notes_path . "index.html" )
 
     "Table of Contents
-    call system("echo \"<div class='toc'><h1>TOC<\/h1>\" >> " . personal_notes_path . "index.html")
+    call system("echo \"<div class='toc'><h1>vim-notes<\/h1>\" >> " . personal_notes_path . "index.html")
     for p_file in personal_notes_files
        let shortname=substitute(p_file, "\\v\/(.+\/)(.+\..+)", "\\2", "g")
        let toc_link="<a href='#" . shortname .  "'>" . shortname . "</a><br>"
        call system("echo '". toc_link . "' >> " . personal_notes_path . "index.html")
     endfor
-    call system("echo \"<\/div>\" >> " . personal_notes_path . "index.html")
+    call system("echo \"<\/div><div id=\\\"contentholder\\\">\" >> " . personal_notes_path . "index.html")
 
 
     "Each 'post'
@@ -77,4 +77,4 @@ function! MakeHtmlPreview()
 
 endfunction
 " }}}
-nnoremap <leader>z :call MakeHtmlPreview()<cr>
+"nnoremap <leader>z :call MakeHtmlPreview()<cr>

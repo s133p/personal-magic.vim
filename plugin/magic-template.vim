@@ -9,14 +9,15 @@ function! MakeCppTemplate()
     let template_relative_path=input("Path> src/")
     let template_namespace=input("namespace> ")
     let template_class_name=input("ClassName> ")
-    " let template_relative_path="src/".template_relative_path
-    echo "\r"
-    "echo template_relative_path
+
     let template_header_guard=toupper("_" . template_namespace . "_" . substitute(template_relative_path, "\/", "_", "g") . "_" . substitute(template_class_name, "\\v\\C([a-z])([A-Z])", "\\1_\\2", "g") . "_H_")
     let template_filename_stub=tolower( substitute(template_class_name, "\\v\\C([a-z])([A-Z])", "\\L\\1_\\2", "g") )
-    call system("mkdir -p ./src/". template_relative_path)
-    "call system("cp ~/.vim/bundle/vim-template/templates/t.h " . getcwd() . "/src/". template_relative_path . "/" . template_filename_stub . ".h")
-    "call system("cp ~/.vim/bundle/vim-template/templates/t.cpp " . getcwd() . "./src/". template_relative_path . "/" . template_filename_stub . ".cpp")
+
+    if has("osx")
+        call system("mkdir -p ./src/". template_relative_path)
+    elseif has("win32")
+        call system("mkdir src/" . template_relative_path)
+    endif
 
     let template_cwd=getcwd()
     let template_vim_path="~/.vim/bundle/vim-magic-template/templates/"
@@ -41,7 +42,6 @@ function! MakeCppTemplate()
     execute "w"
 endfunction
 " }}}
-"nnoremap <leader>z :call MakeCppTemplate()<cr>
 
 
 

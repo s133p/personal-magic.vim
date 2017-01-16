@@ -13,7 +13,7 @@ function! MakeCppTemplate()
     let template_header_guard=toupper("_" . template_namespace . "_" . substitute(template_relative_path, "\/", "_", "g") . "_" . substitute(template_class_name, "\\v\\C([a-z])([A-Z])", "\\1_\\2", "g") . "_H_")
     let template_filename_stub=tolower( substitute(template_class_name, "\\v\\C([a-z])([A-Z])", "\\L\\1_\\2", "g") )
 
-    if has("osx")
+    if has("mac")
         call system("mkdir -p ./src/". template_relative_path)
     elseif has("win32")
         call system("mkdir src/" . template_relative_path)

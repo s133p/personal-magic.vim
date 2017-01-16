@@ -4,16 +4,16 @@ function! MagicCallback(job, status)
     endif
     let currentWin = winnr()
     exe currentWin . "wincmd w"
-    let g:mahJob=""
+    let s:mahJob=""
 endfunction
 
 function! OutHandler(job, message)
     caddexpr a:message
 endfunction
 
-function! MagicRemote( command )
-    if exists("g:mahJob") && g:mahJob != ""
-        echo "Build already running"
+function! MagicJob( command )
+    if exists("s:mahJob") && s:mahJob != ""
+        echo "MagicJob already running"
         return
     endif
     let finalcmd = a:command
@@ -23,7 +23,8 @@ function! MagicRemote( command )
     let opts["out_cb"]=function('OutHandler')
     let opts["err_cb"]=function('OutHandler')
     let opts['exit_cb']=function('MagicCallback')
-    let g:mahJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
+    let s:mahJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
+    echo "MagicJob: ". finalcmd
 
 
     call setqflist([], 'r')
@@ -34,5 +35,5 @@ function! MagicRemote( command )
     exe currentWin . "wincmd w"
 endfunction
 
-" nnoremap <leader>z :call MagicRemote("make")<cr>
-" nnoremap <leader>Z :call MagicRemote("make release")<cr>
+" nnoremap <leader>z :call MagicJob("make")<cr>
+" nnoremap <leader>Z :call MagicJob("make release")<cr>

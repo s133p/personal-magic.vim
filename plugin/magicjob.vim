@@ -31,7 +31,8 @@ function! MagicJob( command )
     let currentWin = winnr()
     let g:mahErrorFmt=&efm
     exec 'copen'
-    exe "set efm=" . substitute(g:mahErrorFmt, '\s', '\\\0', 'g')
+    " exe "set efm=" . substitute(g:mahErrorFmt, '\s', '\\\0', 'g')
+    exe "set efm=" . escape(g:mahErrorFmt, " ")
     exe currentWin . "wincmd w"
 endfunction
 

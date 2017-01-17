@@ -24,7 +24,7 @@ function! MagicJobKill()
     endif
 endfunction
 
-function! MagicJob( command )
+function! MagicJob( command, useEfm )
     if exists("s:mahJob") && s:mahJob != ""
         call MagicJobKill()
     endif
@@ -43,14 +43,14 @@ function! MagicJob( command )
     let currentWin = winnr()
 
     " Not to be trusted! Specific to my usecase!
-    if has("mac")
+    if has("mac") && !exists("a:useEfm")
         let g:mahErrorFmt=&efm
     endif
 
     exec 'copen'
 
     " Not to be trusted! Specific to my usecase!
-    if has("mac")
+    if has("mac") && !exists("a:useEfm")
         exe "set efm=" . escape(g:mahErrorFmt, " \\")
     endif
 

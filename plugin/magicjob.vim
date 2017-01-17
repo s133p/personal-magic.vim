@@ -1,9 +1,12 @@
 function! MagicCallback(job, status)
     if a:status == 0
         exec "cclose"
+    else
+        let currentWin = winnr()
+        exec 'copen'
+        exec 'normal! G'
+        exe currentWin . "wincmd w"
     endif
-    let currentWin = winnr()
-    exe currentWin . "wincmd w"
     let s:mahJob=""
 endfunction
 
@@ -11,10 +14,19 @@ function! OutHandler(job, message)
     caddexpr a:message
 endfunction
 
+function! MagicJobKill()
+    if exists("s:mahJob") && s:mahJob != ""
+        echo "Killing running Job"
+        call job_stop(s:mahJob)
+        let s:mahJob=""
+    else
+        echo "No running job"
+    endif
+endfunction
+
 function! MagicJob( command )
     if exists("s:mahJob") && s:mahJob != ""
-        echo "MagicJob already running"
-        return
+        call MagicJobKill()
     endif
     let finalcmd = a:command
     let opts = {}
@@ -29,10 +41,10 @@ function! MagicJob( command )
 
     call setqflist([], 'r')
     let currentWin = winnr()
-    let g:mahErrorFmt=&efm
+    " let g:mahErrorFmt=&efm
     exec 'copen'
     " exe "set efm=" . substitute(g:mahErrorFmt, '\s', '\\\0', 'g')
-    exe "set efm=" . escape(g:mahErrorFmt, " ")
+    " exe "set efm=" . escape(g:mahErrorFmt, " \\")
     exe currentWin . "wincmd w"
 endfunction
 

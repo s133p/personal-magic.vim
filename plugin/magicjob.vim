@@ -41,10 +41,19 @@ function! MagicJob( command )
 
     call setqflist([], 'r')
     let currentWin = winnr()
-    " let g:mahErrorFmt=&efm
+
+    " Not to be trusted! Specific to my usecase!
+    if has("mac")
+        let g:mahErrorFmt=&efm
+    endif
+
     exec 'copen'
-    " exe "set efm=" . substitute(g:mahErrorFmt, '\s', '\\\0', 'g')
-    " exe "set efm=" . escape(g:mahErrorFmt, " \\")
+
+    " Not to be trusted! Specific to my usecase!
+    if has("mac")
+        exe "set efm=" . escape(g:mahErrorFmt, " \\")
+    endif
+
     exe currentWin . "wincmd w"
 endfunction
 

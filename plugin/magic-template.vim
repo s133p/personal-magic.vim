@@ -77,4 +77,3 @@ function! MakeHtmlPreview()
 
 endfunction
 " }}}
-"nnoremap <leader>z :call MakeHtmlPreview()<cr>

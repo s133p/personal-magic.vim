@@ -18,6 +18,7 @@ function! MagicJobKill()
     if exists("s:mahJob") && s:mahJob != ""
         echo "Killing running Job"
         call job_stop(s:mahJob)
+        sleep 1
         let s:mahJob=""
     else
         echo "No running job"

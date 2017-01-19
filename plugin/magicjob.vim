@@ -66,5 +66,7 @@ function! MagicJob( command, useEfm )
     exe currentWin . "wincmd w"
 endfunction
 
+command! -nargs=1 -complete=shellcmd MagicJob call MagicJob(<q-args> . "; return 1", 0)
+command! -nargs=1 -complete=shellcmd J call MagicJob(<q-args> . "; return 1", 0)
 " nnoremap <leader>z :call MagicJob("make")<cr>
 " nnoremap <leader>Z :call MagicJob("make release")<cr>

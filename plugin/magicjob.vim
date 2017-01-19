@@ -25,6 +25,14 @@ function! MagicJobKill()
     endif
 endfunction
 
+function! MagicJobInfo()
+    if exists("s:mahJob") && s:mahJob != ""
+        echo "MagicJob Status: " . job_status(s:mahJob)
+    else
+        echo "No running job"
+    endif
+endfunction
+
 function! MagicJob( command, useEfm )
     if exists("s:mahJob") && s:mahJob != ""
         call MagicJobKill()

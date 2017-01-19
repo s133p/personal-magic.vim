@@ -71,14 +71,10 @@ function! MagicJob( command, useEfm )
 endfunction
 
 function! MagicBufferCallback(job, status)
-    " if a:status == 0
-    "     exec "cclose"
-    " else
-    "     let currentWin = winnr()
-    "     exec 'copen'
-    "     exec 'normal! G'
-    "     exe currentWin . "wincmd w"
-    " endif
+    if a:status == 0
+        let outBuf = bufnr("MagicOutput")
+        silent exe "bd " . outBuf
+    endif
     let s:mahJob=""
 endfunction
 
@@ -136,5 +132,5 @@ function! MagicBufferJob(command)
     exe currentWin . "wincmd w"
 endfunction
 
-command! -nargs=1 -complete=shellcmd MagicJob call MagicBufferJob(<q-args> . "; return 1")
-command! -nargs=1 -complete=shellcmd J call MagicBufferJob(<q-args> . "; return 1")
+command! -nargs=1 -bang -complete=shellcmd MagicJob call MagicBufferJob('<bang>' != '!' ? <q-args>  : <q-args> . ";return 1")
+command! -nargs=1 -bang -complete=shellcmd J call MagicBufferJob('<bang>' != '!' ? <q-args>  : <q-args> . ";return 1")

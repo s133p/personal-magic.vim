@@ -93,7 +93,7 @@ function! MagicCompile(isRelease)
         let l:configuration = "/p:Configuration=" . l:mode
         let l:flags = "/m /verbosity:quiet /nologo"
 
-        exe "call MagicJob(\"" . &makeprg ." ". l:solution ." ".  l:configuration ." ". l:flags ."\", 1)"
+        exe "call MagicJob(\"" . &makeprg ." ". l:solution ." ".  l:configuration ." ". l:flags ."\", 0)"
 
         " Set s:magicToRun to the run correct version of app
         let l:appPath = expand(getcwd() . "/vs2013/". l:mode ."/".  split(getcwd(), '/')[-1] .".exe")
@@ -105,5 +105,5 @@ function! MagicCompile(isRelease)
 endfunction
 
 function! MagicCompileRun()
-    call MagicJob(s:magicToRun, 0)
+    call MagicBufferJob(s:magicToRun)
 endfunction

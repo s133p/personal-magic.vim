@@ -72,7 +72,7 @@ function! MagicCompile(isRelease)
         let l:mode = a:isRelease ? "Release" : "Debug"
         exe "call MagicJob(\"" . &makeprg . " ". l:mode ."\", 1)"
 
-        " Set g:magicToRun to the run correct version of app
+        " Set s:magicToRun to the run correct version of app
         let l:appPath = expand(getcwd() . "/xcode/build/". l:mode ."/*.app")
         let l:appName = substitute( l:appPath, "\\v^.{-}([a-zA-Z_0-9]+)\.app", "\\1", "g")
 
@@ -80,7 +80,7 @@ function! MagicCompile(isRelease)
         let l:runSleep = a:isRelease ? "1" : "2"
         let l:runBG = "osascript  -e 'delay ". l:runSleep ."' -e 'tell application \"" .  l:appName ."\" to activate' &;"
 
-        let g:magicToRun = l:runBG . l:runFG
+        let s:magicToRun = l:runBG . l:runFG
 
     elseif has("win32")
         " Compiles a visual studio project in the dsCinder folder structure
@@ -95,11 +95,15 @@ function! MagicCompile(isRelease)
 
         exe "call MagicJob(\"" . &makeprg ." ". l:solution ." ".  l:configuration ." ". l:flags ."\", 1)"
 
-        " Set g:magicToRun to the run correct version of app
+        " Set s:magicToRun to the run correct version of app
         let l:appPath = expand(getcwd() . "/vs2013/". l:mode ."/".  split(getcwd(), '/')[-1] .".exe")
         let l:appName = substitute( l:appPath, "\\v^.{-}([a-zA-Z]+)\.exe", "\\1", "g")
 
         let l:runBG = l:appPath
-        let g:magicToRun = l:runBG
+        let s:magicToRun = l:runBG
     endif
+endfunction
+
+function! MagicCompileRun()
+    call MagicJob(s:magicToRun, 0)
 endfunction

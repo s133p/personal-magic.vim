@@ -120,15 +120,15 @@ function! MagicBufferJob(command)
 
     if bufnr("MagicOutput") == -1
         new MagicOutput
-        setlocal buftype=nofile
-        setlocal bufhidden=delete
-        setlocal noswapfile
     elseif bufwinnr("MagicOutput") != -1
         exe bufwinnr("MagicOutput") . "wincmd w"
     elseif bufwinnr("MagicOutput") == -1
         split
         exe "b " . bufnr("MagicOutput")
     endif
+    setlocal buftype=nofile
+    setlocal bufhidden=delete
+    setlocal noswapfile
 
     resize 12
     silent exe "%d"

@@ -2,16 +2,20 @@
 " otherwise changes between splits
 function! TabOrSwitch( shifted )
     if a:shifted
-        let cmd1 = "wincmd W"
-        let cmd2 = ":tabprevious"
+        let wn = winnr()
+        if winbufnr(wn-1) != -1 && wn-1 != 0
+            exe "wincmd W"
+        else
+            exe ":tabprevious"
+        endif
     else
-        let cmd1 = "wincmd w"
-        let cmd2 = ":tabnext"
-    endif
-    if tabpagebuflist(2)[0] == 0
-        exe cmd1
-    else
-        exe cmd2
+        let wn = winnr()
+        if winbufnr(wn+1) != -1
+            exe "wincmd w"
+        else
+            exe ":tabnext"
+            exe "0wincmd w"
+        endif
     endif
 endfunction
 

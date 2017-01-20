@@ -1,35 +1,49 @@
 " Change between tabs when 2+ tabs are open
 " otherwise changes between splits
 function! TabOrSwitch( shifted )
-    if a:shifted
-        let wn = winnr()
-        if winbufnr(wn-1) != -1 && wn-1 != 0
-            exe "wincmd W"
-        else
-            exe ":tabprevious"
-        endif
-    else
-        let wn = winnr()
-        if winbufnr(wn+1) != -1
-            exe "wincmd w"
-        else
-            exe ":tabnext"
+    let wn = winnr()
+    let hastab = tabpagewinnr(tabpagenr()+1) != 0 || tabpagewinnr(tabpagenr()-1) != 0
+    let hassplit = ( (winbufnr(wn-1) != -1 && wn-1 != 0) || (winbufnr(wn+1) != -1) )
+
+    if hassplit
+        exe "wincmd " . (a:shifted?"W":"w")
+    elseif hastab
+        exe ":tab" . (a:shifted?"p":"n")
+        if a:shifted
             exe "0wincmd w"
         endif
+    else
+        exe ":b" . (a:shifted?"p":"n")
     endif
+
+    " if a:shifted
+    "     if winbufnr(wn-1) != -1 && wn-1 != 0
+    "         exe "wincmd W"
+    "     elseif tabpagewinnr(tabpagenr()+1) != 0 || tabpagewinnr(tabpagenr()-1) != 0
+    "         exe ":tabprevious"
+    "     else
+    "         exe "bp"
+    "     endif
+    " else
+    "     if winbufnr(wn+1) != -1
+    "         exe "wincmd w"
+    "     elseif tabpagewinnr(tabpagenr()+1) != 0 || tabpagewinnr(tabpagenr()-1) != 0
+    "         exe ":tabnext"
+    "         exe "0wincmd w"
+    "     else
+    "         exe "bn"
+    "     endif
+    " endif
 endfunction
 
 
 " Toggle quickfix visibility
 function! QuickfixToggle()
-    let cw = winnr()
     let nr = winnr("$")
     cwindow
     let nr2 = winnr("$")
     if nr == nr2
         cclose
-    else
-        exe cw . "wincmd w"
     endif
 endfunction
 
@@ -104,6 +118,22 @@ function! MagicCompile(isRelease)
     endif
 endfunction
 
+" Run the saved "run" command from last MagicCompile
 function! MagicCompileRun()
     call MagicBufferJob(s:magicToRun)
 endfunction
+
+" " Clear empty no-names
+" function! CleanIfNoName()
+"     let bnum = bufnr(expand("%"))
+"     let isCurrentNoName = (expand("%")=="")
+"     let isCurrentEmpty = (getbufline(bnum, 1, "$") == [""])
+"     if isCurrentNoName && isCurrentEmpty
+"         exe "bd " . bnum
+"     endif
+" endfunction
+"
+" augroup CleanOnLeave
+"     autocmd!
+"     autocmd BufHidden "" silent bd
+" augroup END

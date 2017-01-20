@@ -15,10 +15,6 @@ endfunction
 
 function! OutHandler(job, message)
     caddexpr a:message
-    " let currentWin = winnr()
-    " silent exec 'copen'
-    " silent exec 'normal! G'
-    " silent exe currentWin . "wincmd w"
 endfunction
 
 function! MagicJobKill()

@@ -1,21 +1,24 @@
 function! MagicCallback(job, status)
     if a:status == 0
-        exec "cclose"
+        silent exec "cclose"
     else
+        caddexpr "Done with exit status: " . a:status
         let currentWin = winnr()
-        exec 'copen'
-        exec 'normal! G'
-        exe currentWin . "wincmd w"
+        silent exec 'copen'
+        silent exe "wincmd J"
+        silent exe "resize 12"
+        silent exec 'normal! G'
+        silent exe currentWin . "wincmd w"
     endif
     let s:mahJob=""
 endfunction
 
 function! OutHandler(job, message)
     caddexpr a:message
-    let currentWin = winnr()
-    silent exec 'copen'
-    silent exec 'normal! G'
-    silent exe currentWin . "wincmd w"
+    " let currentWin = winnr()
+    " silent exec 'copen'
+    " silent exec 'normal! G'
+    " silent exe currentWin . "wincmd w"
 endfunction
 
 function! MagicJobKill()
@@ -60,7 +63,8 @@ function! MagicJob( command, useEfm )
         let s:mahErrorFmt=&efm
     endif
 
-    exec 'copen'
+    silent exec 'copen'
+    silent exec "wincmd J"
 
     " Not to be trusted! Specific to my usecase!
     if a:useEfm == 1
@@ -115,18 +119,20 @@ function! MagicBufferJob(command)
     let currentWin = winnr()
 
     if bufnr("MagicOutput") == -1
-        new MagicOutput
+        silent new MagicOutput
+        silent exe "wincmd J"
     elseif bufwinnr("MagicOutput") != -1
-        exe bufwinnr("MagicOutput") . "wincmd w"
+        silent exe bufwinnr("MagicOutput") . "wincmd w"
     elseif bufwinnr("MagicOutput") == -1
-        split
-        exe "b " . bufnr("MagicOutput")
+        silent split
+        silent exe "b " . bufnr("MagicOutput")
+        silent exe "wincmd J"
     endif
     setlocal buftype=nofile
     setlocal bufhidden=delete
     setlocal noswapfile
 
-    resize 12
+    silent resize 12
     silent exe "%d"
 
     exe currentWin . "wincmd w"

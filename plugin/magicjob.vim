@@ -2,12 +2,12 @@ function! MagicCallback(job, status)
     if a:status == 0
         silent exec "cclose"
     else
-        caddexpr "Done with exit status: " . a:status
+        echo "Done with exit status: " . a:status
         let currentWin = winnr()
         silent exec 'copen'
         silent exe "wincmd J"
         silent exe "resize 12"
-        silent exec 'normal! G'
+        " silent exec 'normal! G'
         silent exe currentWin . "wincmd w"
     endif
     let s:mahJob=""
@@ -136,3 +136,5 @@ endfunction
 
 command! -nargs=1 -bang -complete=shellcmd MagicJob call MagicBufferJob('<bang>' != '!' ? <q-args>  : <q-args> . ";return 1")
 command! -nargs=1 -bang -complete=shellcmd J call MagicBufferJob('<bang>' != '!' ? <q-args>  : <q-args> . ";return 1")
+
+command! -nargs=1 -complete=file_in_path Mgrep call MagicJob("grep -Hsni " . <q-args> . ";return 1", 0)

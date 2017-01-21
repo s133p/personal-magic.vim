@@ -20,7 +20,7 @@ function! MakeCppTemplate()
     endif
 
     let template_cwd=getcwd()
-    let template_vim_path="~/.vim/bundle/vim-magic-template/templates/"
+    let template_vim_path="~/.vim/bundle/personal-magic.vim/templates/"
 
     execute "tabnew " . template_cwd . "/src/" . template_relative_path . "/" . template_filename_stub . ".cpp"
     execute "r " . template_vim_path . "t.cpp"
@@ -47,7 +47,7 @@ endfunction
 
 " MAKE_HTML_NOTES {{{
 function! MakeHtmlPreview()
-    let template_vim_path="~/.vim/bundle/vim-magic-template/templates/"
+    let template_vim_path="~/.vim/bundle/personal-magic.vim/templates/"
     let personal_notes_path="~/Dropbox/vim-notes/"
     let personal_notes_files=split(globpath(personal_notes_path, "**/*.md"), '\n')
 

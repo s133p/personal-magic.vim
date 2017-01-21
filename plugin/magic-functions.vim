@@ -1,19 +1,20 @@
-" Change between tabs when 2+ tabs are open
-" otherwise changes between splits
+" Cycles forwared or back through splits in tab -> next tab
+" If no tabs or splits, cycles through listed buffers
 function! TabOrSwitch( shifted )
     let wn = winnr()
     let hastab = tabpagewinnr(tabpagenr()+1) != 0 || tabpagewinnr(tabpagenr()-1) != 0
-    let hassplit = ( (winbufnr(wn-1) != -1 && wn-1 != 0) || (winbufnr(wn+1) != -1) )
+    let hasLeftSplit = (winbufnr(wn-1) != -1 && wn-1 != 0)
+    let hasRightSplit = winbufnr(wn+1) != -1
 
-    if hassplit
-        exe "wincmd " . (a:shifted?"W":"w")
+    if (a:shifted && hasLeftSplit) || (!a:shifted && hasRightSplit)
+        silent exe "wincmd " . ( a:shifted?"W":"w" )
     elseif hastab
-        exe ":tab" . (a:shifted?"p":"n")
-        if a:shifted
-            exe "0wincmd w"
+        silent exe ":tab" . ( a:shifted?"p":"n" )
+        if !a:shifted
+            silent exe "0wincmd w"
         endif
     else
-        exe ":b" . (a:shifted?"p":"n")
+        silent exe ":b" . ( a:shifted?"p":"n" )
     endif
 endfunction
 
@@ -62,7 +63,7 @@ function! MagicCompile(isRelease)
         " Compiles an xcode project in the cinder folder structure (from the root of the project)
         " (requires xcpretty)
         setlocal makeprg=make
-        setlocal errorformat=[x]\ %f:%l:%c:\ %m,[x]%m
+        set errorformat=[x]\ %f:%l:%c:\ %m,[x]%m
 
         let l:mode = a:isRelease ? "Release" : "Debug"
         exe "call MagicJob(\"" . &makeprg . " ". l:mode ."\", 1)"

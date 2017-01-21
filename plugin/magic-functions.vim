@@ -15,25 +15,6 @@ function! TabOrSwitch( shifted )
     else
         exe ":b" . (a:shifted?"p":"n")
     endif
-
-    " if a:shifted
-    "     if winbufnr(wn-1) != -1 && wn-1 != 0
-    "         exe "wincmd W"
-    "     elseif tabpagewinnr(tabpagenr()+1) != 0 || tabpagewinnr(tabpagenr()-1) != 0
-    "         exe ":tabprevious"
-    "     else
-    "         exe "bp"
-    "     endif
-    " else
-    "     if winbufnr(wn+1) != -1
-    "         exe "wincmd w"
-    "     elseif tabpagewinnr(tabpagenr()+1) != 0 || tabpagewinnr(tabpagenr()-1) != 0
-    "         exe ":tabnext"
-    "         exe "0wincmd w"
-    "     else
-    "         exe "bn"
-    "     endif
-    " endif
 endfunction
 
 
@@ -121,6 +102,11 @@ endfunction
 " Run the saved "run" command from last MagicCompile
 function! MagicCompileRun()
     call MagicBufferJob(s:magicToRun)
+endfunction
+
+" Get info on what will be run w/ MagicCompileRun
+function! MagicCompileRunInfo()
+    echo "Run Cmd: ". s:magicToRun
 endfunction
 
 " " Clear empty no-names

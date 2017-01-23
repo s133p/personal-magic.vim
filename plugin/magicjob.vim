@@ -73,7 +73,7 @@ endfunction
 function! MagicBufferCallback(job, status)
     if a:status == 0
         let outBuf = bufnr("MagicOutput")
-        silent exe "bd " . outBuf
+        silent exe "close " . outBuf
     endif
     let s:mahJob=""
 endfunction
@@ -124,9 +124,8 @@ function! MagicBufferJob(command)
         silent exe "b " . bufnr("MagicOutput")
         silent exe "wincmd J"
     endif
-    setlocal buftype=nofile
-    setlocal bufhidden=delete
-    setlocal noswapfile
+    setlocal bufhidden=hide buftype=nofile nobuflisted nolist
+    setlocal noswapfile nowrap
 
     silent resize 12
     silent exe "%d"

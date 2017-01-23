@@ -4,7 +4,7 @@ function! TabOrSwitch( shifted )
     let wn = winnr()
     let hastab = tabpagewinnr(tabpagenr()+1) != 0 || tabpagewinnr(tabpagenr()-1) != 0
     let hasLeftSplit = (winbufnr(wn-1) != -1 && wn-1 != 0)
-    let hasRightSplit = winbufnr(wn+1) != -1
+    let hasRightSplit = (winbufnr(wn+1) != -1)
 
     if (a:shifted && hasLeftSplit) || (!a:shifted && hasRightSplit)
         silent exe "wincmd " . ( a:shifted?"W":"w" )

@@ -57,14 +57,16 @@ function! MagicJob( command, useEfm )
     " Not to be trusted! Specific to my usecase!
     if a:useEfm == 1
         let s:mahErrorFmt=&efm
+    elseif a:useEfm == 2
+        let s:mahErrorFmt=&grepformat
     endif
 
     silent exec 'copen'
     silent exec "wincmd J"
 
     " Not to be trusted! Specific to my usecase!
-    if a:useEfm == 1
-        exe "set efm=" . escape(s:mahErrorFmt, " \\")
+    if a:useEfm > 0
+        exe 'set efm='.escape(s:mahErrorFmt, " ")
     endif
 
     exe currentWin . "wincmd w"
@@ -136,4 +138,4 @@ endfunction
 command! -nargs=1 -bang -complete=shellcmd MagicJob call MagicBufferJob('<bang>' != '!' ? <q-args>  : <q-args> . ";return 1")
 command! -nargs=1 -bang -complete=shellcmd J call MagicBufferJob('<bang>' != '!' ? <q-args>  : <q-args> . ";return 1")
 
-command! -nargs=1 -complete=file_in_path Mgrep call MagicJob("grep -Hsni " . <q-args> . ";return 1", 0)
+command! -nargs=1 -complete=file_in_path Mgrep call MagicJob("grep -Hsni " . <q-args> . ";return 1", 2)

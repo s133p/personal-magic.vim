@@ -65,7 +65,7 @@ function! MagicJob( command, useEfm )
     silent exec "wincmd J"
 
     " Not to be trusted! Specific to my usecase!
-    if a:useEfm > 0
+    if a:useEfm != 0
         exe 'set efm='.escape(s:mahErrorFmt, " ")
     endif
 

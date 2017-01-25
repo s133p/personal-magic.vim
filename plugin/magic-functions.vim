@@ -84,10 +84,11 @@ function! MagicCompile(isRelease)
         compiler msvc
         set makeprg=msbuild
 
-        let l:solution = "./vs2013/local.sln"
+        let l:solution = "vs2013/local.sln"
         let l:mode = a:isRelease ? "Release" : "Debug"
         let l:configuration = "/p:Configuration=" . l:mode
-        let l:flags = "/m /verbosity:quiet /nologo"
+        let l:flags = "/v:q /nologo"
+        " let l:flags = "/verbosity:quiet /nologo /p:GenerateFullPaths=true"
 
         exe "call MagicJob(\"" . &makeprg ." ". l:solution ." ".  l:configuration ." ". l:flags ."\", 0)"
 

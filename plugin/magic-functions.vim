@@ -29,6 +29,12 @@ function! QuickfixToggle()
     endif
 endfunction
 
+" Clean whitespace in current file
+function! CleanWhitespace()
+    silent exe "g/^\\s\\+$/s/.\\+//"
+    silent exe "g/\\t/s/\\t/    /g"
+endfunction
+
 
 " Open personal notes dir with unite
 function! OpenPersonalNotes(type)

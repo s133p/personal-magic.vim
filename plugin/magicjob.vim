@@ -98,6 +98,23 @@ function! OutBufferHandler(job, message)
     endif
 endfunction
 
+function! MagicBufferOpen()
+    if bufnr("MagicOutput") == -1
+        silent new MagicOutput
+        silent exe "wincmd J"
+    elseif bufwinnr("MagicOutput") != -1
+        silent exe bufwinnr("MagicOutput") . "wincmd w"
+    elseif bufwinnr("MagicOutput") == -1
+        silent split
+        silent exe "b " . bufnr("MagicOutput")
+        silent exe "wincmd J"
+    endif
+    setlocal bufhidden=hide buftype=nofile nobuflisted nolist
+    setlocal noswapfile nowrap
+
+    silent resize 12
+endfunction
+
 function! MagicBufferJob(command)
     if exists("s:mahJob") && s:mahJob != ""
         call MagicJobKill()
@@ -113,23 +130,8 @@ function! MagicBufferJob(command)
     let s:mahJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
     echo "MagicJob: ". finalcmd
 
-
     let currentWin = winnr()
-
-    if bufnr("MagicOutput") == -1
-        silent new MagicOutput
-        silent exe "wincmd J"
-    elseif bufwinnr("MagicOutput") != -1
-        silent exe bufwinnr("MagicOutput") . "wincmd w"
-    elseif bufwinnr("MagicOutput") == -1
-        silent split
-        silent exe "b " . bufnr("MagicOutput")
-        silent exe "wincmd J"
-    endif
-    setlocal bufhidden=hide buftype=nofile nobuflisted nolist
-    setlocal noswapfile nowrap
-
-    silent resize 12
+    call MagicBufferOpen()
     silent exe "%d"
 
     exe currentWin . "wincmd w"

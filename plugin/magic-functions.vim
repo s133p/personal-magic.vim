@@ -28,13 +28,15 @@ function! QuickfixToggle()
         cclose
     endif
 endfunction
+command! -nargs=0 QfToggle call QuickfixToggle()
 
 " Clean whitespace in current file
 function! CleanWhitespace()
     silent exe "g/^\\s\\+$/s/.\\+//"
     silent exe "g/\\t/s/\\t/    /g"
+    silent exe "g/\\s\\+$/s/\\s\\+$//g"
 endfunction
-
+command! -nargs=0 CleanWhitespace call CleanWhitespace()
 
 " Open personal notes dir with unite
 function! OpenPersonalNotes(type)
@@ -57,9 +59,9 @@ endfunction
 " Dont try file_rec in my homedir, do file and mru instead
 function! MyUniteSpecial()
     if expand("%:p:h") == expand("~")
-        execute "UniteWithProjectDir -start-insert -no-split file"
+        execute "Unite -start-insert -no-split file"
     else
-        execute "UniteWithProjectDir -start-insert -no-split file_rec"
+        execute "Unite -start-insert -no-split file_rec"
     endif
 endfunction
 

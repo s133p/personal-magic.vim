@@ -110,26 +110,13 @@ function! MagicCompile(isRelease)
 endfunction
 
 " Run the saved "run" command from last MagicCompile
-function! MagicCompileRun()
-    call MagicBufferJob(s:magicToRun)
+" :J repeats, :J! repeats, keeping results open
+function! MagicCompileRun(...)
+    echo "MagicJob" . (a:0 > 0 ? '! ' : ' ') . s:magicToRun
+    " call MagicBufferJob(s:magicToRun)
 endfunction
 
 " Get info on what will be run w/ MagicCompileRun
 function! MagicCompileRunInfo()
-    echo "Run Cmd: ". s:magicToRun
+    exe "MagicJob! " . s:magicToRun
 endfunction
-
-" " Clear empty no-names
-" function! CleanIfNoName()
-"     let bnum = bufnr(expand("%"))
-"     let isCurrentNoName = (expand("%")=="")
-"     let isCurrentEmpty = (getbufline(bnum, 1, "$") == [""])
-"     if isCurrentNoName && isCurrentEmpty
-"         exe "bd " . bnum
-"     endif
-" endfunction
-"
-" augroup CleanOnLeave
-"     autocmd!
-"     autocmd BufHidden "" silent bd
-" augroup END

@@ -158,8 +158,11 @@ function! MagicBufferJob(...)
     exe currentWin . "wincmd w"
 endfunction
 
+" :MagicJob[!] {commands} - run {commands} showing results.
+"  Bang forces results to remain open
+"  If {commands} returns success, results are closed
+"  If {commands} returns failure, results remain open
 command! -nargs=? -bang -complete=shellcmd MagicJob call MagicBufferJob('<bang>', <q-args>)
-" command! -nargs=? -bang -complete=shellcmd J call MagicBufferJob('<bang>' != '!' ? <q-args>  : <q-args> . ";return 1")
 command! -nargs=? -bang -complete=shellcmd J call MagicBufferJob('<bang>', <q-args>)
 
 command! -nargs=1 -complete=file_in_path Mgrep call MagicJob("grep -Hsni " . <q-args> . ";return 1", 2)

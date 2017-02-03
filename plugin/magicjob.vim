@@ -73,7 +73,7 @@ function! MagicJob( command, useEfm )
 endfunction
 
 function! MagicBufferCallback(job, status)
-    if a:status == 0
+    if a:status == 0 && s:buffer_job_kill == 1
         let outBuf = bufnr("MagicOutput")
         silent exe "close " . outBuf
     endif
@@ -115,12 +115,33 @@ function! MagicBufferOpen()
     silent resize 12
 endfunction
 
-function! MagicBufferJob(command)
+function! MagicBufferJob(...)
     if exists("s:mahJob") && s:mahJob != ""
         call MagicJobKill()
     endif
 
-    let finalcmd = a:command
+    if a:2 == ''
+        if a:1 == '!'
+            let s:buffer_job_kill = 0
+        endif
+    else
+        if a:1 == '!'
+            let s:buffer_job_kill = 0
+        else
+            let s:buffer_job_kill = 1
+        endif
+    endif
+
+    if a:2 != ''
+        let finalcmd = a:2
+        let s:lastcmd = a:2
+    elseif exists('s:lastcmd')
+        let finalcmd = s:lastcmd
+    else
+        echo "No previous job"
+        return
+    endif
+
     let opts = {}
     let opts['out_io']='pipe'
     let opts['err_io']='pipe'
@@ -137,7 +158,8 @@ function! MagicBufferJob(command)
     exe currentWin . "wincmd w"
 endfunction
 
-command! -nargs=1 -bang -complete=shellcmd MagicJob call MagicBufferJob('<bang>' != '!' ? <q-args>  : <q-args> . ";return 1")
-command! -nargs=1 -bang -complete=shellcmd J call MagicBufferJob('<bang>' != '!' ? <q-args>  : <q-args> . ";return 1")
+command! -nargs=? -bang -complete=shellcmd MagicJob call MagicBufferJob('<bang>', <q-args>)
+" command! -nargs=? -bang -complete=shellcmd J call MagicBufferJob('<bang>' != '!' ? <q-args>  : <q-args> . ";return 1")
+command! -nargs=? -bang -complete=shellcmd J call MagicBufferJob('<bang>', <q-args>)
 
 command! -nargs=1 -complete=file_in_path Mgrep call MagicJob("grep -Hsni " . <q-args> . ";return 1", 2)

@@ -1,3 +1,24 @@
+" Toggle between showing & hiding tab characters
+function! ListTabToggle()
+    if &list == 0
+        return
+    endif
+
+    let currtab = split(&listchars, ',')[-1]
+
+    if !exists("s:savetab")
+        let s:savetab = currtab
+    endif
+
+    if currtab == s:savetab
+        exe "set listchars-=" . s:savetab
+        set listchars+=tab:\ \ 
+    else
+        set listchars-=tab:\ \ 
+        exe "set listchars+=" . s:savetab
+    endif
+endfunction
+
 " Cycles forwared or back through splits in tab -> next tab
 " If no tabs or splits, cycles through listed buffers
 function! TabOrSwitch( shifted )

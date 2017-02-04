@@ -112,7 +112,7 @@ endfunction
 " Run the saved "run" command from last MagicCompile
 " :J repeats, :J! repeats, keeping results open
 function! MagicCompileRun(...)
-    echo "MagicJob" . (a:0 > 0 ? '! ' : ' ') . s:magicToRun
+    exe "MagicJob" . (a:0 > 0 ? '! ' : ' ') . s:magicToRun
     " call MagicBufferJob(s:magicToRun)
 endfunction
 

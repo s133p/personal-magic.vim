@@ -32,3 +32,12 @@ function! MagicDo(type, what_magic, ...)
     let &selection = sel_save
     let @@ = reg_save
 endfunction
+
+nnoremap <Plug>MagicStamp :set opfunc=MagicStamp<CR>g@
+vnoremap <Plug>MagicStamp :<C-U>call MagicStamp(visualmode())<CR>
+
+nnoremap <Plug>MagicClip :set opfunc=MagicClip<CR>g@
+vnoremap <Plug>MagicClip :<C-U>call MagicClip(visualmode())<CR>
+
+nnoremap <Plug>MagicPaste :set opfunc=MagicPaste<CR>g@
+vnoremap <Plug>MagicPaste :<C-U>call MagicPaste(visualmode())<CR>

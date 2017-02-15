@@ -111,6 +111,7 @@ function! MagicBufferOpen()
     endif
     setlocal bufhidden=hide buftype=nofile nobuflisted nolist
     setlocal noswapfile nowrap
+    set ft=log
 
     silent resize 12
 endfunction

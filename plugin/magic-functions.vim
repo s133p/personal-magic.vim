@@ -117,7 +117,6 @@ function! MagicCompile(isRelease)
         let l:mode = a:isRelease ? "Release" : "Debug"
         let l:configuration = "/p:Configuration=" . l:mode
         let l:flags = "/v:q /nologo"
-        " let l:flags = "/verbosity:quiet /nologo /p:GenerateFullPaths=true"
 
         exe "call MagicJob(\"" . &makeprg ." ". l:solution ." ".  l:configuration ." ". l:flags ."\", 0)"
 

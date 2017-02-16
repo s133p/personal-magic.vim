@@ -16,6 +16,7 @@ function! FormatOutHandler(job, message)
 endfunction
 
 function! MagicFormat()
+    call s:CheckClangFormat()
     let finalcmd = "clang-format -style=file"
     let s:final_result = ""
     let opts = {}
@@ -28,6 +29,14 @@ function! MagicFormat()
     let opts['exit_cb']=function('FormatCallback')
     let s:FmtJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
     echo "MagicFormat: ". finalcmd
+endfunction
+
+function! s:CheckClangFormat()
+    if findfile(".clang-format")==''
+        silent exe "vs .clang-format"
+        silent exe "r ~/.vim/bundle/personal-magic.vim/templates/.clang-format"
+        silent exe "w \| bw"
+    endif
 endfunction
 
 "Format current buffer with clang-format

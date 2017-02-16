@@ -1,4 +1,59 @@
-function! StatusUpdate(msg, type)
+function! s:JobRun(qf, command, )
+    if exists("s:mahJob") && s:mahJob != ""
+        call MagicJobKill()
+    endif
+
+    if a:qf
+        let OutFn = function('s:OutHandler')
+        let CallbackFn = function('s:MagicCallback')
+    else
+        let OutFn = function('s:OutBufferHandler')
+        let CallbackFn = function('s:MagicBufferCallback')
+    endif
+    let finalcmd = a:command
+    let opts = {}
+    let opts['out_io']='pipe'
+    let opts['err_io']='pipe'
+    let opts["out_cb"]=OutFn
+    let opts["err_cb"]=OutFn
+    let opts['exit_cb']=CallbackFn
+    let s:mahJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
+    call s:StatusUpdate("[Running]", 1)
+endfunction
+
+function! MagicJob( command, useEfm )
+    call s:JobRun(1, a:command)
+
+    let currentWin = winnr()
+    call s:MagicQf(a:useEfm)
+    exe currentWin . "wincmd w"
+endfunction
+
+function! MagicBufferJob(...)
+    if a:1 == '!'
+        let s:buffer_job_kill = 0
+    else
+        let s:buffer_job_kill = 1
+    endif
+
+    if a:2 != ''
+        let finalcmd = a:2
+        let s:lastcmd = a:2
+    elseif exists('s:lastcmd')
+        let finalcmd = s:lastcmd
+    else
+        call s:StatusUpdate("[No Job]", 1)
+        return
+    endif
+
+    call s:JobRun(0, finalcmd)
+
+    let currentWin = winnr()
+    call MagicBufferOpen(1)
+    exe currentWin . "wincmd w"
+endfunction
+
+function! s:StatusUpdate(msg, type)
     if a:type == 0
         let g:airline_section_z=a:msg
         let g:airline_section_warning=''
@@ -9,12 +64,11 @@ function! StatusUpdate(msg, type)
     exe ":AirlineRefresh"
 endfunction
 
-function! MagicCallback(job, status)
-    call StatusUpdate(a:status == 0 ? "[DONE]" : "[FAIL]" , a:status)
+function! s:MagicCallback(job, status)
+    call s:StatusUpdate(a:status == 0 ? "[DONE]" : "[FAIL]" , a:status)
     if a:status == 0
         silent exec "cclose"
     else
-        echo "Done with exit status: " . a:status
         let currentWin = winnr()
         silent exec 'copen'
         silent exe "wincmd J"
@@ -25,7 +79,7 @@ function! MagicCallback(job, status)
     let s:mahJob=""
 endfunction
 
-function! OutHandler(job, message)
+function! s:OutHandler(job, message)
     caddexpr a:message
 endfunction
 
@@ -48,44 +102,8 @@ function! MagicJobInfo()
     endif
 endfunction
 
-function! MagicJob( command, useEfm )
-    if exists("s:mahJob") && s:mahJob != ""
-        call MagicJobKill()
-    endif
-    let finalcmd = a:command
-    let opts = {}
-    let opts['out_io']='pipe'
-    let opts['err_io']='pipe'
-    let opts["out_cb"]=function('OutHandler')
-    let opts["err_cb"]=function('OutHandler')
-    let opts['exit_cb']=function('MagicCallback')
-    let s:mahJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
-    echo "MagicJob: ". finalcmd
-
-
-    call setqflist([], 'r')
-    let currentWin = winnr()
-
-    " Not to be trusted! Specific to my usecase!
-    if a:useEfm == 1
-        let s:mahErrorFmt=&efm
-    elseif a:useEfm == 2
-        let s:mahErrorFmt=&grepformat
-    endif
-
-    silent exec 'copen'
-    silent exec "wincmd J"
-
-    " Not to be trusted! Specific to my usecase!
-    if a:useEfm != 0
-        exe 'set efm='.escape(s:mahErrorFmt, " ")
-    endif
-
-    exe currentWin . "wincmd w"
-endfunction
-
-function! MagicBufferCallback(job, status)
-    call StatusUpdate(a:status == 0 ? "[DONE]" : "[FAIL]" , a:status)
+function! s:MagicBufferCallback(job, status)
+    call s:StatusUpdate(a:status == 0 ? "[DONE]" : "[FAIL]" , a:status)
     if a:status == 0 && s:buffer_job_kill == 1
         let outBuf = bufnr("MagicOutput")
         silent exe "close " . outBuf
@@ -93,7 +111,7 @@ function! MagicBufferCallback(job, status)
     let s:mahJob=""
 endfunction
 
-function! OutBufferHandler(job, message)
+function! s:OutBufferHandler(job, message)
     let currentBuf = bufnr('%')
     let outBuf = bufnr("MagicOutput")
     let outWin = bufwinnr(outBuf)
@@ -111,7 +129,7 @@ function! OutBufferHandler(job, message)
     endif
 endfunction
 
-function! MagicBufferOpen()
+function! MagicBufferOpen(...)
     if bufnr("MagicOutput") == -1
         silent new MagicOutput
         silent exe "wincmd J"
@@ -127,50 +145,29 @@ function! MagicBufferOpen()
     set ft=log
 
     silent resize 12
+    if a:0 != 0
+        silent exe "%d"
+    endif
 endfunction
 
-function! MagicBufferJob(...)
-    if exists("s:mahJob") && s:mahJob != ""
-        call MagicJobKill()
+function! s:MagicQf(useEfm)
+    call setqflist([], 'r')
+    " Not to be trusted! Specific to my usecase!
+    if a:useEfm == 1
+        let s:mahErrorFmt=&efm
+    elseif a:useEfm == 2
+        let s:mahErrorFmt=&grepformat
     endif
 
-    if a:2 == ''
-        if a:1 == '!'
-            let s:buffer_job_kill = 0
-        endif
-    else
-        if a:1 == '!'
-            let s:buffer_job_kill = 0
-        else
-            let s:buffer_job_kill = 1
-        endif
+    silent exec 'copen'
+    silent exec "wincmd J"
+
+    " Not to be trusted! Specific to my usecase!
+    if a:useEfm != 0
+        exe 'set efm='.escape(s:mahErrorFmt, " ")
     endif
-
-    if a:2 != ''
-        let finalcmd = a:2
-        let s:lastcmd = a:2
-    elseif exists('s:lastcmd')
-        let finalcmd = s:lastcmd
-    else
-        echo "No previous job"
-        return
-    endif
-
-    let opts = {}
-    let opts['out_io']='pipe'
-    let opts['err_io']='pipe'
-    let opts["out_cb"]=function('OutBufferHandler')
-    let opts["err_cb"]=function('OutBufferHandler')
-    let opts['exit_cb']=function('MagicBufferCallback')
-    let s:mahJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
-    echo "MagicJob: ". finalcmd
-
-    let currentWin = winnr()
-    call MagicBufferOpen()
-    silent exe "%d"
-
-    exe currentWin . "wincmd w"
 endfunction
+
 
 " :MagicJob[!] {commands} - run {commands} showing results.
 "  Bang forces results to remain open

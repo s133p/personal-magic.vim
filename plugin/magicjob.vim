@@ -1,4 +1,4 @@
-function! s:JobRun(qf, command, )
+function! s:JobRun(qf, command )
     if exists("s:mahJob") && s:mahJob != ""
         call MagicJobKill()
     endif

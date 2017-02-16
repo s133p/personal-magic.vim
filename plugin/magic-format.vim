@@ -15,20 +15,29 @@ function! FormatOutHandler(job, message)
     let s:final_result = s:final_result . a:message . "\n"
 endfunction
 
-function! MagicFormat()
-    call s:CheckClangFormat()
+function! MagicFormat(copy_fmt, ...)
+    echo a:1
     let finalcmd = "clang-format -style=file"
-    let s:final_result = ""
-    let opts = {}
-    let opts['in_io']='buffer'
-    let opts['in_name']=expand("%")
-    let opts['out_io']='pipe'
-    let opts['err_io']='pipe'
-    let opts["out_cb"]=function('FormatOutHandler')
-    let opts["err_cb"]=function('FormatOutHandler')
-    let opts['exit_cb']=function('FormatCallback')
-    let s:FmtJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
-    echo "MagicFormat: ". finalcmd
+
+    if a:copy_fmt == 1
+        call s:CheckClangFormat()
+    endif
+
+    if a:1 != '!'
+        let s:final_result = ""
+        let opts = {}
+        let opts['in_io']='buffer'
+        let opts['in_name']=expand("%")
+        let opts['out_io']='pipe'
+        let opts['err_io']='pipe'
+        let opts["out_cb"]=function('FormatOutHandler')
+        let opts["err_cb"]=function('FormatOutHandler')
+        let opts['exit_cb']=function('FormatCallback')
+        let s:FmtJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
+        echo "MagicFormat: ". finalcmd
+    else
+        exe "%! " . finalcmd . " " . expand("%")
+    endif
 endfunction
 
 function! s:CheckClangFormat()
@@ -40,4 +49,5 @@ function! s:CheckClangFormat()
 endfunction
 
 "Format current buffer with clang-format
-command! CFormat call MagicFormat()
+command! -bang CFormat call MagicFormat(0, '<bang>')
+command! -bang CFormatCopy call MagicFormat(1, '<bang>')

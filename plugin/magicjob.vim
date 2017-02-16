@@ -1,4 +1,16 @@
+function! StatusUpdate(msg, type)
+    if a:type == 0
+        let g:airline_section_z=a:msg
+        let g:airline_section_warning=''
+    else
+        let g:airline_section_z=''
+        let g:airline_section_warning=a:msg
+    endif
+    exe ":AirlineRefresh"
+endfunction
+
 function! MagicCallback(job, status)
+    call StatusUpdate(a:status == 0 ? "[DONE]" : "[FAIL]" , a:status)
     if a:status == 0
         silent exec "cclose"
     else
@@ -73,6 +85,7 @@ function! MagicJob( command, useEfm )
 endfunction
 
 function! MagicBufferCallback(job, status)
+    call StatusUpdate(a:status == 0 ? "[DONE]" : "[FAIL]" , a:status)
     if a:status == 0 && s:buffer_job_kill == 1
         let outBuf = bufnr("MagicOutput")
         silent exe "close " . outBuf

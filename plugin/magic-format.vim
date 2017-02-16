@@ -1,3 +1,5 @@
+" Functions for using clang-format to format the current buffer
+
 function! FormatCallback(job, status)
     let pos_save = getpos('.')
     let @f = s:final_result

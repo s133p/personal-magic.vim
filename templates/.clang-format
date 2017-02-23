@@ -1,11 +1,14 @@
 BasedOnStyle: Google
 TabWidth: 4
 IndentWidth: 4
+---
+Language: Cpp
+Standard: Cpp11
 ColumnLimit: 120
 MaxEmptyLinesToKeep: 2
 AccessModifierOffset: -2
 ConstructorInitializerIndentWidth: 2
-ContinuationIndentWidth: 8
+ContinuationIndentWidth: 4
 IndentWrappedFunctionNames: true
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true
@@ -14,7 +17,6 @@ ConstructorInitializerAllOnOneLineOrOnePerLine: false
 BinPackParameters: true
 BinPackArguments: true
 AllowShortFunctionsOnASingleLine: Empty
-Language: Cpp
-Standard: Cpp11
+KeepEmptyLinesAtTheStartOfBlocks: true
 
 UseTab: Never

@@ -59,33 +59,6 @@ function! CleanWhitespace()
 endfunction
 command! -nargs=0 CleanWhitespace call CleanWhitespace()
 
-" Open personal notes dir with unite
-function! OpenPersonalNotes(type)
-    if !exists("g:personal_notes_dir")
-        let g:personal_notes_dir="~/Dropbox/vim-notes"
-    endif
-    if !exists("g:personal_nv_notes_dir")
-        let g:personal_nv_notes_dir="~/Dropbox/NV-Notes"
-    endif
-
-    " Open Unite in notes directory
-    if a:type == 'n'
-        execute "Unite -path=" . g:personal_notes_dir . " -start-insert -no-split file_rec"
-    elseif a:type == 'v'
-        execute "Unite -path=" . g:personal_nv_notes_dir . " -start-insert -no-split file_rec"
-    endif
-endfunction
-
-
-" Dont try file_rec in my homedir, do file and mru instead
-function! MyUniteSpecial()
-    if expand("%:p:h") == expand("~")
-        execute "Unite -start-insert -no-split file"
-    else
-        execute "Unite -start-insert -no-split file_rec"
-    endif
-endfunction
-
 " Personal compilation shortcut function
 function! MagicCompile(isRelease)
     if has("mac")

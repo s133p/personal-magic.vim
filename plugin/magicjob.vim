@@ -18,7 +18,7 @@ function! s:JobRun(qf, command )
     let opts["err_cb"]=OutFn
     let opts['exit_cb']=CallbackFn
     let s:mahJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
-    call s:StatusUpdate("[Running]", 1)
+    call s:StatusUpdate("[".finalcmd."]", 1)
 endfunction
 
 function! MagicJob( command, useEfm )

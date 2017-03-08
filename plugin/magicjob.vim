@@ -1,4 +1,4 @@
-function! s:JobRun(qf, command )
+function! s:JobRun(qf, command)
     if exists("s:mahJob") && s:mahJob != ""
         call MagicJobKill()
     endif
@@ -30,12 +30,6 @@ function! MagicJob( command, useEfm )
 endfunction
 
 function! MagicBufferJob(...)
-    if a:1 == '!'
-        let s:buffer_job_kill = 0
-    else
-        let s:buffer_job_kill = 1
-    endif
-
     if a:2 != ''
         let finalcmd = a:2
         let s:lastcmd = a:2
@@ -50,7 +44,11 @@ function! MagicBufferJob(...)
 
     let currentWin = winnr()
     call MagicBufferOpen(1)
-    exe currentWin . "wincmd w"
+    if a:1 == '!'
+        close
+    else
+        exe currentWin . "wincmd w"
+    endif
 endfunction
 
 function! s:StatusUpdate(msg, type)
@@ -104,9 +102,11 @@ endfunction
 
 function! s:MagicBufferCallback(job, status)
     call s:StatusUpdate(a:status == 0 ? "[DONE]" : "[FAIL]" , a:status)
-    if a:status == 0 && s:buffer_job_kill == 1
-        let outBuf = bufnr("MagicOutput")
-        silent exe "close " . outBuf
+    if a:status == 0
+        let outBufwin = bufwinnr(bufnr("MagicOutput"))
+        if outBufwin != -1
+            silent exe "close " . outBufwin
+        endif
     endif
     let s:mahJob=""
 endfunction
@@ -170,7 +170,7 @@ endfunction
 
 
 " :MagicJob[!] {commands} - run {commands} showing results.
-"  Bang forces results to remain open
+"  Bang for "background" (output buffer hidden)
 "  If {commands} returns success, results are closed
 "  If {commands} returns failure, results remain open
 command! -nargs=? -bang -complete=shellcmd MagicJob call MagicBufferJob('<bang>', <q-args>)

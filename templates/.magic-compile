@@ -1,0 +1,11 @@
+#OSX Cpp default
+:SETTINGS
+set efm=[x]\ %f:%l:%c:\ %m,[x]%m
+
+:DEBUG
+make Debug
+open xcode/build/Debug/*.app
+
+:RELEASE
+make Release
+open xcode/build/Release/*.app

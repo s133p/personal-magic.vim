@@ -19,27 +19,6 @@ function! ListTabToggle()
     endif
 endfunction
 
-" Cycles forwared or back through splits in tab -> next tab
-" If no tabs or splits, cycles through listed buffers
-function! TabOrSwitch( shifted )
-    let wn = winnr()
-    let hastab = tabpagewinnr(tabpagenr()+1) != 0 || tabpagewinnr(tabpagenr()-1) != 0
-    let hasLeftSplit = (winbufnr(wn-1) != -1 && wn-1 != 0)
-    let hasRightSplit = (winbufnr(wn+1) != -1)
-
-    if (a:shifted && hasLeftSplit) || (!a:shifted && hasRightSplit)
-        silent exe "wincmd " . ( a:shifted?"W":"w" )
-    elseif hastab
-        silent exe ":tab" . ( a:shifted?"p":"n" )
-        if !a:shifted
-            silent exe "0wincmd w"
-        endif
-    else
-        silent exe ":b" . ( a:shifted?"p":"n" )
-    endif
-endfunction
-
-
 " Toggle quickfix visibility
 function! QuickfixToggle()
     let nr = winnr("$")
@@ -60,56 +39,87 @@ endfunction
 command! -nargs=0 CleanWhitespace call CleanWhitespace()
 
 " Personal compilation shortcut function
-function! MagicCompile(isRelease)
-    if has("mac")
-        " Compiles an xcode project in the cinder folder structure (from the root of the project)
-        " (requires xcpretty)
-        setlocal makeprg=make
-        set errorformat=[x]\ %f:%l:%c:\ %m,[x]%m
-
-        let l:mode = a:isRelease ? "Release" : "Debug"
-        exe "call MagicJob(\"" . &makeprg . " ". l:mode ."\", 1)"
-
-        " Set s:magicToRun to the run correct version of app
-        let l:appPath = expand(getcwd() . "/xcode/build/". l:mode ."/*.app")
-        let l:appName = substitute( l:appPath, "\\v^.{-}([a-zA-Z_0-9]+)\.app", "\\1", "g")
-
-        let l:runFG = l:appPath . "/Contents/MacOS/". l:appName .";"
-        let l:runSleep = a:isRelease ? "1" : "2"
-        let l:runBG = "osascript  -e 'delay ". l:runSleep ."' -e 'tell application \"" .  l:appName ."\" to activate' &;"
-
-        let s:magicToRun = l:runBG . l:runFG
-
-    elseif has("win32")
-        " Compiles a visual studio project in the dsCinder folder structure
-        " (requires creation of local.sln with env-vars expanded)
-        compiler msvc
-        set makeprg=msbuild
-
-        let l:solution = "vs2013/local.sln"
-        let l:mode = a:isRelease ? "Release" : "Debug"
-        let l:configuration = "/p:Configuration=" . l:mode
-        let l:flags = "/v:q /nologo"
-
-        exe "call MagicJob(\"" . &makeprg ." ". l:solution ." ".  l:configuration ." ". l:flags ."\", 0)"
-
-        " Set s:magicToRun to the run correct version of app
-        let l:appPath = expand(getcwd() . "/vs2013/". l:mode ."/".  split(getcwd(), '/')[-1] .".exe")
-        let l:appName = substitute( l:appPath, "\\v^.{-}([a-zA-Z]+)\.exe", "\\1", "g")
-
-        let l:runBG = l:appPath
-        let s:magicToRun = l:runBG
+function! MagicCompile(buildType)
+    let compileSettings = s:GetBuildSettings()
+    if compileSettings == {}
+        let s:magicToRun = ''
+        return
     endif
+
+    let useefm = 0
+    " Apply settings
+    if has_key(compileSettings, "SETTINGS")
+        for setting in compileSettings["SETTINGS"]
+            exe setting
+            if setting[0:6] == "set efm"
+                let useefm = 1
+            endif
+        endfor
+    endif
+
+    if has_key(compileSettings, a:buildType) && len(compileSettings[a:buildType]) == 2
+
+        let s:magicToRun = substitute(compileSettings[a:buildType][1], "\$FULLWD", getcwd(), 'g')
+        let s:magicToRun = substitute(s:magicToRun, "\$WD", split(getcwd(), '/')[-1], 'g')
+        let s:magicToRun = substitute(s:magicToRun, "%", expand("%"), 'g')
+        exe "call MagicJob(\"" . compileSettings[a:buildType][0] ."\", ".useefm.")"
+    else
+        echo a:buildType . " is invalid. Valid options: " . string(keys(compileSettings))
+        let s:magicToRun = ''
+    endif
+endfunction
+
+function! s:GetBuildSettings()
+    " Look for local settings
+    let looker = globpath(getcwd(), ".magic-compile")
+    if looker == ''
+        " Then check ft-specific
+        let looker = globpath("~/.vim/bundle/personal-magic.vim/templates/", ".".&ft."-magic-compile")
+
+        if looker == ''
+            " Then check os-ft-specific
+            let os = 'osx'
+            if has("win32")
+                let os = 'win'
+            endif
+
+            let looker = globpath("~/.vim/bundle/personal-magic.vim/templates/", ".".os."-".&ft."-magic-compile")
+            if looker == ''
+                echo "No .magic-compile found in current directory"
+                return {}
+            endif
+        endif
+    endif
+
+    let cont = readfile(looker)
+    let settings = {}
+    let currentSetting = ""
+    for line in cont
+        if line[0] == ':'
+            let settings[line[1:]] = []
+            let currentSetting = line[1:]
+        elseif line[0] == '#'
+            "comment
+        elseif line != ""
+            let settings[currentSetting] = add(settings[currentSetting], line)
+        endif
+    endfor
+    return settings
 endfunction
 
 " Run the saved "run" command from last MagicCompile
 " :J repeats, :J! repeats, keeping results open
 function! MagicCompileRun(...)
-    exe "MagicJob" . (a:0 > 0 ? '! ' : ' ') . s:magicToRun
-    " call MagicBufferJob(s:magicToRun)
-endfunction
+    let settings = s:GetBuildSettings()
 
-" Get info on what will be run w/ MagicCompileRun
-function! MagicCompileRunInfo()
-    exe "MagicJob! " . s:magicToRun
+    if exists("s:magicToRun") && s:magicToRun != ''
+        exe "MagicJob". (a:0==1 ? '!' : '') . " " . s:magicToRun
+    else
+        if has_key(settings, "RUN") && len(settings["RUN"]) >= 1
+            let run = substitute(settings["RUN"][0], "\$FULLWD", getcwd(), 'g')
+            let run = substitute(run, "\$WD", split(getcwd(), '/')[-1], 'g')
+            let run = substitute(run, "%", expand("%"), 'g')
+            exe "MagicJob". (a:0==1 ? '!' : '') . " " . run
+        endif
+    endif
 endfunction

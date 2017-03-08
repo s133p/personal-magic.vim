@@ -1,0 +1,17 @@
+# vim settings
+:SETTINGS
+set efm=[x]\ %f:%l:%c:\ %m,[x]%m
+
+# Debug. line 1: build, line 2: run
+:DEBUG
+make Debug
+osascript -e 'delay 2' -e 'tell application "$WD.app" to activate' &; ./xcode/build/Debug/*.app/Contents/MacOS/$WD
+
+# Release. line 1: build, line 2: run
+:RELEASE
+make Release
+osascript -e 'delay 2' -e 'tell application "$WD.app" to activate' &; ./xcode/build/Release/$WD.app/Contents/MacOS/$WD
+
+# Run command if not built
+:RUN
+open xcode/build/Release/*.app

@@ -1,5 +1,5 @@
 " Toggle between showing & hiding tab characters
-function! ListTabToggle()
+function! s:ListTabToggle()
     if &list == 0
         return
     endif
@@ -18,9 +18,10 @@ function! ListTabToggle()
         exe "set listchars+=" . s:savetab
     endif
 endfunction
+command! -nargs=0 ListTabToggle call s:ListTabToggle()
 
 " Toggle quickfix visibility
-function! QuickfixToggle()
+function! s:QuickfixToggle()
     let nr = winnr("$")
     cwindow
     let nr2 = winnr("$")
@@ -28,18 +29,18 @@ function! QuickfixToggle()
         cclose
     endif
 endfunction
-command! -nargs=0 QfToggle call QuickfixToggle()
+command! -nargs=0 QfToggle call s:QuickfixToggle()
 
 " Clean whitespace in current file
-function! CleanWhitespace()
+function! s:CleanWhitespace()
     silent exe "g/^\\s\\+$/s/.\\+//"
     silent exe "g/\\t/s/\\t/    /g"
     silent exe "g/\\s\\+$/s/\\s\\+$//g"
 endfunction
-command! -nargs=0 CleanWhitespace call CleanWhitespace()
+command! -nargs=0 CleanWhitespace call s:CleanWhitespace()
 
 " Personal compilation shortcut function
-function! MagicCompile(buildType)
+function! s:MagicCompile(buildType)
     let compileSettings = s:GetBuildSettings()
     if compileSettings == {}
         let s:magicToRun = ''
@@ -109,17 +110,20 @@ endfunction
 
 " Run the saved "run" command from last MagicCompile
 " :J repeats, :J! repeats, keeping results open
-function! MagicCompileRun(...)
+function! s:MagicCompileRun(bang)
     let settings = s:GetBuildSettings()
 
     if exists("s:magicToRun") && s:magicToRun != ''
-        exe "MagicJob". (a:0==1 ? '!' : '') . " " . s:magicToRun
+        exe "MagicJob". a:bang . " " . s:magicToRun
     else
         if has_key(settings, "RUN") && len(settings["RUN"]) >= 1
             let run = substitute(settings["RUN"][0], "\$FULLWD", getcwd(), 'g')
             let run = substitute(run, "\$WD", split(getcwd(), '/')[-1], 'g')
             let run = substitute(run, "%", expand("%"), 'g')
-            exe "MagicJob". (a:0==1 ? '!' : '') . " " . run
+            exe "MagicJob". a:bang . " " . run
         endif
     endif
 endfunction
+
+command! -nargs=1 MCompile call s:MagicCompile(<q-args>)
+command! -bang MCRun call s:MagicCompileRun('<bang>')

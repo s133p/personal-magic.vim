@@ -4,10 +4,11 @@ compiler msvc
 
 :DEBUG
 msbuild vs2013/local.sln /p:Configuration=Debug /v:q /nologo
+$FULLWD/vs2013/Debug/$WD.exe
 
 :RELEASE
 msbuild vs2013/local.sln /p:Configuration=Release /v:q /nologo
 $FULLWD/vs2013/Release/$WD.exe
 
 :RUN
-open xcode/build/Release/*.app;
+$FULLWD/vs2013/Release/$WD.exe

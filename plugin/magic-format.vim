@@ -38,9 +38,11 @@ function! MagicFormat(copy_fmt, ...)
         let s:FmtJob = job_start([&shell, &shellcmdflag, finalcmd], opts)
         echo "MagicFormat: ". finalcmd
     else
-        let pos_save = getpos('.')
+        let winview = winsaveview()
+        "let pos_save = getpos('.')
         exe "%! " . finalcmd . " " . expand("%")
-        call setpos('.', pos_save)
+        "call setpos('.', pos_save)
+        call winrestview(winview)
     endif
 endfunction
 

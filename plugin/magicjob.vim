@@ -3,6 +3,9 @@ function! s:JobRun(qf, command)
         call MagicJobKill()
     endif
 
+    silent exec "cclose"
+    call s:MagicBufferClose()
+
     if a:qf
         let OutFn = function('s:OutHandler')
         let CallbackFn = function('s:MagicCallback')
@@ -100,13 +103,17 @@ function! MagicJobInfo()
     endif
 endfunction
 
+function! s:MagicBufferClose()
+    let outBufwin = bufwinnr(bufnr("MagicOutput"))
+    if outBufwin != -1
+        silent exe "close " . outBufwin
+    endif
+endfunction
+
 function! s:MagicBufferCallback(job, status)
     call s:StatusUpdate(a:status == 0 ? "[DONE]" : "[FAIL]" , a:status)
     if a:status == 0
-        let outBufwin = bufwinnr(bufnr("MagicOutput"))
-        if outBufwin != -1
-            silent exe "close " . outBufwin
-        endif
+        call s:MagicBufferClose()
     endif
     let s:mahJob=""
 endfunction

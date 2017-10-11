@@ -1,3 +1,10 @@
+" Put all trailing '>' | '/>' back on previous line
+function! s:XmlCleaner()
+    norm! gg=G'
+    exec 'g/^\s\+\(>\|\/>\)/norm! kJ'
+endfunction
+command! -nargs=0 XmlClean call s:XmlCleaner()
+
 " Toggle between showing & hiding tab characters
 function! s:ListTabToggle()
     if &list == 0
@@ -69,8 +76,10 @@ command! -nargs=0 TFile call s:GoAppFile('tabedit')
 "  type='f' for fill/center
 "  type='s' to manually enter scale
 function! s:DsEngineConfig(type)
-    let l:screenx = 2560.0
-    let l:screeny = 1440.0
+    let l:reservedx = 62.0
+    let l:reservedy = 0.0
+    let l:screenx = 2560.0 - l:reservedx
+    let l:screeny = 1440.0 - l:reservedy
 
     " Start at top of file
     normal! gg
@@ -79,26 +88,27 @@ function! s:DsEngineConfig(type)
 
     " save x dimension
     exec "normal! /x=\"/e\<cr>"
-    let l:x = str2nr(s:ClipGrab('yi"'))
+    let l:x = str2float(s:ClipGrab('yi"'))
 
     " save y dimension
     exec "normal! /y=\"/e\<cr>"
-    let l:y = str2nr(s:ClipGrab('yi"'))
+    let l:y = str2float(s:ClipGrab('yi"'))
 
+    let l:scale = 1.0
     if a:type == 'f'
         let l:scalex = l:screenx / l:x
         let l:scaley = l:screeny / l:y
         let l:scale = l:scalex <= l:scaley ? l:scalex : l:scaley
         let l:scale = l:scale < 1.0 ? l:scale : 1.0
     elseif a:type == 's'
-        let l:scale = inputdialog("Scale: ", '0.', '1.0')
+        let l:scale = str2float(inputdialog("Scale: ", '0.', '1.0'))
     endif
 
     let l:x = float2nr(round(l:x * l:scale))
     let l:y = float2nr(round(l:y * l:scale))
 
-    let l:offsetx = float2nr(round((l:screenx / 2) - (l:x / 2.0)))
-    let l:offsety = float2nr(round((l:screeny / 2) - (l:y / 2.0)))
+    let l:offsetx = float2nr(round((l:screenx / 2.0) - (l:x / 2.0) + l:reservedx))
+    let l:offsety = float2nr(round((l:screeny / 2.0) - (l:y / 2.0) + l:reservedy))
 
     exec "normal! /dst_rect\<cr>"
     " Replace tag with updated values

@@ -1,27 +1,7 @@
 " Functions to be used as operator pending mappings
 
-" Stamp last yank over motion/selection
-function! MagicStamp(type, ...)
-    call MagicDo(a:type, "\"0p", a:000)
-endfunction
-
-" yank motion/selection to system clipboard
-function! MagicClip(type, ...)
-    call MagicDo(a:type, "\"*y", a:000)
-endfunction
-
-" Stamp system clipboard over motion/selection
-function! MagicPaste(type, ...)
-    call MagicDo(a:type, "\"*p", a:000)
-endfunction
-
-" Stamp system clipboard over motion/selection
-function! MagicCalc(type, ...)
-    call MagicDo(a:type, "c\<c-r>=\<c-r>\"\<cr>", a:000)
-endfunction
-
 " Helper function
-function! MagicDo(type, what_magic, ...)
+function! s:MagicDo(type, what_magic, ...)
     let sel_save = &selection
     let &selection = "inclusive"
     let reg_save = @@
@@ -38,6 +18,36 @@ function! MagicDo(type, what_magic, ...)
     let @@ = reg_save
 endfunction
 
+" Stamp last yank over motion/selection
+function! MagicStamp(type, ...)
+    call s:MagicDo(a:type, "\"0p", a:000)
+endfunction
+
+" yank motion/selection to system clipboard
+function! MagicClip(type, ...)
+    call s:MagicDo(a:type, "\"*y", a:000)
+endfunction
+
+" Stamp system clipboard over motion/selection
+function! MagicPaste(type, ...)
+    call s:MagicDo(a:type, "\"*p", a:000)
+endfunction
+
+" Stamp system clipboard over motion/selection
+function! MagicCalc(type, ...)
+    call s:MagicDo(a:type, "c\<c-r>=\<c-r>\"\<cr>", a:000)
+endfunction
+
+" 
+function! MagicSearch(type, ...)
+    call s:MagicDo(a:type, "\"sy:VGsrc \<c-r>\"\<cr>", a:000)
+endfunction
+
+function! MagicCinderSearch(type, ...)
+    call s:MagicDo(a:type, "\"sy:VGcin \<c-r>\"\<cr>", a:000)
+endfunction
+
+
 nnoremap <Plug>MagicStamp :set opfunc=MagicStamp<CR>g@
 vnoremap <Plug>MagicStamp :<C-U>call MagicStamp(visualmode())<CR>
 
@@ -49,3 +59,9 @@ vnoremap <Plug>MagicPaste :<C-U>call MagicPaste(visualmode())<CR>
 
 nnoremap <Plug>MagicCalc :set opfunc=MagicCalc<CR>g@
 vnoremap <Plug>MagicCalc :<C-U>call MagicCalc(visualmode())<CR>
+
+nnoremap <Plug>MagicSearch :set opfunc=MagicSearch<CR>g@
+vnoremap <Plug>MagicSearch :<C-U>call MagicSearch(visualmode())<CR>
+
+nnoremap <Plug>MagicCinderSearch :set opfunc=MagicCinderSearch<CR>g@
+vnoremap <Plug>MagicCinderSearch :<C-U>call MagicCinderSearch(visualmode())<CR>

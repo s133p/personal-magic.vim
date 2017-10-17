@@ -38,7 +38,6 @@ function! MagicCalc(type, ...)
     call s:MagicDo(a:type, "c\<c-r>=\<c-r>\"\<cr>", a:000)
 endfunction
 
-" 
 function! MagicSearch(type, ...)
     call s:MagicDo(a:type, "\"sy:VGsrc \<c-r>\"\<cr>", a:000)
 endfunction

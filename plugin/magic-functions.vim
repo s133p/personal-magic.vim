@@ -114,5 +114,17 @@ function! s:DsEngineConfig(type)
     " Replace tag with updated values
     exec "normal! ci>rect name=\"dst_rect\" l=\"" . string(l:offsetx) . "\" w=\"" . string(l:x) . "\" t=\"" .  string(l:offsety) . "\" h=\"" . string(l:y) . "\" /"
 endfunction
-command! -nargs=0 DstFConifg call s:DsEngineConfig('f')
-command! -nargs=0 DstSConifg call s:DsEngineConfig('s')
+command! -nargs=0 DsFillEngine call s:DsEngineConfig('f')
+command! -nargs=0 DsScaleEngine call s:DsEngineConfig('s')
+
+
+" Windows convienence for making local visual studio solution
+function! s:MakeLocalSln()
+    let projName = (split(getcwd(), '/')[-1])
+    let currsln = "vs2013/" . projName . ".sln"
+    silent exec "vs " . currsln
+    silent exec "sav vs2013/local.sln"
+    silent exec 'g/%/norm! f%xct%=$"lx'
+    silent exec 'write'
+endfunction
+command! -nargs=0 MakeLocalSln call s:MakeLocalSln()

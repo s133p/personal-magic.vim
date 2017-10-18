@@ -12,7 +12,7 @@ function! s:MagicCompile(buildType)
         for setting in compileSettings["SETTINGS"]
             exe setting
             if setting[0:6] == "set efm"
-                let useefm = 1
+                let g:MagicUseEfm = 1
             endif
         endfor
     endif
@@ -22,7 +22,8 @@ function! s:MagicCompile(buildType)
         let s:magicToRun = substitute(compileSettings[a:buildType][1], "\$FULLWD", getcwd(), 'g')
         let s:magicToRun = substitute(s:magicToRun, "\$WD", split(getcwd(), '/')[-1], 'g')
         let s:magicToRun = substitute(s:magicToRun, "%", expand("%"), 'g')
-        exe "call MagicJob(\"" . compileSettings[a:buildType][0] ."\", ".useefm.")"
+        silent exe "MagicJob! ".compileSettings[a:buildType][0]
+        " exe "call MagicJob(\"" . compileSettings[a:buildType][0] ."\", ".useefm.")"
     else
         echo a:buildType . " is invalid. Valid options: " . string(keys(compileSettings))
         let s:magicToRun = ''

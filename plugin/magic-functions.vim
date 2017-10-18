@@ -1,3 +1,18 @@
+" Open current directory / Document directory in appropriate file-viewer
+function! s:MagicOpen(bang)
+    let cmd = ''
+    if has("mac")
+        let cmd = 'open'
+    elseif has("unix")
+        let cmd = 'exec caja'
+    elseif has("win32")
+        let cmd = 'start explorer'
+    endif
+    let where = a:bang=='!' ? substitute(expand("%:p:h"), '/', '\', 'g') : '.'
+    exec "J ".cmd." ".where
+endfunction
+command! -nargs=0 -bang MagicOpen call s:MagicOpen('<bang>')
+
 " Put all trailing '>' | '/>' back on previous line
 function! s:XmlCleaner()
     norm! gg=G'

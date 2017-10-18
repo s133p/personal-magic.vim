@@ -74,13 +74,14 @@ endfunction
 
 " Helper Functions
 fun! s:SaveWin()
-    let s:currentBuf = bufnr('%')
-    let s:currentWin = winbufnr(s:currentBuf)
+    let s:currentWin = winbufnr('%')
     let s:currentTab = tabpagenr()
 endfun
 
 fun! s:RestoreWin()
-    silent exe "normal! ".s:currentTab."gt"
+    if s:currentTab <= tabpagenr('$')
+        silent exe "normal! ".s:currentTab."gt"
+    endif
     silent exe s:currentWin."wincmd w"
 endfun
 
@@ -89,7 +90,6 @@ fun! s:OpenOutBuf(which)
         let g:MagicUseEfm = 0
     endif
 
-    echom a:which
     if a:which == 'qf'
         call setqflist([], 'r')
         " Not to be trusted! Specific to my usecase!
@@ -153,7 +153,7 @@ fun! s:JobPipeHandle(job, message)
             silent exe outWin."wincmd w"
             silent exe "normal! Gi" . a:message
             silent exe "normal! o"
-            silent exe currWin."wincmd w"
+            silent exe s:currentWin."wincmd w"
         endif
 
         call s:RestoreWin()

@@ -4,13 +4,14 @@ function! GitBranch()
 endfunction
 
 function! StatuslineGit()
-  let l:branchname = substitute(fugitive#statusline(), 'Git(\(.\+\))', '\1', 'g')
+  " let l:branchname = substitute(fugitive#statusline(), 'Git(\(.\+\))', '\1', 'g')
+  let l:branchname = fugitive#head()
   let l:out = '  '.l:branchname.'  '
   return strlen(l:branchname) > 0?l:out:''
 endfunction
 
 function! StatuslineRo()
-    return &readonly == 1 ? '%#CursorLineNr# ' : ''
+    return &readonly == 1 ? '  ' : ''
 endfunction
 
 function! MagicStatusLine(active)
@@ -25,7 +26,7 @@ function! MagicStatusLine(active)
     let l:line.='%m '
     let l:line.='%='
     let l:line.=' %y '
-    let l:line.='%{StatuslineRo()}'
+    let l:line.='%#CursorLineNr#%{StatuslineRo()}'
 
     if a:active
         if exists('g:MagicStatusJob') && g:MagicStatusJob != ''

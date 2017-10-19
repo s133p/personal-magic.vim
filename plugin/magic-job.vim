@@ -44,20 +44,18 @@ endfunction
 
 function! s:StatusUpdate(msg, type)
     if a:type == 0
-        let g:airline_section_z=a:msg
-        let g:airline_section_warning=''
+        let g:MagicStatusJob=''
+        let g:MagicStatusWarn=''
     else
-        let g:airline_section_z=''
-        let g:airline_section_warning=a:msg
+        let g:MagicStatusJob=''
+        let g:MagicStatusWarn=a:msg
     endif
-    exe ":AirlineRefresh"
 endfunction
 
 function! MagicJobKill()
     if exists("s:mahJob") && s:mahJob != ""
-        echo "Killing running Job"
+        let g:MagicStatusWarn = "Killing Job"
         call job_stop(s:mahJob)
-        sleep 4
         let s:mahJob=""
     else
         echo "No running job"

@@ -1,3 +1,4 @@
+"   master  ~/Documents/git/dotfiles/.vimrc  vim  utf-8[unix]   Help  syntax.txt  
 function! GitBranch()
   return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
 endfunction
@@ -37,20 +38,7 @@ function! MagicStatusLine(active)
     return l:line
 endfunction
 
- "  master  ~/Documents/git/dotfiles/.vimrc  vim  utf-8[unix]   Help  syntax.txt  
-" set statusline+=%#CursorLineNr#
-" set statusline+=%{StatuslineGit()}
-" set statusline+=%#StatusLineNC#\ 
-" set statusline+=%#StatusLine#
-" set statusline+=\ %f
-" set statusline+=%m\ 
-" set statusline+=%=
-" set statusline+=\ %y\ 
-" set statusline+=%#CursorLineNr#
-" set statusline+=%{StatuslineRo()}
 
-set showtabline=2
-set tabline=MyTabLine()
 function! MyTabLine()
     let s = ''
     for i in range(tabpagenr('$'))

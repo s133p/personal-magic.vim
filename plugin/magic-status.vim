@@ -4,7 +4,7 @@ function! GitBranch()
 endfunction
 
 function! StatuslineGit()
-  let l:branchname = GitBranch()
+  let l:branchname = substitute(fugitive#statusline(), 'Git(\(.\+\))', '\1', 'g')
   let l:out = '  '.l:branchname.'  '
   return strlen(l:branchname) > 0?l:out:''
 endfunction
@@ -18,6 +18,7 @@ function! MagicStatusLine(active)
     if a:active
         let l:line.='%#CursorLineNr#'
         let l:line.='%{StatuslineGit()}'
+        " let l:line.='%{fugitive#statusline()}'
     endif
     let l:line.='%#StatusLine#'
     let l:line.=' %f'

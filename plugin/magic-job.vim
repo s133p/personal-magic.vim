@@ -6,10 +6,10 @@ function! MagicJob(qf, command)
 
     if a:qf == '!'
         let s:MagicJobType = 'qf'
-        call s:OpenOutBuf('qf')
+        call s:OpenOutBuf('qf', 1)
     else
         let s:MagicJobType = 'magic'
-        call s:OpenOutBuf('magic')
+        call s:OpenOutBuf('magic', 1)
     endif
 
 
@@ -86,7 +86,7 @@ fun! s:RestoreWin()
     endif
 endfun
 
-fun! s:OpenOutBuf(which)
+fun! s:OpenOutBuf(which, clear)
     if !exists('g:MagicUseEfm')
         let g:MagicUseEfm = 0
     endif
@@ -114,23 +114,23 @@ fun! s:OpenOutBuf(which)
             wincmd J
         elseif bufwinnr("MagicOutput") != -1
             silent exe bufwinnr("MagicOutput") . "wincmd w"
-            silent exe "%d"
         elseif bufwinnr("MagicOutput") == -1
             silent split
             silent exe "b " . bufnr("MagicOutput")
             silent exe "wincmd J"
-            silent exe "%d"
         endif
         setlocal bufhidden=hide buftype=nofile nobuflisted nolist
         setlocal noswapfile nowrap
         set ft=log
+
+        if a:clear | silent exe "%d" | endif
 
         silent resize 12
     endif
     call s:RestoreWin()
 
 endfun
-command! -nargs=0 MagicBufferOpen call s:OpenOutBuf('magic')
+command! -nargs=0 MagicBufferOpen call s:OpenOutBuf('magic', 0)
 
 fun! s:CloseOutBufs()
     call s:SaveWin()

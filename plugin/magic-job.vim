@@ -74,7 +74,8 @@ endfunction
 
 " Helper Functions
 fun! s:SaveWin()
-    let s:currentWin = winbufnr('%')
+    let s:currentWin = winnr()
+    let s:currentBuf = bufnr('%')
     let s:currentTab = tabpagenr()
 endfun
 
@@ -82,7 +83,9 @@ fun! s:RestoreWin()
     if s:currentTab <= tabpagenr('$')
         silent exe "normal! ".s:currentTab."gt"
     endif
-    silent exe s:currentWin."wincmd w"
+    if s:currentBuf != bufnr("MagicOutput")
+        silent exe s:currentWin."wincmd w"
+    endif
 endfun
 
 fun! s:OpenOutBuf(which)
@@ -90,6 +93,7 @@ fun! s:OpenOutBuf(which)
         let g:MagicUseEfm = 0
     endif
 
+    call s:SaveWin()
     if a:which == 'qf'
         call setqflist([], 'r')
         " Not to be trusted! Specific to my usecase!
@@ -125,8 +129,10 @@ fun! s:OpenOutBuf(which)
 
         silent resize 12
     endif
+    call s:RestoreWin()
 
 endfun
+command! -nargs=0 MagicBufferOpen call s:OpenOutBuf('magic')
 
 fun! s:CloseOutBufs()
     call s:SaveWin()
@@ -139,23 +145,28 @@ fun! s:JobPipeHandle(job, message)
     if s:MagicJobType == 'qf'
         caddexpr a:message
     else
-        call s:SaveWin()
 
-        let outBuf = bufnr("MagicOutput")
-        let outWin = bufwinnr(outBuf)
-        if outWin == -1
-            silent exe "b".outBuf
-            silent exe "normal! Gi" . a:message
-            silent exe "normal! o"
-            silent exe "b ".currentBuf
-        else
-            let currWin = bufwinnr("%")
-            silent exe outWin."wincmd w"
-            silent exe "normal! Gi" . a:message
-            silent exe "normal! o"
-            silent exe s:currentWin."wincmd w"
+        if !exists('s:outList')
+            let s:outList = []
         endif
 
-        call s:RestoreWin()
+        call add(s:outList, a:message)
+        if len(s:outList) > 6
+            let outBuf = bufnr("MagicOutput")
+            let outWin = bufwinnr("MagicOutput")
+            let saveWin = winnr()
+            if outWin != -1
+                if outWin == saveWin
+                    silent exe outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
+                else
+                    silent exe outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
+                    silent exe saveWin." wincmd w"
+                endif
+            else
+                silent exe "b".outBuf." | call append(line('$'), " . string(s:outList) . ")". " | b#"
+            endif
+            let s:outList = []
+        endif
     endif
 endfun
+

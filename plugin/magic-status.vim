@@ -83,5 +83,7 @@ endfunction
 function! MyTabLabel(n)
     let buflist = tabpagebuflist(a:n)
     let winnr = tabpagewinnr(a:n)
-    return a:n." ".substitute(bufname(buflist[winnr - 1]), '.\+\/\(.\+\)', '\1', 'g')
+    let bufname = bufname(buflist[winnr - 1])
+    if bufname == '' | let bufname='[NULL]' | endif
+    return a:n." ".substitute(bufname, '.\+\/\(.\+\)', '\1', 'g')
 endfunction

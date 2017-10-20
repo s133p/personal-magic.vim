@@ -4,6 +4,7 @@ function! MagicJob(qf, command)
         call MagicJobKill()
     endif
 
+    call s:CloseOutBufs()
     if a:qf ==# '!'
         let s:MagicJobType = 'qf'
         call s:OpenOutBuf('qf', 1)
@@ -34,6 +35,7 @@ command! -nargs=? -bang -complete=shellcmd J call MagicJob('<bang>', <q-args>)
 function! s:MagicCallback(job, status)
     call s:SaveWin()
     call s:StatusUpdate(a:status ==# 0 ? '[DONE]' : '[FAIL]' , a:status)
+    call s:BufferPiper('', 1)
     if a:status ==# 0
         call s:CloseOutBufs()
     endif
@@ -92,7 +94,7 @@ fun! s:OpenOutBuf(which, clear)
     endif
 
     call s:SaveWin()
-    if a:which ==# 'qf'
+    if a:which ==? 'qf'
         call setqflist([], 'r')
         " Not to be trusted! Specific to my usecase!
         if g:MagicUseEfm ==# 1
@@ -138,7 +140,8 @@ fun! s:CloseOutBufs()
     call s:RestoreWin()
 endfun
 
-fun! s:JobPipeHandle(job, message)
+
+fun! s:BufferPiper(message, flush)
     if s:MagicJobType ==# 'qf'
         caddexpr a:message
     else
@@ -148,7 +151,7 @@ fun! s:JobPipeHandle(job, message)
         endif
 
         call add(s:outList, a:message)
-        if len(s:outList) > 6
+        if len(s:outList) > 6 || a:flush == 1
             let l:outBuf = bufnr('MagicOutput')
             let l:outWin = bufwinnr('MagicOutput')
             let l:saveWin = winnr()
@@ -165,5 +168,9 @@ fun! s:JobPipeHandle(job, message)
             let s:outList = []
         endif
     endif
+endfun
+
+fun! s:JobPipeHandle(job, message)
+    call s:BufferPiper(a:message, 0)
 endfun
 

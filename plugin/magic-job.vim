@@ -94,7 +94,7 @@ fun! s:OpenOutBuf(which, clear)
     call s:SaveWin()
     if a:which ==# 'qf'
         call setqflist([], 'r')
-        ' Not to be trusted! Specific to my usecase!
+        " Not to be trusted! Specific to my usecase!
         if g:MagicUseEfm ==# 1
             let s:mahErrorFmt=&efmL
         elseif g:MagicUseEfm ==# 2
@@ -104,7 +104,7 @@ fun! s:OpenOutBuf(which, clear)
         silent exec 'copen'
         silent exec 'wincmd J'
 
-        ' Not to be trusted! Specific to my usecase!
+        " Not to be trusted! Specific to my usecase!
         if g:MagicUseEfm !=# 0
             exe 'set efm='.escape(s:mahErrorFmt, ' ')
         endif
@@ -154,13 +154,13 @@ fun! s:JobPipeHandle(job, message)
             let l:saveWin = winnr()
             if l:outWin !=# -1
                 if l:outWin ==# l:saveWin
-                    silent exe l:outWin.' wincmd w | call append(line('$'), ' . string(s:outList) . ')'. ' | norm!G'
+                    silent exe outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
                 else
-                    silent exe l:outWin.' wincmd w | call append(line('$'), ' . string(s:outList) . ')'. ' | norm!G'
-                    silent exe l:saveWin.' wincmd w'
+                    silent exe outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
+                    silent exe saveWin." wincmd w"
                 endif
             else
-                silent exe 'b'.l:outBuf.' | call append(line('$'), ' . string(s:outList) . ')'. ' | b#'
+                silent exe "b".outBuf." | call append(line('$'), " . string(s:outList) . ")". " | b#"
             endif
             let s:outList = []
         endif

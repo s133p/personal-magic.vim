@@ -25,7 +25,7 @@ built in copy and paste functionality.
 
 [magicjob.vim][] provides functions that leverage vim8 jobs to run
 commands asynchronously and displays the results in real time
-without blocking. **Very rough and undocumented!**
+without blocking. **Rough and undocumented!**
 
 
 ## Magic-Functions.vim

@@ -2,20 +2,20 @@
 
 " Helper function
 function! s:MagicDo(type, what_magic, ...)
-    let sel_save = &selection
-    let &selection = "inclusive"
-    let reg_save = @@
+    let l:sel_save = &selection
+    let &selection = 'inclusive'
+    let l:reg_save = @@
 
-    if a:type == 'v'  " Invoked from Visual mode, use gv command.
-        silent exe "normal! gv" . a:what_magic
-    elseif a:type == 'line'
+    if a:type ==? 'v'  " Invoked from Visual mode, use gv command.
+        silent exe 'normal! gv' . a:what_magic
+    elseif a:type ==? 'line'
         silent exe "normal! '[V']" . a:what_magic
     else
-        silent exe "normal! `[v`]" . a:what_magic
+        silent exe 'normal! `[v`]' . a:what_magic
     endif
 
-    let &selection = sel_save
-    let @@ = reg_save
+    let &selection = l:sel_save
+    let @@ = l:reg_save
 endfunction
 
 " Stamp last yank over motion/selection

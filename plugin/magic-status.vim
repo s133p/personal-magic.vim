@@ -7,7 +7,7 @@ function! StatuslineGit()
   " let l:branchname = substitute(fugitive#statusline(), 'Git(\(.\+\))', '\1', 'g')
   let l:branchname = fugitive#head()
   let l:out = '  '.l:branchname.'  '
-  return strlen(l:branchname) > 0?l:out:''
+  return strlen(l:branchname) > 0 ? l:out : ''
 endfunction
 
 function! StatuslineRo()
@@ -29,10 +29,10 @@ function! MagicStatusLine(active)
     let l:line.='%#CursorLineNr#%{StatuslineRo()}'
 
     if a:active
-        if exists('g:MagicStatusJob') && g:MagicStatusJob != ''
+        if exists('g:MagicStatusJob') && g:MagicStatusJob !=# ''
             let l:line.='%#StatusLine#'
             let l:line.=g:MagicStatusJob.' '
-        elseif exists('g:MagicStatusWarn') && g:MagicStatusWarn != ''
+        elseif exists('g:MagicStatusWarn') && g:MagicStatusWarn !=# ''
             let l:line.='%#CursorLineNr#'
             let l:line.=' '.g:MagicStatusWarn.' '
         endif
@@ -42,38 +42,38 @@ endfunction
 
 
 function! MyTabLine()
-    let s = ''
-    for i in range(tabpagenr('$'))
-        " select the highlighting
-        if i + 1 == tabpagenr()
-            let s .= '%#CursorLineNr#'
+    let l:s = ''
+    for l:i in range(tabpagenr('$'))
+        " l:select the highlighting
+        if l:i + 1 == tabpagenr()
+            let l:s .= '%#CursorLineNr#'
         else
-            let s .= '%#TabLine#'
+            let l:s .= '%#TabLine#'
         endif
 
-        " set the tab page number (for mouse clicks)
-        let s .= '%' . (i + 1) . 'T'
+        " l:set the tab page number (for mouse clicks)
+        let l:s .= '%' . (l:i + 1) . 'T'
 
         " the label is made by MyTabLabel()
-        let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
+        let l:s .= ' %{MyTabLabel(' . (l:i + 1) . ')} '
     endfor
 
     " after the last tab fill with TabLineFill and reset tab page nr
-    let s .= '%#TabLineFill#%T'
+    let l:s .= '%#TabLineFill#%T'
 
     " right-align the label to close the current tab page
     if tabpagenr('$') > 1
-        let s .= '%=%#TabLine#%999X[ X ]'
+        let l:s .= '%=%#TabLine#%999X[ X ]'
     endif
 
-    return s
+    return l:s
 endfunction
 
 
 function! MyTabLabel(n)
-    let buflist = tabpagebuflist(a:n)
-    let winnr = tabpagewinnr(a:n)
-    let bufname = bufname(buflist[winnr - 1])
-    if bufname == '' | let bufname='[NULL]' | endif
-    return a:n." ".substitute(bufname, '.\+\/\(.\+\)', '\1', 'g')
+    let l:buflist = tabpagebuflist(a:n)
+    let l:winnr = tabpagewinnr(a:n)
+    let l:bufname = bufname(l:buflist[l:winnr - 1])
+    if l:bufname ==# '' | let l:bufname='[NULL]' | endif
+    return a:n.' '.substitute(l:bufname, '.\+\/\(.\+\)', '\1', 'g')
 endfunction

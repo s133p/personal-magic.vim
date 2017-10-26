@@ -83,5 +83,20 @@ function! s:MagicCompileRun(bang)
     endif
 endfunction
 
+function! DoDevOpen()
+    let l:run = ''
+    if has('mac')
+        let l:run = "!open xcode/*.xcodeproj"
+    elseif has('win32')
+        let l:dir = 'vs2015'
+        if !isdirectory(l:dir)
+            let l:dir = 'vs2013'
+        endif
+        let l:run = 'J start devenv ' . l:dir . '/' . split(getcwd(), '/')[-1] .'.sln'
+    endif
+    silent exec l:run
+endfun
+nnoremap <Plug>DevOpen :call DoDevOpen()<cr>
+
 command! -nargs=1 MCompile call s:MagicCompile(<q-args>)
 command! -bang MCRun call s:MagicCompileRun('<bang>')

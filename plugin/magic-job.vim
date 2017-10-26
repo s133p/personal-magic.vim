@@ -25,7 +25,14 @@ function! MagicJob(qf, command)
     let l:opts['err_cb']=l:OutFn
     let l:opts['exit_cb']=l:CallbackFn
     let s:mahJob = job_start([&shell, &shellcmdflag, l:finalcmd], l:opts)
-    call s:StatusUpdate('['.l:finalcmd.']', 1)
+
+    let l:statusMsg = l:finalcmd
+    if matchstr(l:finalcmd, 'msbuild') != ''
+        let l:statusMsg = (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE') . ' Build'
+    elseif matchstr(l:finalcmd, '\.exe') != ''
+        let l:statusMsg = substitute(l:finalcmd, '.\+\/\(.\{-}\.exe\)', '\1', '')
+    endif
+    call s:StatusUpdate('['.l:statusMsg.']', 1)
     call s:RestoreWin()
 endfunction
 

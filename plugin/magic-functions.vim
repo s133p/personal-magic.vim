@@ -1,3 +1,10 @@
+" Buf Wiper (close all buffers but current)
+function! s:BufWipe()
+    let l:cBuf = bufnr('%')
+    bufdo if bufnr('%')!=l:cBuf | bw | endif
+endfunction
+command! -nargs=0 BufWipe call s:BufWipe()
+
 " Open current directory / Document directory in appropriate file-viewer
 function! s:MagicOpen(bang)
     let cmd = ''
@@ -136,9 +143,10 @@ command! -nargs=0 DsScaleEngine call s:DsEngineConfig('s')
 " Windows convienence for making local visual studio solution
 function! s:MakeLocalSln()
     let projName = (split(getcwd(), '/')[-1])
-    let currsln = "vs2013/" . projName . ".sln"
+    let vsVer = isdirectory('./vs2015') ? "vs2015" : "vs2013"
+    let currsln = vsVer . "/" . projName . ".sln"
     silent exec "vs " . currsln
-    silent exec "sav vs2013/local.sln"
+    silent exec "sav ".vsVer."/local.sln"
     silent exec 'g/%/norm! f%xct%=$"lx'
     silent exec 'write'
 endfunction

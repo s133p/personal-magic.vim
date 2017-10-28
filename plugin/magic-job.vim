@@ -28,9 +28,9 @@ function! MagicJob(qf, command)
 
     let l:statusMsg = l:finalcmd
     if matchstr(l:finalcmd, 'msbuild') != ''
-        let l:statusMsg = (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE') . ' Build'
+        let l:statusMsg =  'Build ' . (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE')
     elseif matchstr(l:finalcmd, '\.exe') != ''
-        let l:statusMsg = substitute(l:finalcmd, '.\+\/\(.\{-}\.exe\)', '\1', '')
+        let l:statusMsg = (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE') . ' ' . substitute(l:finalcmd, '.\+\/\(.\{-}\.exe\)', '\1', '')
     endif
     call s:StatusUpdate('['.l:statusMsg.']', 1)
     call s:RestoreWin()

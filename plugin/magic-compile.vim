@@ -71,14 +71,14 @@ endfunction
 " :J repeats, :J! repeats, keeping results open
 function! s:MagicCompileRun(bang)
     if exists('s:magicToRun') && s:magicToRun !=# ''
-        exe 'MagicJob'. a:bang . ' ' . s:magicToRun
+        silent exe 'MagicJob'. a:bang . ' ' . s:magicToRun
     else
         let l:settings = s:GetBuildSettings()
         if has_key(l:settings, 'RUN') && len(l:settings['RUN']) >= 1
             let l:run = substitute(l:settings['RUN'][0], '\$FULLWD', getcwd(), 'g')
             let l:run = substitute(l:run, '\$WD', split(getcwd(), '/')[-1], 'g')
             let l:run = substitute(l:run, '%', expand('%'), 'g')
-            exe 'MagicJob'. a:bang . ' ' . l:run
+            silent exe 'MagicJob'. a:bang . ' ' . l:run
         endif
     endif
 endfunction

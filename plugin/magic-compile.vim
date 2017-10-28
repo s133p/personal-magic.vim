@@ -96,7 +96,7 @@ function! DoDevOpen()
     endif
     silent exec l:run
 endfun
-nnoremap <Plug>DevOpen :call DoDevOpen()<cr>
+nnoremap <Plug>(DevOpen) :call DoDevOpen()<cr>
 
 command! -nargs=1 MCompile call s:MagicCompile(<q-args>)
 command! -bang MCRun call s:MagicCompileRun('<bang>')

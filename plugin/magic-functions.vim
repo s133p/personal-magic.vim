@@ -1,9 +1,38 @@
+" Math scratch-buf
+fun! s:OpenMathBuf()
+    if bufnr('MATH') ==# -1
+        silent new MATH
+        wincmd K
+    elseif bufwinnr('MATH') !=# -1
+        silent exe bufwinnr('MATH') . 'wincmd w'
+    elseif bufwinnr('MATH') ==# -1
+        silent split
+        silent exe 'b ' . bufnr('MATH')
+        silent exe 'wincmd J'
+    endif
+
+    setlocal bufhidden=delete buftype=nofile nobuflisted nolist noswapfile nowrap filetype=log
+    silent resize 6
+
+    imap <buffer> <enter> <esc>0yyp;c$A
+    nmap <buffer> <enter> 0;c$
+    nmap <buffer> q 0y$:bw<cr>
+endfun
+nnoremap <Plug>((MagicMathBuf)) :call <SID>OpenMathBuf()<cr>
+
+
 " Buf Wiper (close all buffers but current)
-function! s:BufWipe()
-    let l:cBuf = bufnr('%')
-    bufdo if bufnr('%')!=l:cBuf | bw | endif
+function! s:BufWipe(bang)
+    let l:cBufs = a:bang=='!' ? [bufnr('%')] : tabpagebuflist()
+    let l:buffers = map(copy(getbufinfo()), 'v:val.bufnr')
+
+    for l:b in l:buffers
+        if index(l:cBufs, l:b) == -1
+            silent exe string(l:b).'bw'
+        endif
+    endfor
 endfunction
-command! -nargs=0 BufWipe call s:BufWipe()
+command! -nargs=0 -bang BufWipe call s:BufWipe('<bang>')
 
 " Open current directory / Document directory in appropriate file-viewer
 function! s:MagicOpen(bang)
@@ -22,37 +51,17 @@ command! -nargs=0 -bang MagicOpen call s:MagicOpen('<bang>')
 
 " Put all trailing '>' | '/>' back on previous line
 function! s:XmlCleaner()
+    exe CleanWhitespace
     norm! gg=G'
-    exec 'g/^\s\+\(>\|\/>\)/norm! kJ'
+    " Fix trailing closing >
+    silent exec 'g/^\s\+\(>\|\/>\)/norm! kJ'
 endfunction
 command! -nargs=0 XmlClean call s:XmlCleaner()
-
-" Toggle between showing & hiding tab characters
-function! s:ListTabToggle()
-    if &list == 0
-        return
-    endif
-
-    let currtab = split(&listchars, ',')[-1]
-
-    if !exists("s:savetab")
-        let s:savetab = currtab
-    endif
-
-    if currtab == s:savetab
-        exe "set listchars-=" . s:savetab
-        set listchars+=tab:\ \ 
-    else
-        set listchars-=tab:\ \ 
-        exe "set listchars+=" . s:savetab
-    endif
-endfunction
-command! -nargs=0 ListTabToggle call s:ListTabToggle()
 
 " Toggle quickfix visibility
 function! s:QuickfixToggle()
     let nr = winnr("$")
-    cwindow
+    copen | wincmd J
     let nr2 = winnr("$")
     if nr == nr2
         cclose

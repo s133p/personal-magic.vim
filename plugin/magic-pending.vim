@@ -47,20 +47,20 @@ function! MagicCinderSearch(type, ...)
 endfunction
 
 
-nnoremap <Plug>MagicStamp :set opfunc=MagicStamp<CR>g@
-vnoremap <Plug>MagicStamp :<C-U>call MagicStamp(visualmode())<CR>
+nnoremap <Plug>(MagicStamp) :set opfunc=MagicStamp<CR>g@
+vnoremap <Plug>(MagicStamp) :<C-U>call MagicStamp(visualmode())<CR>
 
-nnoremap <Plug>MagicClip :set opfunc=MagicClip<CR>g@
-vnoremap <Plug>MagicClip :<C-U>call MagicClip(visualmode())<CR>
+nnoremap <Plug>(MagicClip) :set opfunc=MagicClip<CR>g@
+vnoremap <Plug>(MagicClip) :<C-U>call MagicClip(visualmode())<CR>
 
-nnoremap <Plug>MagicPaste :set opfunc=MagicPaste<CR>g@
-vnoremap <Plug>MagicPaste :<C-U>call MagicPaste(visualmode())<CR>
+nnoremap <Plug>(MagicPaste) :set opfunc=MagicPaste<CR>g@
+vnoremap <Plug>(MagicPaste) :<C-U>call MagicPaste(visualmode())<CR>
 
-nnoremap <Plug>MagicCalc :set opfunc=MagicCalc<CR>g@
-vnoremap <Plug>MagicCalc :<C-U>call MagicCalc(visualmode())<CR>
+nnoremap <Plug>(MagicCalc) :set opfunc=MagicCalc<CR>g@
+vnoremap <Plug>(MagicCalc) :<C-U>call MagicCalc(visualmode())<CR>
 
-nnoremap <Plug>MagicSearch :set opfunc=MagicSearch<CR>g@
-vnoremap <Plug>MagicSearch :<C-U>call MagicSearch(visualmode())<CR>
+nnoremap <Plug>(MagicSearch) :set opfunc=MagicSearch<CR>g@
+vnoremap <Plug>(MagicSearch) :<C-U>call MagicSearch(visualmode())<CR>
 
-nnoremap <Plug>MagicCinderSearch :set opfunc=MagicCinderSearch<CR>g@
-vnoremap <Plug>MagicCinderSearch :<C-U>call MagicCinderSearch(visualmode())<CR>
+nnoremap <Plug>(MagicCinderSearch) :set opfunc=MagicCinderSearch<CR>g@
+vnoremap <Plug>(MagicCinderSearch) :<C-U>call MagicCinderSearch(visualmode())<CR>

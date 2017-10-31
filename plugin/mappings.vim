@@ -6,12 +6,14 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nmap <silent> <leader>B :MCompile RELEASE<cr>
     nmap <silent> <leader>r :MCRun<cr>
     nmap <silent> <leader>jk :call MagicJobKill()<cr>
+
     " Quickfix / MagicJob output
     nmap <leader>z :QfToggle<cr>
     nmap <leader>Z :MagicBufferOpen<cr>
     nnoremap <silent> <leader>o :MagicOpen<cr>
     nnoremap <silent> <leader>O :MagicOpen!<cr>
     nmap <leader>gx <Plug>(DevOpen)
+
     " Custom operator-pending mappings & pairings
     map s <Plug>(MagicStamp)
     nmap S v$h<Plug>(MagicStamp)
@@ -32,7 +34,6 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nnoremap <silent> cos :set spell!<cr>
     nnoremap <silent> cow :CleanWhitespace<cr>
     nnoremap cof :up<cr>:CFormat!<cr>:up<cr>
-
 
     augroup MagicMapAugroup
         autocmd!

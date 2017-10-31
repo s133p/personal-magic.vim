@@ -77,3 +77,9 @@ function! MyTabLabel(n)
     if l:bufname ==# '' | let l:bufname='[NULL]' | endif
     return a:n.' '.substitute(l:bufname, '.\+\/\(.\+\)', '\1', 'g')
 endfunction
+
+if exists('g:MagicStatusEnable')
+    set statusline=%!MagicStatusLine(1)
+    set showtabline=2
+    set tabline=%!MyTabLine()
+endif

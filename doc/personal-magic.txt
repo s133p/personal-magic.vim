@@ -1,0 +1,43 @@
+*personal-magic.txt*  Personal plugin for all my Vim goodness.
+
+Author:  Luke Purcell <http://github.com/s133p>
+License: Same terms as Vim itself (see |license|)
+
+INTRODUCTION                                    *personal-magic*
+
+This plugin is a collection of useful functions, mappings, and sugar that
+powers my daily use.
+
+MAPPINGS                                        *personal-magic-mappings*
+
+Delete surroundings is *ds* .  The next character given determines the target
+to delete.  The exact nature of the target is explained in |surround-targets|
+but essentially it is the last character of a |text-object|.  This mapping
+deletes the difference between the "i"nner object and "a"n object.  This is
+easiest to understand with some examples:
+
+  Old text                  Command     New text ~
+  "Hello *world!"           ds"         Hello world!
+  (123+4*56)/2              ds)         123+456/2
+  <div>Yo!*</div>           dst         Yo!
+
+Change surroundings is *cs* .  It takes two arguments, a target like with
+|ds|, and a replacement.  *cS* changes surroundings, placing the surrounded
+text on its own line(s) like |yS|.  Details about the second argument can be
+found below in |surround-replacements|.  Once again, examples are in order.
+
+  Old text                  Command     New text ~
+  "Hello *world!"           cs"'        'Hello world!'
+  "Hello *world!"           cs"<q>      <q>Hello world!</q>
+  (123+4*56)/2              cs)]        [123+456]/2
+  (123+4*56)/2              cs)[        [ 123+456 ]/2
+  <div>Yo!*</div>           cst<p>      <p>Yo!</p>
+
+*ys* takes a valid Vim motion or text object as the first object, and wraps
+it using the second argument as with |cs|.  (It's a stretch, but a good
+mnemonic for "ys" is "you surround".)
+
+  Old text                  Command     New text ~
+  Hello w*orld!             ysiw)       Hello (world)!
+
+ vim:tw=78:ts=8:ft=help:norl:

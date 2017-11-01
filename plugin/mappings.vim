@@ -7,6 +7,8 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nmap <silent> <leader>r :MCRun<cr>
     nmap <silent> <leader>jk :call MagicJobKill()<cr>
 
+    vmap <leader>t <Plug>(MagicTemplate)
+
     " Quickfix / MagicJob output
     nmap <leader>z :QfToggle<cr>
     nmap <leader>Z :MagicBufferOpen<cr>

@@ -18,7 +18,7 @@ fun! s:OpenMathBuf()
     nmap <buffer> <enter> 0;c$
     nmap <buffer> q 0y$:bw<cr>
 endfun
-nnoremap <Plug>((MagicMathBuf)) :call <SID>OpenMathBuf()<cr>
+nnoremap <Plug>(MagicMathBuf) :call <SID>OpenMathBuf()<cr>
 
 
 " Buf Wiper (close all buffers but current)

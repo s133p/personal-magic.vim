@@ -5,6 +5,15 @@ License: Same terms as Vim itself (see |license|)
 
 INTRODUCTION                                        *personal-magic*
 
+M"""""`'"""`YM                   oo          M""MMMMM""M M""M M"""""`'"""`YM ~
+M  mm.  mm.  M                               M  MMMMM  M M  M M  mm.  mm.  M ~
+M  MMM  MMM  M .d8888b. .d8888b. dP .d8888b. M  MMMMP  M M  M M  MMM  MMM  M~
+M  MMM  MMM  M 88'  `88 88'  `88 88 88'  `"" M  MMMM' .M M  M M  MMM  MMM  M~
+M  MMM  MMM  M 88.  .88 88.  .88 88 88.  ... M  MMP' .MM M  M M  MMM  MMM  M~
+M  MMM  MMM  M `88888P8 `8888P88 dP `88888P' M     .dMMM M  M M  MMM  MMM  M~
+MMMMMMMMMMMMMM               .88             MMMMMMMMMMM MMMM MMMMMMMMMMMMMM~
+                         d8888P                                             ~
+
 This plugin is a collection of useful functions, mappings, and sugar that
 powers my daily use.
 

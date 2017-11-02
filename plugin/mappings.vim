@@ -1,6 +1,10 @@
 " Setup mappings
 if exists('g:MagicMapAll') && g:MagicMapAll == 1
 
+    " Git
+    nmap <leader>gp :MagicJobS git push<cr>
+    nmap <leader>gu :MagicJobS git pull<cr>
+
     " Compile for OSX & Windows using MagicJob()
     nmap <silent> <leader>b :MCompile DEBUG<cr>
     nmap <silent> <leader>B :MCompile RELEASE<cr>

@@ -8,6 +8,9 @@ function! MagicJob(qf, command)
     if a:qf ==# '!'
         let s:MagicJobType = 'qf'
         call s:OpenOutBuf('qf', 1)
+    else if a:qf !=# ''
+        let s:MagicJobType = 'magic'
+        call s:OpenOutBuf('magic', 1, a:qf)
     else
         let s:MagicJobType = 'magic'
         call s:OpenOutBuf('magic', 1)
@@ -38,6 +41,7 @@ endfunction
 
 command! -nargs=? -bang -complete=shellcmd MagicJob call MagicJob('<bang>', <q-args>)
 command! -nargs=? -bang -complete=shellcmd J call MagicJob('<bang>', <q-args>)
+command! -nargs=? -bang -complete=shellcmd MagicJobS call MagicJob('4', <q-args>)
 
 function! s:MagicCallback(job, status)
     call s:SaveWin()
@@ -95,7 +99,7 @@ fun! s:RestoreWin()
     endif
 endfun
 
-fun! s:OpenOutBuf(which, clear)
+fun! s:OpenOutBuf(which, clear, ...)
     if !exists('g:MagicUseEfm')
         let g:MagicUseEfm = 0
     endif
@@ -133,7 +137,11 @@ fun! s:OpenOutBuf(which, clear)
 
         if a:clear | silent exe '%d' | endif
 
-        silent resize 12
+        if a:0 == 0 
+            silent resize 12
+        else
+            silent resize a:1
+        endif
     endif
     call s:RestoreWin()
 

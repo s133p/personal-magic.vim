@@ -17,16 +17,17 @@ endfunction
 function! MagicStatusLine(active)
     let l:line = ''
     if a:active
-        let l:line.='%#CursorLineNr#'
+        let l:line.='%#Conceal#'
+        " let l:line.='%#CursorLineNr#'
         let l:line.='%{StatuslineGit()}'
         " let l:line.='%{fugitive#statusline()}'
     endif
-    let l:line.='%#StatusLine#'
+    let l:line.='%#LineNr#'
     let l:line.=' %f'
     let l:line.='%m '
     let l:line.='%='
     let l:line.=' %y '
-    let l:line.='%#CursorLineNr#%{StatuslineRo()}'
+    let l:line.='%#Conceal#%{StatuslineRo()}'
 
     if a:active
         if exists('g:MagicStatusJob') && g:MagicStatusJob !=# ''
@@ -42,13 +43,17 @@ endfunction
 
 
 function! MyTabLine()
-    let l:s = ''
+    let l:s = '%#Conceal#'
+    let l:s .= has('nvim')?'    ':'   '
     for l:i in range(tabpagenr('$'))
         " l:select the highlighting
         if l:i + 1 == tabpagenr()
-            let l:s .= '%#CursorLineNr#'
+            " let l:s .= '%#DiffChange#'
+            let l:s .= '%#Conceal#'
+            " let l:s .= '%#PmenuSel#'
         else
-            let l:s .= '%#TabLine#'
+            " let l:s .= '%#Conceal#'
+            let l:s .= '%#NonText#'
         endif
 
         " l:set the tab page number (for mouse clicks)
@@ -59,12 +64,7 @@ function! MyTabLine()
     endfor
 
     " after the last tab fill with TabLineFill and reset tab page nr
-    let l:s .= '%#TabLineFill#%T'
-
-    " right-align the label to close the current tab page
-    if tabpagenr('$') > 1
-        let l:s .= '%=%#TabLine#%999X[ X ]'
-    endif
+    let l:s .= '%#Conceal#'
 
     return l:s
 endfunction

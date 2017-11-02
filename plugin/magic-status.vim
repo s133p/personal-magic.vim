@@ -34,7 +34,7 @@ function! MagicStatusLine(active)
             let l:line.='%#StatusLine#'
             let l:line.=g:MagicStatusJob.' '
         elseif exists('g:MagicStatusWarn') && g:MagicStatusWarn !=# ''
-            let l:line.='%#CursorLineNr#'
+            let l:line.='%#PmenuSel#'
             let l:line.=' '.g:MagicStatusWarn.' '
         endif
     endif

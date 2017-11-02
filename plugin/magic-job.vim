@@ -76,6 +76,7 @@ function! MagicJobKill()
     else
         echo 'No running job'
     endif
+    let g:MagicStatusWarn = ''
 endfunction
 
 function! MagicJobInfo()

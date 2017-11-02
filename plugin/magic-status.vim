@@ -17,12 +17,17 @@ endfunction
 function! MagicStatusLine(active)
     let l:line = ''
     if a:active
-        let l:line.='%#Conceal#'
-        " let l:line.='%#CursorLineNr#'
+        let l:line.='%#DiffChange#'
+        " let l:line.='%#WildMenu#'
+        " let l:line.='%#QuestionsorLineNr#'
         let l:line.='%{StatuslineGit()}'
         " let l:line.='%{fugitive#statusline()}'
     endif
-    let l:line.='%#LineNr#'
+    if a:active
+        let l:line.='%#TabLineSel#'
+    else
+        let l:line.='%#TabLine#'
+    endif
     let l:line.=' %f'
     let l:line.='%m '
     let l:line.='%='
@@ -34,7 +39,7 @@ function! MagicStatusLine(active)
             let l:line.='%#StatusLine#'
             let l:line.=g:MagicStatusJob.' '
         elseif exists('g:MagicStatusWarn') && g:MagicStatusWarn !=# ''
-            let l:line.='%#PmenuSel#'
+            let l:line.='%#DiffChange#'
             let l:line.=' '.g:MagicStatusWarn.' '
         endif
     endif
@@ -43,17 +48,17 @@ endfunction
 
 
 function! MyTabLine()
-    let l:s = '%#Conceal#'
+    let l:s = '%#TabLineFill#'
     let l:s .= has('nvim')?'    ':'   '
     for l:i in range(tabpagenr('$'))
         " l:select the highlighting
         if l:i + 1 == tabpagenr()
             " let l:s .= '%#DiffChange#'
-            let l:s .= '%#Conceal#'
-            " let l:s .= '%#PmenuSel#'
+            " let l:s .= '%#Conceal#'
+            let l:s .= '%#DiffChange#'
         else
             " let l:s .= '%#Conceal#'
-            let l:s .= '%#NonText#'
+            let l:s .= '%#TabLine#'
         endif
 
         " l:set the tab page number (for mouse clicks)
@@ -64,7 +69,7 @@ function! MyTabLine()
     endfor
 
     " after the last tab fill with TabLineFill and reset tab page nr
-    let l:s .= '%#Conceal#'
+    let l:s .= '%#TabLineFill#'
 
     return l:s
 endfunction

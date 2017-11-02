@@ -42,10 +42,12 @@ function! MagicJob(qf, command, ...)
     endif
 
     let l:statusMsg = l:finalcmd
-    if matchstr(l:finalcmd, 'msbuild') != ''
+
+    if matchstr(l:finalcmd, 'msbuild') != '' || matchstr(l:finalcmd, 'make') != ''
         let l:statusMsg =  'Build ' . (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE')
-    elseif matchstr(l:finalcmd, '\.exe') != ''
-        let l:statusMsg = (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE') . ' ' . substitute(l:finalcmd, '.\+\/\(.\{-}\.exe\)', '\1', '')
+    elseif matchstr(l:finalcmd, '\.exe') != '' || matchstr(l:finalcmd, '\.app') != ''
+        " let l:statusMsg = (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE') . ' ' . substitute(l:finalcmd, '.\+\/\(.\{-}\.\(exe\|app\)\)', '\1', '')
+        let l:statusMsg = (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE') . ' ' . split(getcwd(), '/')[-1]
     endif
     call s:StatusUpdate('['.l:statusMsg.']', 1)
     call s:RestoreWin()

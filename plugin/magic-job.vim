@@ -22,15 +22,24 @@ function! MagicJob(qf, command, ...)
         let l:finalcmd .= ';return 1'
     endif
 
-    let l:OutFn = function('s:JobPipeHandle')
-    let l:CallbackFn = function('s:MagicCallback')
     let l:opts = {}
-    let l:opts['out_io']='pipe'
-    let l:opts['err_io']='pipe'
-    let l:opts['out_cb']=l:OutFn
-    let l:opts['err_cb']=l:OutFn
-    let l:opts['exit_cb']=l:CallbackFn
-    let s:mahJob = job_start([&shell, &shellcmdflag, l:finalcmd], l:opts)
+    if !has('nvim')
+        let l:OutFn = function('s:JobPipeHandle')
+        let l:CallbackFn = function('s:MagicCallback')
+        let l:opts['out_io']='pipe'
+        let l:opts['err_io']='pipe'
+        let l:opts['out_cb']=l:OutFn
+        let l:opts['err_cb']=l:OutFn
+        let l:opts['exit_cb']=l:CallbackFn
+        let s:mahJob = job_start([&shell, &shellcmdflag, l:finalcmd], l:opts)
+    else
+        let l:CallbackFn = function('s:NvimMagicCallback')
+        let l:opts['on_stdout']=l:CallbackFn
+        let l:opts['on_stderr']=l:CallbackFn
+        let l:opts['on_exit']=l:CallbackFn
+        let s:mahJob = jobstart([&shell, &shellcmdflag, l:finalcmd], l:opts)
+        echom s:mahJob
+    endif
 
     let l:statusMsg = l:finalcmd
     if matchstr(l:finalcmd, 'msbuild') != ''
@@ -45,6 +54,18 @@ endfunction
 command! -nargs=? -bang -complete=shellcmd MagicJob call MagicJob('<bang>', <q-args>)
 command! -nargs=? -bang -complete=shellcmd J call MagicJob('<bang>', <q-args>)
 command! -nargs=? -bang -count=0 -complete=shellcmd MagicJobS call MagicJob(<q-count>, <q-args>, '<bang>')
+
+if has('nvim')
+    function! s:NvimMagicCallback(job, data, event)
+        if a:event == 'stdout'
+            call s:JobPipeHandle(a:job, a:data)
+        elseif a:event == 'stderr'
+            call s:JobPipeHandle(a:job, a:data)
+        else
+            call s:MagicCallback(s:mahJob, a:data)
+        endif
+    endfunction
+endif
 
 function! s:MagicCallback(job, status)
     call s:SaveWin()
@@ -113,7 +134,7 @@ fun! s:OpenOutBuf(which, clear, ...)
         call setqflist([], 'r')
         " Not to be trusted! Specific to my usecase!
         if g:MagicUseEfm ==# 1
-            let s:mahErrorFmt=&efmL
+            let s:mahErrorFmt=&efm
         elseif g:MagicUseEfm ==# 2
             let s:mahErrorFmt=&grepformat
         endif
@@ -169,20 +190,25 @@ fun! s:BufferPiper(message, flush)
             let s:outList = []
         endif
 
-        call add(s:outList, a:message)
+        if type(a:message)==type("")
+            call add(s:outList, a:message)
+        elseif type(a:message)==type([])
+            call extend(s:outList, a:message)
+        endif
+
         if len(s:outList) > 6 || a:flush == 1
             let l:outBuf = bufnr('MagicOutput')
             let l:outWin = bufwinnr('MagicOutput')
             let l:saveWin = winnr()
             if l:outWin !=# -1
                 if l:outWin ==# l:saveWin
-                    silent exe outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
+                    silent exe l:outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
                 else
-                    silent exe outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
-                    silent exe saveWin." wincmd w"
+                    silent exe l:outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
+                    silent exe l:saveWin." wincmd w"
                 endif
             else
-                silent exe "b".outBuf." | call append(line('$'), " . string(s:outList) . ")". " | b#"
+                silent exe "b".l:outBuf." | call append(line('$'), " . string(s:outList) . ")". " | b#"
             endif
             let s:outList = []
         endif

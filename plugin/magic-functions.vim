@@ -52,12 +52,21 @@ command! -nargs=0 -bang MagicOpen call s:MagicOpen('<bang>')
 
 " Put all trailing '>' | '/>' back on previous line
 function! s:XmlCleaner()
-    exe CleanWhitespace
+    call s:CleanWhitespace()
     norm! gg=G'
     " Fix trailing closing >
     silent exec 'g/^\s\+\(>\|\/>\)/norm! kJ'
 endfunction
 command! -nargs=0 XmlClean call s:XmlCleaner()
+
+" Clean whitespace in current file
+function! s:CleanWhitespace()
+    silent exe "g/^\\s\\+$/s/.\\+//"
+    silent exe "g/\\t/s/\\t/    /g"
+    silent exe "g/\\s\\+$/s/\\s\\+$//g"
+    silent exe 'g//s///g'
+endfunction
+command! -nargs=0 CleanWhitespace call s:CleanWhitespace()
 
 " Toggle quickfix visibility
 function! s:QuickfixToggle()
@@ -69,14 +78,6 @@ function! s:QuickfixToggle()
     endif
 endfunction
 command! -nargs=0 QfToggle call s:QuickfixToggle()
-
-" Clean whitespace in current file
-function! s:CleanWhitespace()
-    silent exe "g/^\\s\\+$/s/.\\+//"
-    silent exe "g/\\t/s/\\t/    /g"
-    silent exe "g/\\s\\+$/s/\\s\\+$//g"
-endfunction
-command! -nargs=0 CleanWhitespace call s:CleanWhitespace()
 
 function! s:ClipGrab(what)
     let l:save_clipboard = &clipboard

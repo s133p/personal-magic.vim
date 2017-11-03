@@ -19,7 +19,7 @@ function! MagicJob(qf, command, ...)
 
     let l:finalcmd = a:command
     if a:0 == 1 && a:1 ==# '!'
-        let l:finalcmd .= ';return 1'
+        let l:finalcmd .= has('win32') ? ' && exit 1' : '; return 1'
     endif
 
     let l:opts = {}

@@ -37,7 +37,7 @@ function! MagicJob(qf, command, ...)
         let l:opts['on_stdout']=l:CallbackFn
         let l:opts['on_stderr']=l:CallbackFn
         let l:opts['on_exit']=l:CallbackFn
-        let s:mahJob = jobstart([&shell, &shellcmdflag, l:finalcmd], l:opts)
+        let s:mahJob = jobstart(l:finalcmd, l:opts)
     endif
 
     let l:statusMsg = l:finalcmd

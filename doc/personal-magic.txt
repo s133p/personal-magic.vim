@@ -3,7 +3,7 @@
 Author:  Luke Purcell <http://github.com/s133p>
 License: Same terms as Vim itself (see |license|)
 
-INTRODUCTION                                        *personal-magic*
+INTRODUCTION                                                  *personal-magic*
 
 M"""""`'"""`YM                   oo          M""MMMMM""M M""M M"""""`'"""`YM ~
 M  mm.  mm.  M                               M  MMMMM  M M  M M  mm.  mm.  M ~
@@ -14,43 +14,56 @@ M  MMM  MMM  M `88888P8 `8888P88 dP `88888P' M     .dMMM M  M M  MMM  MMM  M~
 MMMMMMMMMMMMMM               .88             MMMMMMMMMMM MMMM MMMMMMMMMMMMMM~
                          d8888P                                             ~
 
+CONFIGURATION                                   *personal-magic-configuration*
+
 This plugin is a collection of useful functions, mappings, and sugar that
 powers my daily use.
 
 Set g:MagicMapAll=1 to enable mappings, set g:MagicStatusEnable=1 for magic
 statusline/tabline
 
-PENDING-MAPS                                       *personal-magic-pending*
+MAGIC-JOB                                                          *magic-job*
+MAGIC-PENDING                                                  *magic-pending*
+MAGIC-FORMAT                                                    *magic-format*
+MAGIC-COMPILE                                                  *magic-compile*
+MAGIC-FUNCTIONS                                              *magic-functions*
+MAGIC-MAPPINGS                                                *magic-mappings*
+MAGIC-STATUS                                                    *magic-status*
+MAGIC-TEMPLATE                                                *magic-template*
 
-    Map                       Result ~
-    s|text-object|              Stamps yank register (not effected by delete)
-    <leader>s|text-object|      Stamps system clipboard
-    <leader>y|text-object|      Yank to system clipboard
-    <leader>c|text-object|      Calculates result of |text-object|
-    <leader>ms|text-object|     Searches ./src/** for |text-object|
-    <leader>mc|text-object|     Searches ds-cinder sources for |text-object|
+PENDING-MAPS                                          *personal-magic-pending*
 
-NORMAL-MAPS                                        *personal-magic-normal*
+    Map                         Result ~
+    s|text-object|                Stamps yank register
+    <leader>s|text-object|        Stamps system clipboard
+    <leader>y|text-object|        Yank to system clipboard
+    <leader>c|text-object|        Calculates result of |text-object|
+    <leader>ms|text-object|       Searches ./src/** for |text-object|
+    <leader>mc|text-object|       Searches ds-cinder sources for |text-object|
 
-    Map                       Result ~
-    <leader>b                 Build current project in debug mode
-    <leader>B                 Build current project in release mode
-    <leader>r                 Runs current build (or default)
-    <leader>jk                Kills current magic-job
-    <leader>z                 Toggle Quickfix window
-    <leader>Z                 Toggle Magic-Buffer
-    <leader>o                 Open current directory in GUI
-    <leader>O                 Open current buffer directory in GUI
-    <leader>coh               Toggle search highlighting
-    <leader>cos               Toggle Spelling
-    <leader>cow               Clean Whitespace in file
-    <leader>cof               Save + runs clang-format on file
+NORMAL-MAPS                                            *personal-magic-normal*
 
-FILE-SPECIFIC-MAPS                                 *personal-magic-file*
+    Map                         Result ~
+    <leader>b                   Build current project in debug mode
+    <leader>B                   Build current project in release mode
+    <leader>r                   Runs current build (or default)
+    <leader>jk                  Kills current magic-job
+    <leader>z                   Toggle Quickfix window
+    <leader>Z                   Toggle Magic-Buffer
+    <leader>o                   Open current directory in GUI
+    <leader>O                   Open current buffer directory in GUI
+    <leader>coh                 Toggle search highlighting
+    <leader>cos                 Toggle Spelling
+    <leader>cow                 Clean Whitespace in file
+    <leader>cof                 Save + runs clang-format on file
+
+FILE-SPECIFIC-MAPS                                       *personal-magic-file*
 
     Map          File           Result ~
     <leader>ef   engine.xml     Fit & center src-rect into screen
     <leader>es   engine.xml     Set specific scale & center
     <leader>G    model.yml      Run yaml-generator on model.yml
+
+
 
  vim:tw=78:ts=8:ft=help:norl:

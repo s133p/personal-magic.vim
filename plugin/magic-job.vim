@@ -93,7 +93,11 @@ endfunction
 function! MagicJobKill()
     if exists('s:mahJob') && s:mahJob !=# ''
         let g:MagicStatusWarn = 'Killing Job'
-        call job_stop(s:mahJob)
+        if !has('nvim')
+            call job_stop(s:mahJob)
+        else
+            call jobstop(s:mahJob)
+        endif
         let s:mahJob=''
     else
         echo 'No running job'

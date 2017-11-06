@@ -64,6 +64,11 @@ FILE-SPECIFIC-MAPS                                       *personal-magic-file*
     <leader>es   engine.xml     Set specific scale & center
     <leader>G    model.yml      Run yaml-generator on model.yml
 
+TEMPLATE-MAPS                                          *personal-magic-template*
+
+    Map                         Result ~
+    <leader>b                   Build output based on template + inputs
+    <leader>w                   Make inputs from template
 
 
  vim:tw=78:ts=8:ft=help:norl:

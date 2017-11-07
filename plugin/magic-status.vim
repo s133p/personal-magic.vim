@@ -4,9 +4,9 @@ function! GitBranch()
 endfunction
 
 function! StatuslineGit()
-  " let l:branchname = substitute(fugitive#statusline(), 'Git(\(.\+\))', '\1', 'g')
+  let l:unstaged = substitute(system('git diff-index --quiet HEAD -- || echo +'), '\n', '', 'g')
   let l:branchname = fugitive#head()
-  let l:out = '  '.l:branchname.'  '
+  let l:out = ' '.l:branchname.'  '
   return strlen(l:branchname) > 0 ? l:out : ''
 endfunction
 
@@ -17,18 +17,19 @@ endfunction
 function! MagicStatusLine(active)
     let l:line = ''
     if a:active
-        let l:line.='%#DiffChange#'
-        " let l:line.='%#WildMenu#'
-        " let l:line.='%#QuestionsorLineNr#'
+        if system('git diff-index --quiet HEAD -- || echo 1')[0] !=# '1'
+            let l:line.='%#Conceal#'
+        else
+            let l:line.='%#DiffChange#'
+        endif
         let l:line.='%{StatuslineGit()}'
-        " let l:line.='%{fugitive#statusline()}'
     endif
     if a:active
         let l:line.='%#TabLineSel#'
     else
         let l:line.='%#TabLine#'
     endif
-    let l:line.=' %f'
+    let l:line.='  %f'
     let l:line.='%m '
     let l:line.='%='
     let l:line.=' %y '

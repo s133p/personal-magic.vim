@@ -1,27 +1,3 @@
-" Math scratch-buf
-fun! s:OpenMathBuf()
-    if bufnr('MATH') ==# -1
-        silent new MATH
-        wincmd K
-    elseif bufwinnr('MATH') !=# -1
-        silent exe bufwinnr('MATH') . 'wincmd w'
-    elseif bufwinnr('MATH') ==# -1
-        silent split
-        silent exe 'b ' . bufnr('MATH')
-        silent exe 'wincmd J'
-    endif
-
-    setlocal bufhidden=delete buftype=nofile nobuflisted nolist noswapfile nowrap filetype=log
-    silent resize 6
-
-    imap <buffer> <enter> <esc>0yyp;c$A
-    nmap <buffer> <enter> 0;c$
-    nmap <buffer> q 0y$:bw<cr>
-    nmap <buffer> <esc> 0y$:bw<cr>
-endfun
-nnoremap <Plug>(MagicMathBuf) :call <SID>OpenMathBuf()<cr>
-
-
 " Buf Wiper (close all buffers but current)
 function! s:BufWipe(bang)
     let l:cBufs = a:bang=='!' ? [bufnr('%')] : tabpagebuflist()

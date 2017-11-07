@@ -1,6 +1,5 @@
 " Setup mappings
 if exists('g:MagicMapAll') && g:MagicMapAll == 1
-
     " Git
     nmap <leader>gp :8MagicJobS git push<cr>
     nmap <leader>gu :8MagicJobS git pull<cr>
@@ -24,22 +23,27 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     map s <Plug>(MagicStamp)
     nmap S v$h<Plug>(MagicStamp)
     nmap ss V<Plug>(MagicStamp)
+
     map <leader>y <Plug>(MagicClip)
     nmap <leader>Y v$h<Plug>(MagicClip)
+
     map <leader>s <Plug>(MagicPaste)
     nmap <leader>S v$h<Plug>(MagicPaste)
     nnoremap <leader>p "*p
     nnoremap <leader>P "*P
+
     map <leader>c <Plug>(MagicCalc)
     nmap <leader>C v$h<Plug>(MagicCalc)
+
     map <leader>ms <Plug>(MagicSearch)
     map <leader>mc <Plug>(MagicCinderSearch)
-    map <leader>mm <Plug>(MagicMathBuf)
+
     "Replacements for vim-unimpaired
     nnoremap <silent> coh :set hlsearch!<cr>
     nnoremap <silent> cos :set spell!<cr>
     nnoremap <silent> cow :CleanWhitespace<cr>
-    nnoremap cof :up<cr>:CFormat!<cr>:up<cr>
+    nnoremap cof :up<cr>:CFormat<cr>:up<cr>
+    nnoremap coF :up<cr>:CFormat!<cr>:up<cr>
 
     augroup MagicMapAugroup
         autocmd!

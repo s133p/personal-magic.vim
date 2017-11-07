@@ -27,7 +27,7 @@ function! MagicStatusLine(active)
 
         " Keep branch marker highlighed if there are unpushed commits
         if system('git diff-index @{u} --quiet || echo 1')[0] ==# '1'
-            let l:line.='%#DiffChange#'
+            let l:line.=' %#DiffChange#'
         endif
         let l:line.='  '
 

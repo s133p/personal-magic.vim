@@ -23,7 +23,7 @@ function! MagicStatusLine(active)
             let l:line.='%#DiffChange#'
         endif
         let l:line.='%{StatuslineGit()}'
-        if system('git diff-index @{u} --quiet || echo 1')[0] !=# '1'
+        if system('git diff-index @{u} --quiet || echo 1')[0] ==# '1'
             let l:line.='%#DiffChange#'
         endif
         let l:line.=' '

@@ -1,29 +1,18 @@
-"   master  ~/Documents/git/dotfiles/.vimrc  vim  utf-8[unix]   Help  syntax.txt  
-function! GitBranch()
-  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
-endfunction
-
-function! StatuslineGit()
-  let l:unstaged = substitute(system('git diff-index --quiet HEAD -- || echo +'), '\n', '', 'g')
-  let l:branchname = fugitive#head()
-  let l:out = '  '.l:branchname
-  return strlen(l:branchname) > 0 ? l:out : ''
-endfunction
-
 function! StatuslineRo()
     return &readonly == 1 ? '  ' : ''
 endfunction
 
 function! MagicStatusLine(active)
     let l:line = ''
-    if a:active
+    let l:branchname = fugitive#head()
+    if a:active && strlen(l:branchname) > 0
         " Highlight the branch name if there are uncommitted changes
         if system('git diff-index --quiet HEAD -- || echo 1')[0] !=# '1'
             let l:line.='%#Conceal#'
         else
             let l:line.='%#DiffChange#'
         endif
-        let l:line.='%{StatuslineGit()}'
+        let l:line.='  '.l:branchname
 
         " Keep branch marker highlighed if there are unpushed commits
         if system('git diff-index @{u} --quiet || echo 1')[0] ==# '1'

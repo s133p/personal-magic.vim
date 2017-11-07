@@ -6,7 +6,7 @@ endfunction
 function! StatuslineGit()
   let l:unstaged = substitute(system('git diff-index --quiet HEAD -- || echo +'), '\n', '', 'g')
   let l:branchname = fugitive#head()
-  let l:out = '  '.l:branchname.' '
+  let l:out = '  '.l:branchname
   return strlen(l:branchname) > 0 ? l:out : ''
 endfunction
 
@@ -17,16 +17,20 @@ endfunction
 function! MagicStatusLine(active)
     let l:line = ''
     if a:active
+        " Highlight the branch name if there are uncommitted changes
         if system('git diff-index --quiet HEAD -- || echo 1')[0] !=# '1'
             let l:line.='%#Conceal#'
         else
             let l:line.='%#DiffChange#'
         endif
         let l:line.='%{StatuslineGit()}'
+
+        " Keep branch marker highlighed if there are unpushed commits
         if system('git diff-index @{u} --quiet || echo 1')[0] ==# '1'
             let l:line.='%#DiffChange#'
         endif
-        let l:line.=' '
+        let l:line.='  '
+
         let l:line.='%#TabLineSel#'
     else
         let l:line.='%#TabLine#'

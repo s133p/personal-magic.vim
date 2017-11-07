@@ -3,8 +3,8 @@ function! StatuslineRo()
 endfunction
 
 function! s:MagicGitStatus()
-    let s:gitUncommitted = (system('git diff-index --quiet HEAD -- || echo 1')[0] !=# '1')
-    let s:gitUnpushed = (system('git diff-index @{u} --quiet || echo 1')[0] ==# '1')
+    let b:gitUncommitted = (system('git diff-index --quiet HEAD -- || echo 1')[0] !=# '1')
+    let b:gitUnpushed = (system('git diff-index @{u} --quiet || echo 1')[0] ==# '1')
 endfunction
 
 function! MagicStatusLine(active)
@@ -12,7 +12,7 @@ function! MagicStatusLine(active)
     let l:branchname = fugitive#head()
     if a:active && strlen(l:branchname) > 0
         " Highlight the branch name if there are uncommitted changes
-        if exists('s:gitUncommitted') && s:gitUncommitted
+        if exists('b:gitUncommitted') && b:gitUncommitted
             let l:line.='%#Conceal#'
         else
             let l:line.='%#DiffChange#'
@@ -20,7 +20,7 @@ function! MagicStatusLine(active)
         let l:line.='  '.l:branchname
 
         " Keep branch marker highlighed if there are unpushed commits
-        if exists('s:gitUnpushed') && s:gitUnpushed
+        if exists('b:gitUnpushed') && b:gitUnpushed
             let l:line.=' %#DiffChange#'
         endif
         let l:line.='  '
@@ -88,6 +88,8 @@ if exists('g:MagicStatusEnable')
         au!
         au WinLeave * setlocal nocursorline statusline=%!MagicStatusLine(0)
         au WinEnter * setlocal cursorline statusline=%!MagicStatusLine(1)
-        au BufEnter,BufWritePost,BufReadPost * call s:MagicGitStatus()
+        if exists('g:MagicStatusGitExtra')
+            au BufEnter,BufWritePost,BufReadPost * call s:MagicGitStatus()
+        endif
     augroup END
 endif

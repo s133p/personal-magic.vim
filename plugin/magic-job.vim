@@ -188,7 +188,11 @@ endfun
 
 fun! s:BufferPiper(message, flush)
     if s:MagicJobType ==# 'qf'
-        caddexpr a:message
+        if type(a:message)==type("")
+            caddexpr substitute(a:message, '\<c-m>', '', 'g')
+        elseif type(a:message)==type([])
+            caddexpr map(a:message, "substitute(v:val, '\<c-m>', '', 'g')")
+        endif
     else
 
         if !exists('s:outList')
@@ -196,9 +200,9 @@ fun! s:BufferPiper(message, flush)
         endif
 
         if type(a:message)==type("")
-            call add(s:outList, a:message)
+            call add(s:outList, substitute(a:message, '\<c-m>', '', 'g'))
         elseif type(a:message)==type([])
-            call extend(s:outList, a:message)
+            call extend(s:outList, map(a:message, "substitute(v:val, '\<c-m>', '', 'g')"))
         endif
 
         if len(s:outList) > 6 || a:flush == 1

@@ -6,7 +6,7 @@ endfunction
 function! StatuslineGit()
   let l:unstaged = substitute(system('git diff-index --quiet HEAD -- || echo +'), '\n', '', 'g')
   let l:branchname = fugitive#head()
-  let l:out = ' '.l:branchname.'  '
+  let l:out = '  '.l:branchname.'  '
   return strlen(l:branchname) > 0 ? l:out : ''
 endfunction
 

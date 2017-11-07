@@ -85,6 +85,9 @@ if exists('g:MagicStatusEnable')
     set tabline=%!MyTabLine()
 
     augroup MagicStatusLine
-        au! BufEnter * call s:MagicGitStatus()
+        au!
+        au WinLeave * setlocal nocursorline statusline=%!MagicStatusLine(0)
+        au WinEnter * setlocal cursorline statusline=%!MagicStatusLine(1)
+        au BufEnter,BufWritePost,BufReadPost * call s:MagicGitStatus()
     augroup END
 endif

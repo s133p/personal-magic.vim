@@ -23,12 +23,11 @@ function! MagicStatusLine(active)
             let l:line.='%#DiffChange#'
         endif
         let l:line.='%{StatuslineGit()}'
-    endif
-    if a:active
         let l:line.='%#TabLineSel#'
     else
         let l:line.='%#TabLine#'
     endif
+
     let l:line.='  %f'
     let l:line.='%m '
     let l:line.='%='
@@ -52,23 +51,17 @@ function! MyTabLine()
     let l:s = '%#TabLineFill#'
     let l:s .= has('nvim')?'    ':'   '
     for l:i in range(tabpagenr('$'))
-        " l:select the highlighting
         if l:i + 1 == tabpagenr()
-            " let l:s .= '%#DiffChange#'
-            " let l:s .= '%#Conceal#'
             let l:s .= '%#DiffChange#'
         else
-            " let l:s .= '%#Conceal#'
             let l:s .= '%#TabLine#'
         endif
 
-        " l:set the tab page number (for mouse clicks)
+        " set the tab page number (for mouse clicks)
         let l:s .= '%' . (l:i + 1) . 'T'
-
         " the label is made by MyTabLabel()
         let l:s .= ' %{MyTabLabel(' . (l:i + 1) . ')} '
     endfor
-
     " after the last tab fill with TabLineFill and reset tab page nr
     let l:s .= '%#TabLineFill#'
 

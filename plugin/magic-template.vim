@@ -1,3 +1,24 @@
+fun! MakeTemplate(template, input)
+    let l:template = a:template
+    for l:item in keys(a:input)
+        let l:template = substitute(l:template, l:item, a:input[l:item], 'g')
+    endfor
+    return l:template
+endfun
+
+fun! s:MakeTemplateMap(template)
+    let l:template = a:template
+    let l:templateVars = []
+    let l:m = matchstrpos(l:template, '%\w\{-}%')
+    while l:m[1] != -1
+        if index(l:templateVars, l:m[0]) == -1
+            let l:templateVars = add(l:templateVars, l:m[0])
+        endif
+        let l:m = matchstrpos(l:template, '%\w\{-}%', l:m[2])
+    endwhile
+    return l:templateVars
+endfun
+
 fun! OpenSpecialBufs(names, filetype, isTop)
     let l:isFirst = 1
     let l:buffers = {}
@@ -26,26 +47,6 @@ fun! OpenSpecialBufs(names, filetype, isTop)
 
     return l:buffers
 
-endfun
-
-fun! s:MakeTemplateMap(input)
-    let l:template = a:input
-    let l:templateVars = []
-    let l:m = matchstrpos(l:template, '%\w\{-}%')
-    while l:m[1] != -1
-        if index(l:templateVars, l:m[0]) == -1
-            let l:templateVars = add(l:templateVars, l:m[0])
-        endif
-        let l:m = matchstrpos(l:template, '%\w\{-}%', l:m[2])
-    endwhile
-    return l:templateVars
-
-    " let l:output = l:template
-    " for l:item in l:templateVars
-    "     let l:output = substitute(l:output, l:item, input(l:item. ': '), 'g')
-    " endfor
-    " let @" = l:output
-    " exe 'norm! gvp'
 endfun
 
 fun! s:OpenTemplateBuf(type, ...)
@@ -114,14 +115,6 @@ nnoremap <Plug>(MagicTemplateBuffer) :set opfunc=<SID>OpenTemplateBuf<CR>g@
 vnoremap <Plug>(MagicTemplateBuffer) :<C-U>call <SID>OpenTemplateBuf(visualmode())<CR>
 map ;T <Plug>(MagicTemplateBuffer)
 
-fun! MakeTemplate(template, input)
-    let l:template = a:template
-
-    for l:item in keys(a:input)
-        let l:template = substitute(l:template, l:item, a:input[l:item], 'g')
-    endfor
-    return l:template
-endfun
 
 " %PROJECT%         :test
 " %INSTALL_SITES%   :home

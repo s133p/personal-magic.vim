@@ -2,7 +2,7 @@
 " endfun
 
 fun! OpenIsolateBuf(contents, parent, filetype)
-    let l:name = 'MagicIsolate://'.a:parent
+    let l:name = 'mIso://'.a:parent
     silent exe 'e ' . l:name
     setlocal bufhidden=wipe buftype=nofile nobuflisted nolist noswapfile nowrap
     silent exe 'setlocal filetype='.a:filetype
@@ -29,7 +29,7 @@ fun! MagicIsolate(type)
     let l:contents = @"
 
 
-    call OpenIsolateBuf(l:contents, bufnr('%'), &ft)
+    call OpenIsolateBuf(l:contents, expand('%:t'), &ft)
 
     let &selection = l:sel_save
     let @@ = l:reg_save

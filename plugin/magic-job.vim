@@ -4,6 +4,8 @@ function! MagicJob(qf, command, ...)
         call MagicJobKill()
     endif
 
+    let s:outList = []
+
     call s:CloseOutBufs()
     if a:qf ==# '!'
         let s:MagicJobType = 'qf'
@@ -187,25 +189,19 @@ endfun
 
 
 fun! s:BufferPiper(message, flush)
+    let l:out = ""
+    if type(a:message)==type("")
+        let l:out = a:message
+    elseif type(a:message)==type([])
+        let l:out = join(a:message)
+    endif
+    let l:out = split(l:out, '\r')
+
     if s:MagicJobType ==# 'qf'
-        if type(a:message)==type("")
-            caddexpr substitute(a:message, '\<c-m>', '', 'g')
-        elseif type(a:message)==type([])
-            caddexpr map(a:message, "substitute(v:val, '\<c-m>', '', 'g')")
-        endif
+        caddexpr l:out
     else
-
-        if !exists('s:outList')
-            let s:outList = []
-        endif
-
-        if type(a:message)==type("")
-            call add(s:outList, substitute(a:message, '\<c-m>', '', 'g'))
-        elseif type(a:message)==type([])
-            call extend(s:outList, map(a:message, "substitute(v:val, '\<c-m>', '', 'g')"))
-        endif
-
-        if len(s:outList) > 6 || a:flush == 1
+        let s:outList = extend(s:outList, l:out)
+        if len(s:outList) > 4 || a:flush == 1
             let l:outBuf = bufnr('MagicOutput')
             let l:outWin = bufwinnr('MagicOutput')
             let l:saveWin = winnr()

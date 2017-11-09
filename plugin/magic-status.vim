@@ -89,7 +89,7 @@ if exists('g:MagicStatusEnable')
         au WinLeave * setlocal nocursorline statusline=%!MagicStatusLine(0)
         au WinEnter * setlocal cursorline statusline=%!MagicStatusLine(1)
         if exists('g:MagicStatusGitExtra')
-            au BufEnter,BufWritePost,BufReadPost * call s:MagicGitStatus()
+            au BufWritePost,BufReadPost * call s:MagicGitStatus()
         endif
     augroup END
 endif

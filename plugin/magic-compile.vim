@@ -22,7 +22,11 @@ function! s:MagicCompile(buildType)
         let s:magicToRun = substitute(l:compileSettings[a:buildType][1], '\$FULLWD', getcwd(), 'g')
         let s:magicToRun = substitute(s:magicToRun, '\$WD', split(getcwd(), '/')[-1], 'g')
         let s:magicToRun = substitute(s:magicToRun, '%', expand('%'), 'g')
-        silent exe 'MagicJob! '.l:compileSettings[a:buildType][0]
+
+        let l:magicToCompile = substitute(l:compileSettings[a:buildType][0], '\$FULLWD', getcwd(), 'g')
+        let l:magicToCompile = substitute(l:magicToCompile, '\$WD', split(getcwd(), '/')[-1], 'g')
+        let l:magicToCompile = substitute(l:magicToCompile, '%', expand('%'), 'g')
+        silent exe 'MagicJob! '.l:magicToCompile
     else
         echo a:buildType . ' is invalid. Valid options: ' . string(keys(l:compileSettings))
         let s:magicToRun = ''

@@ -48,15 +48,26 @@ fun! MagicBuffers(bang)
     norm! ggVGd
     let l:buffers = filter(range(1, bufnr('$')), a:bang==#'!' ? 'bufexists(v:val)' : 'buflisted(v:val)')
 
-    call append(line('$'), map(l:buffers, 'bufname(v:val)'))
+    call append(line('$'), map(l:buffers, 'v:val." \t ".bufname(v:val)'))
     norm! dd
     setlocal readonly
     redraw!
+    let s:prevBuf = bufnr('#')
     " silent exe l:outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
 
-    nmap <silent><buffer> <cr> 0Y:b <c-r>"<cr>
+    nmap <buffer> <cr> :call MagicBuffersGo()<cr>
+    cnoremap <buffer><expr> <cr> getcmdtype() == '/' ? '<cr>:call MagicBuffersGo()<cr>' : '<cr>'
 
     nmap <silent><buffer> <Leader>x gb
     nmap <silent><buffer> <Esc> gb
     "call append(0, split(a:contents, ''))
+endfun
+
+fun! MagicBuffersGo()
+    let l:m = @m
+    norm! 0"myiw
+    silent exe "b".s:prevBuf
+    silent exe "b".@m
+    let @m = l:m
+    redraw!
 endfun

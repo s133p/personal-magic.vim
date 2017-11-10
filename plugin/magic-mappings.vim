@@ -19,6 +19,9 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
 
     vmap <leader>t <Plug>(MagicTemplate)
 
+    nmap <leader>ab :call MagicBuffers('')<cr>/
+    nmap <leader>aB :call MagicBuffers('!')<cr>/
+
     " Quickfix / MagicJob output
     nmap <leader>z :QfToggle<cr>
     nmap <leader>Z :MagicBufferOpen<cr>

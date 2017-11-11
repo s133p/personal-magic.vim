@@ -5,7 +5,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     command! -nargs=1 -complete=buffer VGsrc exe "noautocmd vimgrep /" . <q-args> . "/j src/**/* \| copen"
     command! -nargs=1 -complete=buffer VGlay exe "noautocmd vimgrep /" . <q-args> . "/j data/layout*/**/* \| copen"
     command! -nargs=1 -complete=buffer VGset exe "noautocmd vimgrep /" . <q-args> . "/j settings/**/* \| copen"
-    command! -nargs=1 -complete=buffer VGcin exe "noautocmd vimgrep /" . <q-args> . "/j ~/Documents/git/ds_cinder_090/**/*.{cpp,h} \| copen"
+    command! -nargs=1 -complete=buffer VGcin exe "noautocmd vimgrep /" . <q-args> . "/j ~/code/ds_cinder/**/src/ds/**/*.{cpp,h} \| copen"
 
     " Git
     nmap <leader>gp :8MagicJobS git push<cr>
@@ -48,10 +48,17 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     map <leader>ms <Plug>(MagicSearch)
     map <leader>mc <Plug>(MagicCinderSearch)
 
+    nmap <leader>sb <Plug>(MagicSuperSearch)
+
     "Replacements for vim-unimpaired
     nnoremap <silent> coh :set hlsearch!<cr>
     nnoremap <silent> cos :set spell!<cr>
+    nnoremap <silent> coS :MakeLocalSln<cr>
     nnoremap <silent> cow :CleanWhitespace<cr>
+    nnoremap <silent> cox :XmlClean<cr>
+    nnoremap <silent> cob :BufWipe<cr>
+    nnoremap <silent> coB :BufWipe!<cr>
+    nnoremap <silent> com :MagicBufferOpen<cr>
     nnoremap cof :up<cr>:CFormat<cr>:up<cr>
     nnoremap coF :up<cr>:CFormat!<cr>:up<cr>
 
@@ -60,6 +67,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
         " Mappings for ease ds_cinder engine resizing
         autocmd BufReadPost engine.xml nnoremap <buffer> <leader>ef :DsFillEngine<cr>
         autocmd BufReadPost engine.xml nnoremap <buffer> <leader>es :DsScaleEngine<cr>
+        autocmd FileType c,cpp,xml setlocal includeexpr=MagicIncludeExpr(v:fname)
         " Call yaml generator
         if has('win32')
             autocmd BufReadPost model.yml nnoremap <buffer> <leader>G :!start /Users/luke.purcell/Documents/git/ds_cinder/utility/yaml_importer/yaml_importer.exe %<cr>

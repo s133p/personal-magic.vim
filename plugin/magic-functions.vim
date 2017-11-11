@@ -1,3 +1,26 @@
+" Fuzzy esque search
+fun! s:SuperSearch(what)
+    let l:ss = map(range(0,len(a:what)-1), 'a:what[v:val]')
+    set hlsearch
+    let @/ = join(l:ss, '.\{-}')
+    norm! n
+    " echo join(l:ss, '.\{-}')
+endfun
+nnoremap <Plug>(MagicSuperSearch) :call <Sid>SuperSearch(input('> '))<cr>
+
+" Substitutions + glob for includeexpr
+function! MagicIncludeExpr(fname)
+    let l:outfile = substitute(a:fname,'%APP%','','g')
+    let l:candidates = glob('./**/'.l:outfile, 0, 1)
+    echom string(l:outfile)
+    if len(l:candidates)==1
+        return l:candidates[0]
+    else
+        " echom string(l:candidates)
+        return '**'
+    endif
+endfun
+
 " Buf Wiper (close all buffers but current)
 function! s:BufWipe(bang)
     let l:cBufs = a:bang=='!' ? [bufnr('%')] : tabpagebuflist()
@@ -46,11 +69,14 @@ command! -nargs=0 CleanWhitespace call s:CleanWhitespace()
 
 " Toggle quickfix visibility
 function! s:QuickfixToggle()
-    let nr = winnr("$")
-    copen | wincmd J
-    let nr2 = winnr("$")
-    if nr == nr2
-        cclose
+    let nr = winnr()
+    let cnt = winnr('$')
+    silent copen | wincmd J
+    let cnt2 = winnr()
+    if cnt == cnt2
+        silent cclose
+    else
+        silent exe nr."wincmd w"
     endif
 endfunction
 command! -nargs=0 QfToggle call s:QuickfixToggle()
@@ -67,23 +93,10 @@ function! s:ClipGrab(what)
     return l:text
 endfunction
 
-" Goto file for ds_cinder %APP% paths (Can be expanded to others)
-function! s:GoAppFile(type)
-    let l:text = s:ClipGrab('yi"')
-    if len(l:text) > 0
-        let l:file = substitute(l:text, '%APP%', getcwd(), 'g')
-        if filereadable(l:file)
-            exec a:type . " " . l:file
-        endif
-    endif
-endfunction
-command! -nargs=0 EFile call s:GoAppFile('e')
-command! -nargs=0 VFile call s:GoAppFile('vs')
-command! -nargs=0 TFile call s:GoAppFile('tabedit')
-
 " Set ds_cinder engine dimensions.
 "  type='f' for fill/center
 "  type='s' to manually enter scale
+"  TODO: Autodetect old/new settings (possibly with 2013 vs 2015 folder)
 function! s:DsEngineConfig(type)
     let l:reservedx = 62.0
     let l:reservedy = 0.0
@@ -138,3 +151,19 @@ function! s:MakeLocalSln()
     silent exec 'write'
 endfunction
 command! -nargs=0 MakeLocalSln call s:MakeLocalSln()
+
+"Format current buffer with clang-format
+" Functions for using clang-format to format the current buffer
+function! s:MagicFormat(copy_fmt, ...)
+    if a:copy_fmt == 1 && findfile('.clang-format') ==# ''
+        silent vs .clang-format
+        silent r ~/.vim/bundle/personal-magic.vim/templates/.clang-format
+        silent w
+        silent bw
+    endif
+
+    let l:winview = winsaveview()
+    silent exe '%!clang-format -style=file '.expand('%')
+    call winrestview(l:winview)
+endfunction
+command! -bang CFormat call s:MagicFormat('<bang>'=='!' ? 1 : 0)

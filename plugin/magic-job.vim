@@ -1,12 +1,11 @@
 function! MagicJob(qf, command, ...)
-    if exists('s:mahJob') && s:mahJob !=# ''
-        call MagicJobKill()
+    if MagicJobKill()
         echo 'killing job... once again with gusto'
         return
     endif
 
-    call s:SaveWin()
     call s:CloseOutBufs()
+    call s:SaveWin()
     let s:MagicJobType = a:qf ==# '!' ? 'qf' : 'magic'
     let s:outList = []
     let l:finalcmd = a:command
@@ -22,13 +21,13 @@ function! MagicJob(qf, command, ...)
     endif
 
     let l:opts = {}
-    let l:cb = function('s:MagicCallback')
+    let l:CB = has('nvim') ? function('s:NvimMagicCallback') : function('s:MagicCallback')
     if !has('nvim')
-        let l:outfn = function('s:JobPipeHandle')
-        let l:opts = { 'out_io': 'pipe', 'err_io': 'pipe', 'out_cb': l:outfn, 'err_cb': l:outfn, 'exit_cb': l:cb }
+        let l:Outfn = function('s:JobPipeHandle')
+        let l:opts = { 'out_io': 'pipe', 'err_io': 'pipe', 'out_cb': l:Outfn, 'err_cb': l:Outfn, 'exit_cb': l:CB }
         let s:mahJob = job_start([&shell, &shellcmdflag, l:finalcmd], l:opts)
     else
-        let l:opts = { 'on_stdout': l:cb, 'on_stderr': l:cb, 'on_exit': l:cb }
+        let l:opts = { 'on_stdout': l:CB, 'on_stderr': l:CB, 'on_exit': l:CB }
         let s:mahJob = jobstart(l:finalcmd, l:opts)
     endif
 
@@ -85,16 +84,15 @@ endfunction
 
 function! MagicJobKill()
     if exists('s:mahJob') && s:mahJob !=# ''
-        let g:MagicStatusWarn = 'Killing Job'
-        if !has('nvim')
-            call job_stop(s:mahJob)
-        else
-            call jobstop(s:mahJob)
-        endif
-    else
-        echo 'No running job'
+        try
+            let l:rsp = has('nvim') ? jobstop(s:mahJob) : job_stop(s:mahJob)
+            return 1
+        catch
+            " Job didnt exist, clear away
+            let s:mahJob = ''
+        endtry
     endif
-    let g:MagicStatusWarn = ''
+    return 0
 endfunction
 
 " Helper Functions

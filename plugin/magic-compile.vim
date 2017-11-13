@@ -12,7 +12,7 @@ function! s:MagicCompile(buildType)
         for l:setting in l:compileSettings['SETTINGS']
             exe l:setting
             if l:setting[0:6] ==? 'set efm'
-                let g:MagicUseEfm = 1
+                let g:MagicUseEfm = &efm
             endif
         endfor
     endif

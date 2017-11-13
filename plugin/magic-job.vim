@@ -1,55 +1,45 @@
 function! MagicJob(qf, command, ...)
-    call s:SaveWin()
-    if exists('s:mahJob') && s:mahJob !=# ''
-        call MagicJobKill()
+    if MagicJobKill()
+        echo 'killing job... once again with gusto'
+        return
     endif
-
-    let s:outList = []
 
     call s:CloseOutBufs()
-    if a:qf ==# '!'
-        let s:MagicJobType = 'qf'
-        call s:OpenOutBuf('qf', 1)
-    elseif a:qf !=# ''
-        let s:MagicJobType = 'magic'
-        call s:OpenOutBuf('magic', 1, a:qf)
+    call s:SaveWin()
+    let s:MagicJobType = a:qf ==# '!' ? 'qf' : 'magic'
+    let s:outList = []
+    let l:finalcmd = a:command
+
+    if a:qf !=# '' && a:qf != '!'
+        call s:OpenOutBuf(s:MagicJobType, 1, a:qf)
     else
-        let s:MagicJobType = 'magic'
-        call s:OpenOutBuf('magic', 1)
+        call s:OpenOutBuf(s:MagicJobType, 1)
     endif
 
-
-    let l:finalcmd = a:command
     if a:0 == 1 && a:1 ==# '!'
         let l:finalcmd .= has('win32') ? ' && exit 1' : '; return 1'
     endif
 
     let l:opts = {}
+    let l:CB = has('nvim') ? function('s:NvimMagicCallback') : function('s:MagicCallback')
     if !has('nvim')
-        let l:OutFn = function('s:JobPipeHandle')
-        let l:CallbackFn = function('s:MagicCallback')
-        let l:opts['out_io']='pipe'
-        let l:opts['err_io']='pipe'
-        let l:opts['out_cb']=l:OutFn
-        let l:opts['err_cb']=l:OutFn
-        let l:opts['exit_cb']=l:CallbackFn
+        let l:Outfn = function('s:JobPipeHandle')
+        let l:opts = { 'out_io': 'pipe', 'err_io': 'pipe', 'out_cb': l:Outfn, 'err_cb': l:Outfn, 'exit_cb': l:CB }
         let s:mahJob = job_start([&shell, &shellcmdflag, l:finalcmd], l:opts)
     else
-        let l:CallbackFn = function('s:NvimMagicCallback')
-        let l:opts['on_stdout']=l:CallbackFn
-        let l:opts['on_stderr']=l:CallbackFn
-        let l:opts['on_exit']=l:CallbackFn
+        let l:opts = { 'on_stdout': l:CB, 'on_stderr': l:CB, 'on_exit': l:CB }
         let s:mahJob = jobstart(l:finalcmd, l:opts)
     endif
 
-    let l:statusMsg = l:finalcmd
-
+    " Update Status
     if matchstr(l:finalcmd, 'msbuild') != '' || matchstr(l:finalcmd, 'make') != ''
         let l:statusMsg =  'Build ' . (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE')
     elseif matchstr(l:finalcmd, '\.exe') != '' || matchstr(l:finalcmd, '\.app') != ''
-        " let l:statusMsg = (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE') . ' ' . substitute(l:finalcmd, '.\+\/\(.\{-}\.\(exe\|app\)\)', '\1', '')
         let l:statusMsg = (matchstr(l:finalcmd, 'Debug')!='' ? 'DEBUG' : 'RELEASE') . ' ' . split(getcwd(), '/')[-1]
+    else
+        let l:statusMsg = l:finalcmd
     endif
+
     call s:StatusUpdate('['.l:statusMsg.']', 1)
     call s:RestoreWin()
 endfunction
@@ -94,25 +84,15 @@ endfunction
 
 function! MagicJobKill()
     if exists('s:mahJob') && s:mahJob !=# ''
-        let g:MagicStatusWarn = 'Killing Job'
-        if !has('nvim')
-            call job_stop(s:mahJob)
-        else
-            call jobstop(s:mahJob)
-        endif
-        let s:mahJob=''
-    else
-        echo 'No running job'
+        try
+            let l:rsp = has('nvim') ? jobstop(s:mahJob) : job_stop(s:mahJob)
+            return 1
+        catch
+            " Job didnt exist, clear away
+            let s:mahJob = ''
+        endtry
     endif
-    let g:MagicStatusWarn = ''
-endfunction
-
-function! MagicJobInfo()
-    if exists('s:mahJob') && s:mahJob !=# ''
-        echo 'MagicJob Status: ' . job_status(s:mahJob)
-    else
-        echo 'No running job'
-    endif
+    return 0
 endfunction
 
 " Helper Functions
@@ -132,61 +112,41 @@ fun! s:RestoreWin()
 endfun
 
 fun! s:OpenOutBuf(which, clear, ...)
-    if !exists('g:MagicUseEfm')
-        let g:MagicUseEfm = 0
-    endif
-
     call s:SaveWin()
     if a:which ==? 'qf'
         call setqflist([], 'r')
-        " Not to be trusted! Specific to my usecase!
-        if g:MagicUseEfm ==# 1
-            let s:mahErrorFmt=&efm
-        elseif g:MagicUseEfm ==# 2
-            let s:mahErrorFmt=&grepformat
-        endif
 
-        silent exec 'copen'
-        silent exec 'wincmd J'
+        silent exec 'copen | wincmd J'
 
-        " Not to be trusted! Specific to my usecase!
-        if g:MagicUseEfm !=# 0
-            exe 'set efm='.escape(s:mahErrorFmt, ' ')
+        if exists('g:MagicUseEfm')
+            exe 'set efm='.escape(g:MagicUseEfm, ' ')
         endif
     else
-        if bufnr('MagicOutput') ==# -1
-            silent new MagicOutput
-            wincmd J
-        elseif bufwinnr('MagicOutput') !=# -1
-            silent exe bufwinnr('MagicOutput') . 'wincmd w'
-        elseif bufwinnr('MagicOutput') ==# -1
-            silent split
-            silent exe 'b ' . bufnr('MagicOutput')
-            silent exe 'wincmd J'
+        let l:mbufwin = bufwinnr('MagicOutput')
+        let l:mbuf = bufnr('MagicOutput')
+
+        if l:mbuf == -1 || l:mbufwin == -1
+            silent exe l:mbuf==-1 ? 'new MagicOutput' : 'split | b '.l:mbuf
+            silent wincmd J
+        elseif l:mbufwin != -1
+            silent exe l:mbufwin.'wincmd w'
         endif
 
         setlocal bufhidden=hide buftype=nofile nobuflisted nolist noswapfile nowrap filetype=log
-
         if a:clear | silent exe '%d' | endif
-
-        if a:0 == 0
-            silent resize 12
-        else
-            exe 'silent resize '.a:1
-        endif
+        let l:sz = a:0 == 0 ? 12 : a:1
+        exe 'silent resize '.l:sz
     endif
     call s:RestoreWin()
-
 endfun
 command! -nargs=0 MagicBufferOpen call s:OpenOutBuf('magic', 0)
 
 fun! s:CloseOutBufs()
     call s:SaveWin()
-    tabdo cclose
-    tabdo if bufwinnr('MagicOutput')!=#-1 | silent exe bufwinnr('MagicOutput').'close' | endif
+    silent tabdo cclose
+    silent tabdo if bufwinnr('MagicOutput')!=#-1 | silent exe bufwinnr('MagicOutput').'close' | endif
     call s:RestoreWin()
 endfun
-
 
 fun! s:BufferPiper(message, flush)
     let l:out = ""
@@ -195,7 +155,7 @@ fun! s:BufferPiper(message, flush)
     elseif type(a:message)==type([])
         let l:out = join(a:message)
     endif
-    let l:out = split(l:out, '\r')
+    let l:out = split(l:out)
 
     if s:MagicJobType ==# 'qf'
         caddexpr l:out
@@ -205,15 +165,13 @@ fun! s:BufferPiper(message, flush)
             let l:outBuf = bufnr('MagicOutput')
             let l:outWin = bufwinnr('MagicOutput')
             let l:saveWin = winnr()
-            if l:outWin !=# -1
-                if l:outWin ==# l:saveWin
-                    silent exe l:outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
-                else
-                    silent exe l:outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
-                    silent exe l:saveWin." wincmd w"
-                endif
-            else
-                silent exe "b".l:outBuf." | call append(line('$'), " . string(s:outList) . ")". " | b#"
+            silent exe l:outWin !=# -1 ? l:outWin.' wincmd w' : 'b'.l:outBuf
+            call append(line('$'), s:outList)
+            silent norm! G
+            if l:outWin !=# -1 && l:outWin !=# l:saveWin
+                silent exe l:saveWin.' wincmd w'
+            elseif l:outWin ==# -1
+                silent exe 'b#'
             endif
             let s:outList = []
         endif

@@ -64,5 +64,9 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
         if has('win32')
             autocmd BufReadPost model.yml nnoremap <buffer> <leader>G :!start /Users/luke.purcell/Documents/git/ds_cinder/utility/yaml_importer/yaml_importer.exe %<cr>
         endif
+        if v:version >= 700
+            au BufLeave * let b:winview = winsaveview()
+            au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+        endif
     augroup END
 endif

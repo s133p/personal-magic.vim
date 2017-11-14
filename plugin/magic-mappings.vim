@@ -1,11 +1,11 @@
 " Setup mappings
 if exists('g:MagicMapAll') && g:MagicMapAll == 1
     " Commands
-    command! -nargs=1 -complete=buffer VGall exe "noautocmd vimgrep /" . <q-args> . "/j **/* \| copen"
-    command! -nargs=1 -complete=buffer VGsrc exe "noautocmd vimgrep /" . <q-args> . "/j src/**/* \| copen"
-    command! -nargs=1 -complete=buffer VGlay exe "noautocmd vimgrep /" . <q-args> . "/j data/layout*/**/* \| copen"
-    command! -nargs=1 -complete=buffer VGset exe "noautocmd vimgrep /" . <q-args> . "/j settings/**/* \| copen"
-    command! -nargs=1 -complete=buffer VGcin exe "noautocmd vimgrep /" . <q-args> . "/j ~/code/ds_cinder/**/src/ds/**/*.{cpp,h} \| copen"
+    command! -nargs=1 -complete=buffer VGall exe "grep! " . <q-args> . " . \| copen"
+    command! -nargs=1 -complete=buffer VGsrc exe "grep! " . <q-args> . " src/ \| copen"
+    command! -nargs=1 -complete=buffer VGlay exe "grep! " . <q-args> . " data/layout*/ \| copen"
+    command! -nargs=1 -complete=buffer VGset exe "grep! " . <q-args> . " settings \| copen"
+    command! -nargs=1 -complete=buffer VGcin exe "grep! " . <q-args> . " ".expand('$DS_PLATFORM_090')."/src/ ".expand('$DS_PLATFORM_090')."/projects/ \| copen"
 
     " Git
     nmap <leader>gp :8MagicJobS git push<cr>

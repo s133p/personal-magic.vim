@@ -1,11 +1,11 @@
 " Setup mappings
 if exists('g:MagicMapAll') && g:MagicMapAll == 1
     " Commands
-    command! -nargs=1 -complete=buffer VGall exe "grep! " . <q-args> . " . \| copen"
-    command! -nargs=1 -complete=buffer VGsrc exe "grep! " . <q-args> . " src/ \| copen"
-    command! -nargs=1 -complete=buffer VGlay exe "grep! " . <q-args> . " data/layout*/ \| copen"
-    command! -nargs=1 -complete=buffer VGset exe "grep! " . <q-args> . " settings \| copen"
-    command! -nargs=1 -complete=buffer VGcin exe "grep! " . <q-args> . " ".expand('$DS_PLATFORM_090')."/src/ ".expand('$DS_PLATFORM_090')."/projects/ \| copen"
+    command! -nargs=1 VGall silent exe "silent grep! " . <q-args> . " . \| copen"
+    command! -nargs=1 VGsrc silent exe "silent grep! " . <q-args> . " src/ \| copen"
+    command! -nargs=1 VGlay silent exe "silent grep! " . <q-args> . " data/layout*/ \| copen"
+    command! -nargs=1 VGset silent exe "silent grep! " . <q-args> . " settings \| copen"
+    command! -nargs=1 VGcin silent exe "silent grep! " . <q-args> . " ".expand('$DS_PLATFORM_090')."/src/ ".expand('$DS_PLATFORM_090')."/projects/ \| copen"
 
     " Git
     nmap <leader>gp :8MagicJobS git push<cr>

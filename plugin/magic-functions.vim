@@ -1,3 +1,18 @@
+fun! s:MagicPreview(bang)
+    let l:chrome = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe'
+    if executable('pandoc')
+        let l:home = expand('~')
+        let l:head = l:home . '/.vim/bundle/personal-magic.vim/templates/header.html'
+        let l:foot = l:home . '/.vim/bundle/personal-magic.vim/templates/footer.html'
+        echo system('pandoc -t html -B '.l:head.' -A '.l:foot.' --self-contained --toc --section-divs "' . expand('%') . '" -o '.l:home.'/Desktop/preview.html')
+
+        if executable(l:chrome) && a:bang != '!'
+            echo system('"'.l:chrome . '" ' . l:home.'/Desktop/preview.html')
+        endif
+    endif
+endfun
+command! -nargs=0 -bang MagicPreview call s:MagicPreview('<bang>')
+
 " Fuzzy esque search
 fun! s:SuperSearch(what)
     let l:ss = map(range(0,len(a:what)-1), 'a:what[v:val]')

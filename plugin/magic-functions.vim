@@ -182,35 +182,3 @@ function! s:MagicFormat(copy_fmt, ...)
     call winrestview(l:winview)
 endfunction
 command! -bang CFormat call s:MagicFormat('<bang>'=='!' ? 1 : 0)
-
-fun! MagicBuffers(bang)
-    let l:name = 'MagicBuffers://ls'
-    silent exe 'e ' . l:name
-    setlocal bufhidden=wipe buftype=nofile nobuflisted nolist noswapfile nowrap noreadonly
-
-    norm! ggVGd
-    let l:buffers = filter(range(1, bufnr('$')), a:bang==#'!' ? 'bufexists(v:val)' : 'buflisted(v:val)')
-
-    call append(line('$'), map(l:buffers, 'v:val." \t ".bufname(v:val)'))
-    norm! dd
-    setlocal readonly
-    redraw!
-    let s:prevBuf = bufnr('#')
-    " silent exe l:outWin." wincmd w | call append(line('$'), " . string(s:outList) . ")". " | norm!G"
-
-    nmap <buffer> <cr> :call MagicBuffersGo()<cr>
-    cnoremap <buffer><expr> <cr> getcmdtype() == '/' ? '<cr>:call MagicBuffersGo()<cr>' : '<cr>'
-
-    nmap <silent><buffer> <Leader>x gb
-    nmap <silent><buffer> <Esc> gb
-    "call append(0, split(a:contents, ''))
-endfun
-
-fun! MagicBuffersGo()
-    let l:m = @m
-    norm! 0"myiw
-    silent exe "b".s:prevBuf
-    silent exe "b".@m
-    let @m = l:m
-    redraw!
-endfun

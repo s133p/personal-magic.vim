@@ -17,11 +17,6 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nmap <silent> <leader>r :MCRun<cr>
     nmap <silent> <leader>jk :call MagicJobKill()<cr>
 
-    vmap <leader>t <Plug>(MagicTemplate)
-
-    nmap <leader>ab :call MagicBuffers('')<cr>/
-    nmap <leader>aB :call MagicBuffers('!')<cr>/
-
     " Quickfix / MagicJob output
     nmap <leader>z :QfToggle<cr>
     nmap <leader>Z :MagicBufferOpen<cr>
@@ -58,7 +53,6 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nnoremap <silent> cox :XmlClean<cr>
     nnoremap <silent> cob :BufWipe<cr>
     nnoremap <silent> coB :BufWipe!<cr>
-    nnoremap <silent> com :MagicBufferOpen<cr>
     nnoremap cof :up<cr>:CFormat<cr>:up<cr>
     nnoremap coF :up<cr>:CFormat!<cr>:up<cr>
 
@@ -74,7 +68,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
         endif
         if v:version >= 700
             au BufLeave * let b:winview = winsaveview()
-            au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+            au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | unlet b:winview | endif
         endif
     augroup END
 endif

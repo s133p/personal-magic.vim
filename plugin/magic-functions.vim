@@ -4,7 +4,7 @@ fun! s:MagicPreview(bang)
         let l:home = expand('~')
         let l:head = l:home . '/.vim/bundle/personal-magic.vim/templates/header.html'
         let l:foot = l:home . '/.vim/bundle/personal-magic.vim/templates/footer.html'
-        echo system('pandoc -t html -B '.l:head.' -A '.l:foot.' --self-contained --toc --section-divs "' . expand('%') . '" -o '.l:home.'/Desktop/preview.html')
+        echo system('pandoc -t html -B '.l:head.' -A '.l:foot.' --self-contained --section-divs "' . expand('%') . '" -o '.l:home.'/Desktop/preview.html')
 
         if executable(l:chrome) && a:bang != '!'
             echo system('"'.l:chrome . '" ' . l:home.'/Desktop/preview.html')

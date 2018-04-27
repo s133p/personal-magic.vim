@@ -48,7 +48,6 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     "Replacements for vim-unimpaired
     nnoremap <silent> coh :set hlsearch!<cr>
     nnoremap <silent> cos :set spell!<cr>
-    nnoremap <silent> coS :MakeLocalSln<cr>
     nnoremap <silent> cow :CleanWhitespace<cr>
     nnoremap <silent> cox :XmlClean<cr>
     nnoremap <silent> cob :BufWipe<cr>

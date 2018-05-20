@@ -1,0 +1,9 @@
+/** {{--}}
+ *  
+ */
+class {{++}} {
+public:
+    /// Default Constuctor
+    {{+~\~1+}}();
+private:
+};

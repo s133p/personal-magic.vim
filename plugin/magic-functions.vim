@@ -1,13 +1,28 @@
+fun! MagicGuard()
+    let l:dir = split(getcwd(), '/')[-1]
+    let l:f = split(expand('%:r'), '/')
+    let l:guard = toupper(l:dir . '_' . join( l:f, '_' ))
+    return l:guard
+endfun
+
 fun! s:MagicPreview(bang)
-    let l:chrome = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe'
+    if has('win32')
+        let l:opener = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe'
+    elseif has('mac')
+        let l:opener = 'open'
+    endif
     if executable('pandoc')
         let l:home = expand('~')
         let l:head = l:home . '/.vim/bundle/personal-magic.vim/templates/header.html'
         let l:foot = l:home . '/.vim/bundle/personal-magic.vim/templates/footer.html'
         echo system('pandoc -t html -B '.l:head.' -A '.l:foot.' --self-contained --section-divs "' . expand('%') . '" -o '.l:home.'/Desktop/preview.html')
 
-        if executable(l:chrome) && a:bang != '!'
-            echo system('"'.l:chrome . '" ' . l:home.'/Desktop/preview.html')
+        if executable(l:opener) && a:bang != '!'
+            if has('win32')
+                echo system('"'.l:opener . '" ' . l:home.'/Desktop/preview.html')
+            elseif has('mac')
+                system(l.opener . " " . l:home . "/Desktop/preview.html")
+            endif
         endif
     endif
 endfun

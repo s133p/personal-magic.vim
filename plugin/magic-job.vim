@@ -153,9 +153,9 @@ fun! s:BufferPiper(message, flush)
     if type(a:message)==type("")
         let l:out = a:message
     elseif type(a:message)==type([])
-        let l:out = join(a:message)
+        let l:out = join(a:message, "\r")
     endif
-    let l:out = split(l:out, '\r')
+    let l:out = split(l:out, "\r")
 
     if s:MagicJobType ==# 'qf'
         caddexpr l:out

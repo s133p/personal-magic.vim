@@ -1,0 +1,12 @@
+#pragma once
+#ifndef {{+~MagicGuard()+}}
+#define {{+~MagicGuard()+}}
+
+namespace {{++}} {
+
+{{--}}
+
+} // namespace {{+~\~1+}}
+
+#endif
+

@@ -1,3 +1,11 @@
+/**
+ * @file {{+~expand('%')+}}
+ *
+ * @brief ...
+ * @author Luke Purcell
+ * @date {{+~strftime('%d/%m/%Y')+}}
+ */
+
 #pragma once
 #ifndef {{+~MagicGuard()+}}
 #define {{+~MagicGuard()+}}

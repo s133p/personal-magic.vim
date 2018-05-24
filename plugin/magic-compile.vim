@@ -1,4 +1,6 @@
 " Personal compilation shortcut function
+let s:asyncRunner = 'AsyncRun'
+
 function! s:MagicCompile(buildType)
     let l:compileSettings = s:GetBuildSettings()
     if l:compileSettings == {}
@@ -26,7 +28,7 @@ function! s:MagicCompile(buildType)
         let l:magicToCompile = substitute(l:compileSettings[a:buildType][0], '\$FULLWD', getcwd(), 'g')
         let l:magicToCompile = substitute(l:magicToCompile, '\$WD', split(getcwd(), '/')[-1], 'g')
         let l:magicToCompile = substitute(l:magicToCompile, '%', expand('%'), 'g')
-        silent exe 'MagicJob! '.l:magicToCompile
+        silent exe s:asyncRunner . ' '.l:magicToCompile
     else
         echo a:buildType . ' is invalid. Valid options: ' . string(keys(l:compileSettings))
         let s:magicToRun = ''
@@ -75,14 +77,14 @@ endfunction
 " :J repeats, :J! repeats, keeping results open
 function! s:MagicCompileRun(bang)
     if exists('s:magicToRun') && s:magicToRun !=# ''
-        silent exe 'MagicJob'. a:bang . ' ' . s:magicToRun
+        silent exe s:asyncRunner . a:bang . ' ' . s:magicToRun
     else
         let l:settings = s:GetBuildSettings()
         if has_key(l:settings, 'RUN') && len(l:settings['RUN']) >= 1
             let l:run = substitute(l:settings['RUN'][0], '\$FULLWD', getcwd(), 'g')
             let l:run = substitute(l:run, '\$WD', split(getcwd(), '/')[-1], 'g')
             let l:run = substitute(l:run, '%', expand('%'), 'g')
-            silent exe 'MagicJob'. a:bang . ' ' . l:run
+            silent exe s:asyncRunner. a:bang . ' ' . l:run
         endif
     endif
 endfunction

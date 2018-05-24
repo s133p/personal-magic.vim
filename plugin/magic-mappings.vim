@@ -8,8 +8,8 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     command! -nargs=1 VGcin silent exe "silent grep! " . <q-args> . " ".expand('$DS_PLATFORM_090')."/src/ ".expand('$DS_PLATFORM_090')."/projects/ \| copen"
 
     " Git
-    nmap <leader>gp :AsynRun git push<cr>
-    nmap <leader>gu :AsynRun git pull<cr>
+    nmap <leader>gp :AsyncRun git push<cr>
+    nmap <leader>gu :AsyncRun git pull<cr>
 
     " Compile for OSX & Windows using MagicJob()
     nmap <silent> <leader>b :MCompile DEBUG<cr>

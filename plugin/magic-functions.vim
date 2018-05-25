@@ -97,20 +97,6 @@ function! s:CleanWhitespace()
 endfunction
 command! -nargs=0 CleanWhitespace call s:CleanWhitespace()
 
-" Toggle quickfix visibility
-function! s:QuickfixToggle()
-    let nr = winnr()
-    let cnt = winnr('$')
-    silent copen | wincmd J
-    let cnt2 = winnr()
-    if cnt == cnt2
-        silent cclose
-    else
-        silent exe nr."wincmd w"
-    endif
-endfunction
-command! -nargs=0 QfToggle call s:QuickfixToggle()
-
 function! s:ClipGrab(what)
     let l:save_clipboard = &clipboard
     set clipboard= " Avoid clobbering the selection and clipboard registers.
@@ -122,53 +108,6 @@ function! s:ClipGrab(what)
     let &clipboard = l:save_clipboard
     return l:text
 endfunction
-
-" Set ds_cinder engine dimensions.
-"  type='f' for fill/center
-"  type='s' to manually enter scale
-"  TODO: Autodetect old/new settings (possibly with 2013 vs 2015 folder)
-function! s:DsEngineConfig(type)
-    let l:reservedx = 62.0
-    let l:reservedy = 0.0
-    let l:screenx = 2560.0 - l:reservedx
-    let l:screeny = 1440.0 - l:reservedy
-
-    " Start at top of file
-    normal! gg
-    " find world_dimensions
-    exec "normal! /world_dimensions\<cr>"
-
-    " save x dimension
-    exec "normal! /x=\"/e\<cr>"
-    let l:x = str2float(s:ClipGrab('yi"'))
-
-    " save y dimension
-    exec "normal! /y=\"/e\<cr>"
-    let l:y = str2float(s:ClipGrab('yi"'))
-
-    let l:scale = 1.0
-    if a:type == 'f'
-        let l:scalex = l:screenx / l:x
-        let l:scaley = l:screeny / l:y
-        let l:scale = l:scalex <= l:scaley ? l:scalex : l:scaley
-        let l:scale = l:scale < 1.0 ? l:scale : 1.0
-    elseif a:type == 's'
-        let l:scale = str2float(inputdialog("Scale: ", '0.', '1.0'))
-    endif
-
-    let l:x = float2nr(round(l:x * l:scale))
-    let l:y = float2nr(round(l:y * l:scale))
-
-    let l:offsetx = float2nr(round((l:screenx / 2.0) - (l:x / 2.0) + l:reservedx))
-    let l:offsety = float2nr(round((l:screeny / 2.0) - (l:y / 2.0) + l:reservedy))
-
-    exec "normal! /dst_rect\<cr>"
-    " Replace tag with updated values
-    exec "normal! ci>rect name=\"dst_rect\" l=\"" . string(l:offsetx) . "\" w=\"" . string(l:x) . "\" t=\"" .  string(l:offsety) . "\" h=\"" . string(l:y) . "\" /"
-endfunction
-command! -nargs=0 DsFillEngine call s:DsEngineConfig('f')
-command! -nargs=0 DsScaleEngine call s:DsEngineConfig('s')
-
 
 " Windows convienence for making local visual studio solution
 function! s:MakeLocalSln()

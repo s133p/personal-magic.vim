@@ -1,21 +1,24 @@
 " Setup mappings
 if exists('g:MagicMapAll') && g:MagicMapAll == 1
     " Commands
-    command! -nargs=1 VGall silent exe "silent grep! " . <q-args> . " . \| copen"
-    command! -nargs=1 VGsrc silent exe "silent grep! " . <q-args> . " src/ \| copen"
-    command! -nargs=1 VGlay silent exe "silent grep! " . <q-args> . " data/layout*/ \| copen"
-    command! -nargs=1 VGset silent exe "silent grep! " . <q-args> . " settings \| copen"
-    command! -nargs=1 VGcin silent exe "silent grep! " . <q-args> . " ".expand('$DS_PLATFORM_090')."/src/ ".expand('$DS_PLATFORM_090')."/projects/ \| copen"
+    command! -nargs=1 VGall silent exe "AsyncRun! -program=grep --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>
+    command! -nargs=1 VGsrc silent exe "AsyncRun! -program=grep --cpp --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>. " ./src"
+    command! -nargs=1 VGlay silent exe "AsyncRun! -program=grep --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>. " ./data"
+    command! -nargs=1 VGset silent exe "AsyncRun! -program=grep --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>. " ./settings"
+    command! -nargs=1 VGcin silent exe "AsyncRun! -program=grep --cpp --ignore build --ignore vs2015 --ignore vs2013 --ignore example " .<q-args>. " ". expand('$DS_PLATFORM_090')
 
     " Git
     nmap <leader>gp :AsyncRun git push<cr>
     nmap <leader>gu :AsyncRun git pull<cr>
 
     " Compile for OSX & Windows using MagicJob()
-    nmap <silent> <leader>b :MCompile DEBUG<cr>
+    nmap <silent> <leader>bd :MCompile DEBUG<cr>
+    nmap <silent> <leader>br :MCompile RELEASE<cr>
     nmap <silent> <leader>B :MCompile RELEASE<cr>
     nmap <silent> <leader>r :MCRun<cr>
     nmap <silent> <leader>jk :AsyncStop!<cr>
+
+    nnoremap <silent> <leader>ep :e ~/.vim/bundle/personal-magic.vim/<cr>
 
     " Quickfix / MagicJob output
     nmap <leader>z :QfToggle<cr>
@@ -58,13 +61,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     augroup MagicMapAugroup
         autocmd!
         " Mappings for ease ds_cinder engine resizing
-        autocmd BufReadPost engine.xml nnoremap <buffer> <leader>ef :DsFillEngine<cr>
-        autocmd BufReadPost engine.xml nnoremap <buffer> <leader>es :DsScaleEngine<cr>
         autocmd FileType c,cpp,xml setlocal includeexpr=MagicIncludeExpr(v:fname)
-        " Call yaml generator
-        if has('win32')
-            autocmd BufReadPost model.yml nnoremap <buffer> <leader>G :!start /Users/luke.purcell/Documents/git/ds_cinder/utility/yaml_importer/yaml_importer.exe %<cr>
-        endif
         if v:version >= 700
             au BufLeave * let b:winview = winsaveview()
             au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | unlet b:winview | endif

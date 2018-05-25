@@ -192,8 +192,8 @@ function! s:MagicFormat(copy_fmt, ...)
         silent bw
     endif
 
-    let l:winview = winsaveview()
+    let l:winline = line('.')
     silent exe '%!clang-format -style=file '.expand('%')
-    call winrestview(l:winview)
+    exec l:winline
 endfunction
 command! -bang CFormat call s:MagicFormat('<bang>'=='!' ? 1 : 0)

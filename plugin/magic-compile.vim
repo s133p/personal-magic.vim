@@ -1,5 +1,5 @@
 " Personal compilation shortcut function
-let s:asyncRunner = 'AsyncRun'
+let s:asyncRunner = 'AsyncRunAutoClose'
 
 function! s:MagicCompile(buildType)
     let l:compileSettings = s:GetBuildSettings()

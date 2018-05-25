@@ -1,5 +1,20 @@
 " Setup mappings
 if exists('g:MagicMapAll') && g:MagicMapAll == 1
+    "
+    fun! s:AsyncDone()
+        if g:asyncrun_code == 0
+            cclose
+        else
+            cwindow
+        endif
+    endfun
+    command! -nargs=0 AsyncRunDone call s:AsyncDone()
+
+    fun! s:AsyncRunAutoClose(bang, cmd)
+        silent exe "AsyncRun".a:bang." -post=AsyncRunDone ".a:cmd
+    endfun
+    command! -nargs=1 -bang AsyncRunAutoClose call s:AsyncRunAutoClose('<bang>', <q-args>)
+
     " Commands
     command! -nargs=1 VGall silent exe "AsyncRun! -program=grep --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>
     command! -nargs=1 VGsrc silent exe "AsyncRun! -program=grep --cpp --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>. " ./src"
@@ -21,8 +36,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nnoremap <silent> <leader>ep :e ~/.vim/bundle/personal-magic.vim/<cr>
 
     " Quickfix / MagicJob output
-    nmap <leader>z :QfToggle<cr>
-    nmap <leader>Z :MagicBufferOpen<cr>
+    nmap <leader>z :cclose<cr>
     nnoremap <silent> <leader>o :MagicOpen<cr>
     nnoremap <silent> <leader>O :MagicOpen!<cr>
     nmap <leader>gx <Plug>(DevOpen)

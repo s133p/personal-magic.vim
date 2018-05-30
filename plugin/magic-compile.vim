@@ -98,7 +98,7 @@ function! DoDevOpen()
         if !isdirectory(l:dir)
             let l:dir = 'vs2013'
         endif
-        let l:run = 'J start devenv ' . l:dir . '/' . split(getcwd(), '/')[-1] .'.sln'
+        let l:run = '!devenv ' . l:dir . '/' . split(getcwd(), '/')[-1] .'.sln'
     endif
     silent exec l:run
 endfun

@@ -1,6 +1,6 @@
 " Setup mappings
 if exists('g:MagicMapAll') && g:MagicMapAll == 1
-    "
+    " Close quickfix if async job returned success
     fun! s:AsyncDone()
         if g:asyncrun_code == 0
             cclose
@@ -10,12 +10,13 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     endfun
     command! -nargs=0 AsyncRunDone call s:AsyncDone()
 
+    " Run async job, closing quickfix on success
     fun! s:AsyncRunAutoClose(bang, cmd)
         silent exe "AsyncRun".a:bang." -post=AsyncRunDone ".a:cmd
     endfun
     command! -nargs=1 -bang AsyncRunAutoClose call s:AsyncRunAutoClose('<bang>', <q-args>)
 
-    " Commands
+    " Magicified grep commands my common use cases
     command! -nargs=1 VGall silent exe "AsyncRun! -program=grep --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>
     command! -nargs=1 VGsrc silent exe "AsyncRun! -program=grep --cpp --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>. " ./src"
     command! -nargs=1 VGlay silent exe "AsyncRun! -program=grep --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>. " ./data"
@@ -31,7 +32,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nmap <silent> <leader>br :MCompile RELEASE<cr>
     nmap <silent> <leader>B :MCompile RELEASE<cr>
     nmap <silent> <leader>r :MCRun<cr>
-    nmap <silent> <leader>jk :AsyncStop!<cr>
+    nmap <silent> <leader>bk :AsyncStop!<cr>
 
     nnoremap <silent> <leader>ep :e ~/.vim/bundle/personal-magic.vim/<cr>
 

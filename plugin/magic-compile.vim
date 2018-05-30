@@ -1,7 +1,8 @@
 " Personal compilation shortcut function
 let s:asyncRunner = 'AsyncRunAutoClose'
 
-function! s:MagicCompile(buildType)
+function! s:MagicCompile(bang, buildType)
+    let l:asyncRunner = a:bang=='!' ? 'AsyncRunAutoPost' : s:asyncRunner
     let l:compileSettings = s:GetBuildSettings()
     if l:compileSettings == {}
         let s:magicToRun = ''
@@ -28,7 +29,7 @@ function! s:MagicCompile(buildType)
         let l:magicToCompile = substitute(l:compileSettings[a:buildType][0], '\$FULLWD', getcwd(), 'g')
         let l:magicToCompile = substitute(l:magicToCompile, '\$WD', split(getcwd(), '/')[-1], 'g')
         let l:magicToCompile = substitute(l:magicToCompile, '%', expand('%'), 'g')
-        silent exe s:asyncRunner . ' '.l:magicToCompile
+        silent exe l:asyncRunner . ' '.l:magicToCompile
     else
         echo a:buildType . ' is invalid. Valid options: ' . string(keys(l:compileSettings))
         let s:magicToRun = ''
@@ -104,5 +105,5 @@ function! DoDevOpen()
 endfun
 nnoremap <Plug>(DevOpen) :call DoDevOpen()<cr>
 
-command! -nargs=1 MCompile call s:MagicCompile(<q-args>)
+command! -nargs=1 -bang MCompile call s:MagicCompile('<bang>', <q-args>)
 command! -bang MCRun call s:MagicCompileRun('<bang>')

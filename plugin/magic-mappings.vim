@@ -1,19 +1,28 @@
 " Setup mappings
 if exists('g:MagicMapAll') && g:MagicMapAll == 1
     "
-    fun! s:AsyncDone()
+    fun! s:AsyncDone(onsuccess)
         if g:asyncrun_code == 0
             cclose
+            if a:onsuccess != ""
+                exec a:onsuccess
+            endif
         else
             cwindow
         endif
     endfun
-    command! -nargs=0 AsyncRunDone call s:AsyncDone()
+    command! -nargs=0 AsyncRunDone call s:AsyncDone("")
+    command! -nargs=0 AsyncRunPost call s:AsyncDone("MCRun")
 
-    fun! s:AsyncRunAutoClose(bang, cmd)
-        silent exe "AsyncRun".a:bang." -post=AsyncRunDone ".a:cmd
+    fun! s:AsyncRunAutoClose(bang, cmd, post)
+        if a:post != ""
+            silent exe "AsyncRun".a:bang." -post=AsyncRunPost ".a:cmd
+        else
+            silent exe "AsyncRun".a:bang." -post=AsyncRunDone ".a:cmd
+        endif
     endfun
-    command! -nargs=1 -bang AsyncRunAutoClose call s:AsyncRunAutoClose('<bang>', <q-args>)
+    command! -nargs=1 -bang AsyncRunAutoClose call s:AsyncRunAutoClose('<bang>', <q-args>, "")
+    command! -nargs=1 -bang AsyncRunAutoPost call s:AsyncRunAutoClose('<bang>', <q-args>, "MCRun")
 
     " Commands
     command! -nargs=1 VGall silent exe "AsyncRun! -program=grep --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>
@@ -27,9 +36,11 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nmap <leader>gu :AsyncRun git pull<cr>
 
     " Compile for OSX & Windows using MagicJob()
-    nmap <silent> <leader>bd :MCompile DEBUG<cr>
+    nmap <silent> <leader>bb :MCompile DEBUG<cr>
     nmap <silent> <leader>br :MCompile RELEASE<cr>
-    nmap <silent> <leader>B :MCompile RELEASE<cr>
+    nmap <silent> <leader>bt :MCompile! TEST<cr>
+    nmap <silent> <leader>bd :MCompile DOC<cr>
+    nmap <silent> <leader>B :MCompile! RELEASE<cr>
     nmap <silent> <leader>r :MCRun<cr>
     nmap <silent> <leader>jk :AsyncStop!<cr>
 

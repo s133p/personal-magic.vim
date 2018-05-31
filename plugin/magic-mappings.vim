@@ -25,11 +25,21 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     command! -nargs=1 -bang AsyncRunAutoPost call s:AsyncRunAutoClose('<bang>', <q-args>, "MCRun")
 
     " Magicified grep commands my common use cases
-    command! -nargs=1 VGall silent exe "AsyncRun! -program=grep --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>
-    command! -nargs=1 VGsrc silent exe "AsyncRun! -program=grep --cpp --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>. " ./src"
-    command! -nargs=1 VGlay silent exe "AsyncRun! -program=grep --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>. " ./data"
-    command! -nargs=1 VGset silent exe "AsyncRun! -program=grep --ignore build --ignore vs2015 --ignore vs2013 " .<q-args>. " ./settings"
-    command! -nargs=1 VGcin silent exe "AsyncRun! -program=grep --cpp --ignore build --ignore vs2015 --ignore vs2013 --ignore example " .<q-args>. " ". expand('$DS_PLATFORM_090')
+    fun! s:AsyncGrep(searchy)
+        " echom a:searchy
+        let l:pgm = '-program=grep '
+        let l:ignore_prefix = '--ignore '
+        let l:ignore_list = ['build', 'vs2013', 'vs2015', 'lib']
+        let l:ignore_string = join(map(l:ignore_list, '"--ignore ".v:val'))
+        silent exe "AsyncRun! ".l:pgm . l:ignore_string . " " . a:searchy
+    endfun
+    command! -nargs=1 -bang AsyncGrep call s:AsyncGrep(<q-args>)
+
+    command! -nargs=1 VGall silent exe "AsyncGrep " .<q-args>
+    command! -nargs=1 VGsrc silent exe "AsyncGrep --cpp " .<q-args>. " ./src"
+    command! -nargs=1 VGlay silent exe "AsyncGrep " .<q-args>. " ./data"
+    command! -nargs=1 VGset silent exe "AsyncGrep " .<q-args>. " ./settings"
+    command! -nargs=1 VGcin silent exe "AsyncGrep --cpp " .<q-args>. " ". expand('$DS_PLATFORM_090')
 
     " Git
     nmap <leader>gp :AsyncRun git push<cr>

@@ -45,6 +45,10 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nmap <leader>gp :AsyncRun git push<cr>
     nmap <leader>gu :AsyncRun git pull<cr>
 
+    nmap <leader>av :AV<cr>
+    nmap <leader>as :A<cr>
+    nmap <leader>ah :AS<cr>
+
     " Compile for OSX & Windows using MagicJob()
     nmap <silent> <leader>bb :MCompile DEBUG<cr>
     nmap <silent> <leader>br :MCompile RELEASE<cr>

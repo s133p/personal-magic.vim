@@ -103,9 +103,5 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
         autocmd!
         " Mappings for ease ds_cinder engine resizing
         autocmd FileType c,cpp,xml setlocal includeexpr=MagicIncludeExpr(v:fname)
-        if v:version >= 700
-            au BufLeave * let b:winview = winsaveview()
-            au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | unlet b:winview | endif
-        endif
     augroup END
 endif

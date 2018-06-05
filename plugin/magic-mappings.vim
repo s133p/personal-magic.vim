@@ -45,29 +45,25 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nmap <leader>gp :AsyncRun git push<cr>
     nmap <leader>gu :AsyncRun git pull<cr>
 
-    nmap <leader>av :AV<cr>
-    nmap <leader>as :A<cr>
-    nmap <leader>ah :AS<cr>
-
     " Compile for OSX & Windows using MagicJob()
-    nmap <silent> <leader>bb :MCompile DEBUG<cr>
-    nmap <silent> <leader>br :MCompile RELEASE<cr>
-    nmap <silent> <leader>bt :MCompile! TEST<cr>
-    nmap <silent> <leader>bd :MCompile DOC<cr>
-    nmap <silent> <leader>B :MCompile! RELEASE<cr>
-    nmap <silent> <leader>r :MCRun<cr>
-    nmap <silent> <leader>bk :AsyncStop!<cr>
+    nnoremap <silent> <leader>bb :MCompile DEBUG<cr>
+    nnoremap <silent> <leader>br :MCompile RELEASE<cr>
+    nnoremap <silent> <leader>bt :MCompile! TEST<cr>
+    nnoremap <silent> <leader>bd :MCompile DOC<cr>
+    nnoremap <silent> <leader>B :MCompile! RELEASE<cr>
+    nnoremap <silent> <leader>r :MCRun<cr>
+    nnoremap <silent> <leader>bk :AsyncStop!<cr>
 
     nnoremap <silent> <leader>ep :e ~/.vim/bundle/personal-magic.vim/<cr>
 
     " Alternate files (from LucHermitte/alternate-lite)
-    nmap <silent> <leader>av :AV<cr>
-    nmap <silent> <leader>ah :AS<cr>
-    nmap <silent> <leader>as :A<cr>
+    nnoremap <silent> <leader>av :AV<cr>
+    nnoremap <silent> <leader>ah :AS<cr>
+    nnoremap <silent> <leader>as :A<cr>
 
     " Quickfix / MagicJob output
-    nmap <leader>z :cclose<cr>
-    nmap <leader>Z :copen<cr>
+    nnoremap <leader>z :cclose<cr>
+    nnoremap <leader>Z :copen<cr>
     nnoremap <silent> <leader>o :MagicOpen<cr>
     nnoremap <silent> <leader>O :MagicOpen!<cr>
     nmap <leader>gx <Plug>(DevOpen)

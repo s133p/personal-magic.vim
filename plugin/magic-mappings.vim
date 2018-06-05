@@ -56,8 +56,14 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
 
     nnoremap <silent> <leader>ep :e ~/.vim/bundle/personal-magic.vim/<cr>
 
+    " Alternate files (from LucHermitte/alternate-lite)
+    nmap <silent> <leader>av :AV<cr>
+    nmap <silent> <leader>ah :AS<cr>
+    nmap <silent> <leader>as :A<cr>
+
     " Quickfix / MagicJob output
     nmap <leader>z :cclose<cr>
+    nmap <leader>Z :copen<cr>
     nnoremap <silent> <leader>o :MagicOpen<cr>
     nnoremap <silent> <leader>O :MagicOpen!<cr>
     nmap <leader>gx <Plug>(DevOpen)

@@ -1,0 +1,5 @@
+#ifndef {{+~MagicGuard()+}}
+#define {{+~MagicGuard()+}}
+
+#endif // define {{+~MagicGuard()+}}
+

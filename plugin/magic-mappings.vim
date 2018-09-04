@@ -54,8 +54,6 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nnoremap <silent> <leader>r :MCRun<cr>
     nnoremap <silent> <leader>bk :AsyncStop!<cr>
 
-    nnoremap <silent> <leader>ep :e ~/.vim/bundle/personal-magic.vim/<cr>
-
     " Alternate files (from LucHermitte/alternate-lite)
     nnoremap <silent> <leader>av :AV<cr>
     nnoremap <silent> <leader>ah :AS<cr>

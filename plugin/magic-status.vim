@@ -30,6 +30,7 @@ function! MagicStatusLine(active)
         let l:line.='%#TabLine#'
     endif
 
+
     let l:line.='  %f'
     let l:line.='%m '
     let l:line.='%='
@@ -37,6 +38,16 @@ function! MagicStatusLine(active)
     let l:line.='%#Conceal#%{StatuslineRo()}'
 
     if a:active
+        if g:asyncrun_status ==# "stopped"
+            let l:line.=' { } '
+        elseif g:asyncrun_status ==# "success"
+            let l:line.=' {-} '
+        elseif g:asyncrun_status ==# "running"
+            let l:line.=' {>} '
+        else "failure
+            let l:line.=' {X} '
+        endif
+
         if exists('g:MagicStatusJob') && g:MagicStatusJob !=# ''
             let l:line.='%#StatusLine#'
             let l:line.=g:MagicStatusJob.' '

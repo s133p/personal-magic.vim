@@ -85,7 +85,7 @@ function! s:MagicCompileRun(bang)
             let l:run = substitute(l:settings['RUN'][0], '\$FULLWD', getcwd(), 'g')
             let l:run = substitute(l:run, '\$WD', split(getcwd(), '/')[-1], 'g')
             let l:run = substitute(l:run, '%', expand('%'), 'g')
-            silent exe s:asyncRunner. a:bang . ' ' . l:run
+            silent exe s:asyncRunner. a:bang . ' -raw=1 ' . l:run
         endif
     endif
 endfunction

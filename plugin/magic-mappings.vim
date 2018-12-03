@@ -29,7 +29,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
         " echom a:searchy
         let l:pgm = '-program=grep '
         let l:ignore_prefix = '--ignore '
-        let l:ignore_list = ['build', 'vs2013', 'vs2015', 'lib']
+        let l:ignore_list = ['build', 'vs2013', 'vs2015', 'lib', 'example']
         let l:ignore_string = join(map(l:ignore_list, '"--ignore ".v:val'))
         silent exe "AsyncRun! ".l:pgm . l:ignore_string . " " . a:searchy
     endfun
@@ -40,6 +40,8 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     command! -nargs=1 VGlay silent exe "AsyncGrep " .<q-args>. " ./data"
     command! -nargs=1 VGset silent exe "AsyncGrep " .<q-args>. " ./settings"
     command! -nargs=1 VGcin silent exe "AsyncGrep --cpp " .<q-args>. " ". expand('$DS_PLATFORM_090')
+
+let g:asyncrun_status = "stopped"
 
     " Git
     nmap <leader>gp :AsyncRun git push<cr>
@@ -58,6 +60,13 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nnoremap <silent> <leader>av :AV<cr>
     nnoremap <silent> <leader>ah :AS<cr>
     nnoremap <silent> <leader>as :A<cr>
+
+	" Helpful ds_cinder jumps
+	nnoremap <leader>em :e data/model/content_model.xml<cr>
+	nnoremap <leader>el :e data/layouts/
+	nnoremap <leader>es :e src/
+	nnoremap <leader>es :e src/
+	nnoremap <leader>sa :sav <c-r>=expand('%:h')<cr>/
 
     " Quickfix / MagicJob output
     nnoremap <leader>z :cclose<cr>

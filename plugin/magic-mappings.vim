@@ -3,9 +3,10 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     " Close quickfix if async job returned success
     fun! s:AsyncDone(onsuccess)
         if g:asyncrun_code == 0
-            cclose
             if a:onsuccess != ""
                 exec a:onsuccess
+            else
+                cclose
             endif
         else
             cwindow
@@ -41,7 +42,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     command! -nargs=1 VGset silent exe "AsyncGrep " .<q-args>. " ./settings"
     command! -nargs=1 VGcin silent exe "AsyncGrep --cpp " .<q-args>. " ". expand('$DS_PLATFORM_090')
 
-let g:asyncrun_status = "stopped"
+    let g:asyncrun_status = "stopped"
 
     " Git
     nmap <leader>gp :AsyncRun git push<cr>
@@ -61,12 +62,12 @@ let g:asyncrun_status = "stopped"
     nnoremap <silent> <leader>ah :AS<cr>
     nnoremap <silent> <leader>as :A<cr>
 
-	" Helpful ds_cinder jumps
-	nnoremap <leader>em :e data/model/content_model.xml<cr>
-	nnoremap <leader>el :e data/layouts/
-	nnoremap <leader>es :e src/
-	nnoremap <leader>es :e src/
-	nnoremap <leader>sa :sav <c-r>=expand('%:h')<cr>/
+    " Helpful ds_cinder jumps
+    nnoremap <leader>em :e data/model/content_model.xml<cr>
+    nnoremap <leader>el :e data/layouts/
+    nnoremap <leader>es :e src/
+    nnoremap <leader>es :e src/
+    nnoremap <leader>sa :sav <c-r>=expand('%:h')<cr>/
 
     " Quickfix / MagicJob output
     nnoremap <leader>z :cclose<cr>

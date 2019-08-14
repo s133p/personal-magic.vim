@@ -1,11 +1,14 @@
-#OSX Cpp default
+# 
 :SETTINGS
-set efm=[x]\ %f:%l:%c:\ %m,[x]%m
+compiler msvc
 
 :DEBUG
-make Debug
-open xcode/build/Debug/*.app
+taskkill /IM $WD /F & msbuild vs2015/local.sln /p:Configuration=Debug /v:q /nologo /p:Platform=x64
+cd vs2015/ start Debug/$WD.exe
 
 :RELEASE
-make Release
-open xcode/build/Release/*.app
+taskkill /IM $WD /F & msbuild vs2015/local.sln /p:Configuration=Release /v:q /nologo /p:Platform=x64
+cd vs2015/ start Release/$WD.exe
+
+:RUN
+cd vs2015/ start Release/$WD.exe

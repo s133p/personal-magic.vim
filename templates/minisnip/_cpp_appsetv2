@@ -1,0 +1,1 @@
+mEngine.getAppSettings().getVec2("{{++}}", 0, ci::vec2({{++}}))

@@ -1,0 +1,17 @@
+-std=c++14
+-Wl,-search_paths_first
+-Wl,-headerpad_max_install_names
+-fms-compatibility
+-fdelayed-template-parsing
+-IC:/Users/luke.purcell/Documents/git/FOLDER_NAME_HERE/src
+-IC:/Users/luke.purcell/Documents/cinder_0.9.1_vc2013/include
+-IC:/Users/luke.purcell/Documents/git/ds_cinder/src
+-IC:/Users/luke.purcell/Documents/git/ds_cinder/src/osc
+-IC:/Users/luke.purcell/Documents/git/ds_cinder/src/tuio
+-IC:/Users/luke.purcell/Documents/git/ds_cinder/lib/poco/include
+-IC:/Users/luke.purcell/Documents/git/ds_cinder/projects/essentials/src
+-IC:/Users/luke.purcell/Documents/git/ds_cinder/projects/video/gstreamer-1.0/src
+-IC:/Users/luke.purcell/Documents/git/ds_cinder/projects/web/cef/src
+-IC:/Users/luke.purcell/Documents/git/ds_cinder/projects/pdf/mupdf/src
+-IC:/Users/luke.purcell/Documents/git/ds_cinder/projects/viewers/src
+

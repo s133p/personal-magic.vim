@@ -95,10 +95,14 @@ function! DoDevOpen()
     if has('mac')
         let l:run = "!open xcode/*.xcodeproj"
     elseif has('win32')
-        let l:dir = 'vs2015'
+        let l:dir = 'vs2019'
         if !isdirectory(l:dir)
-            let l:dir = 'vs2013'
+            let l:dir = 'vs2015'
+            if !isdirectory(l:dir)
+                let l:dir = 'vs2013'
+            endif
         endif
+
         let l:run = '!devenv ' . l:dir . '/' . split(getcwd(), '/')[-1] .'.sln'
     endif
     silent exec l:run

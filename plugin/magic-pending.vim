@@ -38,6 +38,10 @@ function! MagicCalc(type, ...)
     call s:MagicDo(a:type, "c\<c-r>=\<c-r>\"\<cr>", a:000)
 endfunction
 
+function! MagicWikiSearch(type, ...)
+    call s:MagicDo(a:type, "\"sy:VGwiki \<c-r>\"\<cr>", a:000)
+endfunction
+
 function! MagicSearch(type, ...)
     call s:MagicDo(a:type, "\"sy:VGsrc \<c-r>\"\<cr>", a:000)
 endfunction
@@ -61,6 +65,9 @@ vnoremap <Plug>(MagicCalc) :<C-U>call MagicCalc(visualmode())<CR>
 
 nnoremap <Plug>(MagicSearch) :set opfunc=MagicSearch<CR>g@
 vnoremap <Plug>(MagicSearch) :<C-U>call MagicSearch(visualmode())<CR>
+
+nnoremap <Plug>(MagicWikiSearch) :set opfunc=MagicWikiSearch<CR>g@
+vnoremap <Plug>(MagicWikiSearch) :<C-U>call MagicWikiSearch(visualmode())<CR>
 
 nnoremap <Plug>(MagicCinderSearch) :set opfunc=MagicCinderSearch<CR>g@
 vnoremap <Plug>(MagicCinderSearch) :<C-U>call MagicCinderSearch(visualmode())<CR>

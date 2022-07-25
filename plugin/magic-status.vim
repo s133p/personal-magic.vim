@@ -9,7 +9,7 @@ endfunction
 
 function! MagicStatusLine(active)
     let l:line = ''
-    let l:branchname = fugitive#head()
+    let l:branchname = FugitiveHead()
     if a:active && strlen(l:branchname) > 0
         " Highlight the branch name if there are uncommitted changes
         if exists('b:gitUncommitted') && b:gitUncommitted
@@ -90,7 +90,7 @@ function! MyTabLabel(n)
     return a:n.' '.substitute(l:bufname, '.\+\/\(.\+\)', '\1', 'g')
 endfunction
 
-if exists('g:MagicStatusEnable')
+if ( exists('g:MagicStatusEnable') && g:MagicStatusEnable==1 )
     set statusline=%!MagicStatusLine(1)
     set showtabline=2
     set tabline=%!MyTabLine()

@@ -112,7 +112,7 @@ endfunction
 " Windows convienence for making local visual studio solution
 function! s:MakeLocalSln()
     let projName = (split(getcwd(), '/')[-1])
-    let vsVer = isdirectory('./vs2015') ? "vs2015" : "vs2013"
+    let vsVer = isdirectory('./vs2019') ? "vs2019" : "vs2015"
     let currsln = vsVer . "/" . projName . ".sln"
     silent exec "vs " . currsln
     silent exec "sav ".vsVer."/local.sln"

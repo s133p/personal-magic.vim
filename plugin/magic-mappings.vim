@@ -30,7 +30,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
         " echom a:searchy
         let l:pgm = '-program=grep '
         let l:ignore_prefix = '--ignore '
-        let l:ignore_list = ['build', 'vs2013', 'vs2015', 'lib', 'example']
+        let l:ignore_list = ['build', 'vs2015', 'vs2019', 'lib', 'example']
         let l:ignore_string = join(map(l:ignore_list, '"--ignore ".v:val'))
         silent exe "AsyncRun! ".l:pgm . l:ignore_string . " " . a:searchy
     endfun
@@ -40,7 +40,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     command! -nargs=1 VGsrc silent exe "AsyncGrep --cpp " .<q-args>. " ./src"
     command! -nargs=1 VGlay silent exe "AsyncGrep " .<q-args>. " ./data"
     command! -nargs=1 VGset silent exe "AsyncGrep " .<q-args>. " ./settings"
-    command! -nargs=1 VGcin silent exe "AsyncGrep --cpp " .<q-args>. " ". expand('$DS_PLATFORM_090')
+    command! -nargs=1 VGcin silent exe "AsyncGrep --cpp " .<q-args>. " ../ds_cinder"
 
     let g:asyncrun_status = "stopped"
 
@@ -93,6 +93,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nmap <leader>C v$h<Plug>(MagicCalc)
 
     map <leader>ms <Plug>(MagicSearch)
+    map <leader>mw <Plug>(MagicWikiSearch)
     map <leader>mc <Plug>(MagicCinderSearch)
 
     nmap <leader>sb <Plug>(MagicSuperSearch)

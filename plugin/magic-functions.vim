@@ -114,9 +114,22 @@ function! s:MakeLocalSln()
     let projName = (split(getcwd(), '/')[-1])
     let vsVer = isdirectory('./vs2019') ? "vs2019" : "vs2015"
     let currsln = vsVer . "/" . projName . ".sln"
-    silent exec "vs " . currsln
-    silent exec "sav ".vsVer."/local.sln"
+    silent exec "tabnew " . currsln
+    silent exec "setlocal textwidth=0"
+    silent exec "sav! ".vsVer."/local.sln"
     silent exec 'g/%/norm! f%xct%=$"lx'
+    silent exec 'write'
+
+    " update clang format
+    silent exec 'vs .clang-format'
+    silent exec 'norm! ggdG'
+    silent exec 'r ~/.vim/bundle/personal-magic.vim/templates/.clang-format'
+    silent exec 'write'
+
+    "update magic compile
+    silent exec 'vs .magic-compile'
+    silent exec 'norm! ggdG'
+    silent exec 'r ~/.vim/bundle/personal-magic.vim/templates/.magic-compile'
     silent exec 'write'
 endfunction
 command! -nargs=0 MakeLocalSln call s:MakeLocalSln()

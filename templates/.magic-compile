@@ -3,12 +3,12 @@
 compiler msvc
 
 :DEBUG
-taskkill /IM $WD /F & msbuild vs2015/local.sln /p:Configuration=Debug /v:q /nologo /p:Platform=x64
-cd vs2015/ start Debug/$WD.exe
+taskkill /IM $WD.exe /F & msbuild vs2019/local.sln /p:Configuration=Debug /v:q /nologo /p:Platform=x64
+cd vs2019/ & start Debug/$WD.exe
 
 :RELEASE
-taskkill /IM $WD /F & msbuild vs2015/local.sln /p:Configuration=Release /v:q /nologo /p:Platform=x64
-cd vs2015/ start Release/$WD.exe
+taskkill /IM $WD.exe /F & msbuild vs2019/local.sln /p:Configuration=Release /v:q /nologo /p:Platform=x64
+cd vs2019/ & start Release/$WD.exe
 
 :RUN
-cd vs2015/ start Release/$WD.exe
+cd vs2019/ & start Release/$WD.exe

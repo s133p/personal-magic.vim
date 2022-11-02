@@ -49,13 +49,17 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nmap <leader>gu :AsyncRun git pull<cr>
 
     " Compile for OSX & Windows using MagicJob()
-    nnoremap <silent> <leader>bb :MCompile DEBUG<cr>
-    nnoremap <silent> <leader>br :MCompile RELEASE<cr>
-    nnoremap <silent> <leader>bt :MCompile! TEST<cr>
-    nnoremap <silent> <leader>bd :MCompile DOC<cr>
-    nnoremap <silent> <leader>B :MCompile! RELEASE<cr>
-    nnoremap <silent> <leader>r :MCRun<cr>
-    nnoremap <silent> <leader>bk :AsyncStop!<cr>
+    nnoremap <silent> <leader>bb :AsyncTaskProfile debug<cr>:AsyncTask build<cr>
+    nnoremap <silent> <leader>br :AsyncTaskProfile release<cr>:AsyncTask build<cr>
+    nnoremap <silent> <leader>bt :AsyncTask test<cr>
+    nnoremap <silent> <leader>r :AsyncTask run<cr>
+    " nnoremap <silent> <leader>bb :MCompile DEBUG<cr>
+    " nnoremap <silent> <leader>br :MCompile RELEASE<cr>
+    " nnoremap <silent> <leader>bt :MCompile! TEST<cr>
+    " nnoremap <silent> <leader>bd :MCompile DOC<cr>
+    " nnoremap <silent> <leader>B :MCompile! RELEASE<cr>
+    " nnoremap <silent> <leader>r :MCRun<cr>
+    " nnoremap <silent> <leader>bk :AsyncStop!<cr>
 
     " Alternate files (from LucHermitte/alternate-lite)
     nnoremap <silent> <leader>av :AV<cr>
@@ -70,8 +74,8 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nnoremap <leader>sa :sav <c-r>=expand('%:h')<cr>/
 
     " Quickfix / MagicJob output
-    nnoremap <leader>z :cclose<cr>
-    nnoremap <leader>Z :copen<cr>
+    "nnoremap <leader>z :cclose<cr>
+    "nnoremap <leader>Z :copen<cr>
     nnoremap <silent> <leader>o :MagicOpen<cr>
     nnoremap <silent> <leader>O :MagicOpen!<cr>
     nmap <leader>gx <Plug>(DevOpen)

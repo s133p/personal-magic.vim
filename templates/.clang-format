@@ -3,7 +3,7 @@ TabWidth: 4
 IndentWidth: 4
 ---
 Language: Cpp
-Standard: Cpp11
+Standard: c++17
 ColumnLimit: 120
 MaxEmptyLinesToKeep: 2
 AccessModifierOffset: -2
@@ -18,5 +18,7 @@ BinPackParameters: true
 BinPackArguments: true
 AllowShortFunctionsOnASingleLine: Empty
 KeepEmptyLinesAtTheStartOfBlocks: true
+IncludeBlocks: Preserve
+SortIncludes: true
 
 UseTab: Always

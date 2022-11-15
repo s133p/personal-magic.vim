@@ -1,0 +1,30 @@
+# vim: set fenc=utf-8 ft=dosini:
+# see: https://github.com/skywind3000/asynctasks.vim/wiki/Task-Config
+
+[build:release]
+command=taskkill /IM ft_bragg_fallen.exe /F & msbuild vs2019/local.sln /p:Configuration=Release /v:q /nologo /p:Platform=x64
+cwd=$(VIM_ROOT)
+output=quickfix
+errorformat=\ %#%f(%l\\\,%c):\ %m
+save=0
+
+[build:debug]
+command=taskkill /IM ft_bragg_fallen.exe /F & msbuild vs2019/local.sln /p:Configuration=Debug /v:q /nologo /p:Platform=x64
+cwd=$(VIM_ROOT)
+output=quickfix
+errorformat=\ %#%f(%l\\\,%c):\ %m
+save=0
+
+[run:release]
+command=cd vs2019/ & start Release/ft_bragg_fallen.exe
+cwd=$(VIM_ROOT)
+output=terminal
+save=0
+close=1
+
+[run:debug]
+command=cd vs2019/ & start Debug/ft_bragg_fallen.exe
+cwd=$(VIM_ROOT)
+output=terminal
+save=0
+close=1

@@ -127,9 +127,9 @@ function! s:MakeLocalSln()
     silent exec 'write'
 
     "update magic compile
-    silent exec 'vs .magic-compile'
+    silent exec 'vs .tasks'
     silent exec 'norm! ggdG'
-    silent exec 'r ~/.vim/bundle/personal-magic.vim/templates/.magic-compile'
+    silent exec 'r ~/.vim/bundle/personal-magic.vim/templates/.tasks'
     silent exec 'write'
 endfunction
 command! -nargs=0 MakeLocalSln call s:MakeLocalSln()

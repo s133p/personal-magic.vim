@@ -3,17 +3,20 @@ TabWidth: 4
 IndentWidth: 4
 ---
 AccessModifierOffset: '-2'
+ConstructorInitializerIndentWidth: 2
 MaxEmptyLinesToKeep: '2'
 AlignConsecutiveAssignments: 'true'
 AlignConsecutiveDeclarations: 'true'
+AlignAfterOpenBracket: Align
 AlignOperands: 'true'
-AllowShortBlocksOnASingleLine: 'false'
-AllowShortFunctionsOnASingleLine: InlineOnly
-AllowShortIfStatementsOnASingleLine: Never
+AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: WithoutElse
 AllowShortLambdasOnASingleLine: Inline
 AllowShortLoopsOnASingleLine: 'false'
 BreakConstructorInitializers: BeforeComma
 SpaceAroundPointerQualifiers: Default
+AlwaysBreakTemplateDeclarations: Yes
 PointerAlignment: Left
 BinPackArguments: 'true'
 BinPackParameters: 'true'
@@ -23,6 +26,6 @@ FixNamespaceComments: 'true'
 IncludeBlocks: Preserve
 KeepEmptyLinesAtTheStartOfBlocks: 'true'
 Language: Cpp
-NamespaceIndentation: None
+NamespaceIndentation: Inner
 Standard: c++17
 UseTab: Always

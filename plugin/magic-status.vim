@@ -7,6 +7,19 @@ function! s:MagicGitStatus()
     let b:gitUnpushed = (system('git diff-index @{u} --quiet || echo 1')[0] ==# '1')
 endfunction
 
+function! StatusDiagnostic() abort
+  let info = get(b:, 'coc_diagnostic_info', {})
+  if empty(info) | return '' | endif
+  let msgs = []
+  if get(info, 'error', 0)
+    call add(msgs, '🚩' . info['error'])
+  endif
+  if get(info, 'warning', 0)
+    call add(msgs, '🔥' . info['warning'])
+  endif
+  return join(msgs, ' '). ' ' . get(g:, 'coc_status', '')
+endfunction
+
 function! MagicStatusLine(active)
     let l:line = ''
     let l:branchname = FugitiveHead()
@@ -34,18 +47,20 @@ function! MagicStatusLine(active)
     let l:line.='  %f'
     let l:line.='%m '
     let l:line.='%='
-    let l:line.=' %y '
-    let l:line.='%#Conceal#%{StatuslineRo()}'
+    let l:line.='%{StatusDiagnostic()}'
+    let l:line.='%y '
+    " let l:line.='%#Conceal#%{StatuslineRo()}'
 
-    if a:active
+    if a:active && exists("g:asynctasks_last") && g:asynctasks_last != ""
+        let l:line.='{' . g:asynctasks_last . ' ' . g:asynctasks_profile
         if g:asyncrun_status ==# "stopped"
-            let l:line.=' { } '
+            let l:line.=' 🛑'
         elseif g:asyncrun_status ==# "success"
-            let l:line.=' {-} '
+            let l:line.=' ✅'
         elseif g:asyncrun_status ==# "running"
-            let l:line.=' {>} '
+            let l:line.=' ⏲️ '
         else "failure
-            let l:line.=' {X} '
+            let l:line.=' ❗'
         endif
 
         if exists('g:MagicStatusJob') && g:MagicStatusJob !=# ''
@@ -55,6 +70,7 @@ function! MagicStatusLine(active)
             let l:line.='%#DiffChange#'
             let l:line.=' '.g:MagicStatusWarn.' '
         endif
+        let l:line.='}'
     endif
     return l:line
 endfunction

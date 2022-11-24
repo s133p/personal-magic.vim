@@ -41,6 +41,7 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     command! -nargs=1 VGlay silent exe "AsyncGrep " .<q-args>. " ./data"
     command! -nargs=1 VGset silent exe "AsyncGrep " .<q-args>. " ./settings"
     command! -nargs=1 VGcin silent exe "AsyncGrep --cpp " .<q-args>. " ../ds_cinder"
+    command! -nargs=1 VGnot silent exe "AsyncGrep --markdown " .<q-args>. " C:/Users/luke.purcell/zettelkasten"
 
     let g:asyncrun_status = "stopped"
 
@@ -53,13 +54,8 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nnoremap <silent> <leader>br :AsyncTaskProfile release<cr>:AsyncTask build<cr>
     nnoremap <silent> <leader>bt :AsyncTask test<cr>
     nnoremap <silent> <leader>r :AsyncTask run<cr>
-    " nnoremap <silent> <leader>bb :MCompile DEBUG<cr>
-    " nnoremap <silent> <leader>br :MCompile RELEASE<cr>
-    " nnoremap <silent> <leader>bt :MCompile! TEST<cr>
-    " nnoremap <silent> <leader>bd :MCompile DOC<cr>
-    " nnoremap <silent> <leader>B :MCompile! RELEASE<cr>
-    " nnoremap <silent> <leader>r :MCRun<cr>
-    " nnoremap <silent> <leader>bk :AsyncStop!<cr>
+    nnoremap <silent> <leader>bk :AsyncStop<cr>
+    nnoremap <silent> <leader>bK :AsyncStop<cr>
 
     " Alternate files (from LucHermitte/alternate-lite)
     nnoremap <silent> <leader>av :AV<cr>
@@ -67,15 +63,9 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nnoremap <silent> <leader>as :A<cr>
 
     " Helpful ds_cinder jumps
-    nnoremap <leader>em :e data/model/content_model.xml<cr>
-    nnoremap <leader>el :e data/layouts/
-    nnoremap <leader>es :e src/
-    nnoremap <leader>es :e src/
     nnoremap <leader>sa :sav <c-r>=expand('%:h')<cr>/
 
     " Quickfix / MagicJob output
-    "nnoremap <leader>z :cclose<cr>
-    "nnoremap <leader>Z :copen<cr>
     nnoremap <silent> <leader>o :MagicOpen<cr>
     nnoremap <silent> <leader>O :MagicOpen!<cr>
     nmap <leader>gx <Plug>(DevOpen)
@@ -93,24 +83,20 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nnoremap <leader>p "*p
     nnoremap <leader>P "*P
 
-    map <leader>c <Plug>(MagicCalc)
-    nmap <leader>C v$h<Plug>(MagicCalc)
-
     map <leader>ms <Plug>(MagicSearch)
     map <leader>mw <Plug>(MagicWikiSearch)
     map <leader>mc <Plug>(MagicCinderSearch)
+    map <leader>mn <Plug>(MagicNoteSearch)
 
     nmap <leader>sb <Plug>(MagicSuperSearch)
 
     "Replacements for vim-unimpaired
     nnoremap <silent> coh :set hlsearch!<cr>
     nnoremap <silent> cos :set spell!<cr>
-    nnoremap <silent> cow :CleanWhitespace<cr>
+    " nnoremap <silent> cow :CleanWhitespace<cr>
     nnoremap <silent> cox :XmlClean<cr>
     nnoremap <silent> cob :BufWipe<cr>
     nnoremap <silent> coB :BufWipe!<cr>
-    nnoremap cof :up<cr>:CFormat<cr>:up<cr>
-    nnoremap coF :up<cr>:CFormat!<cr>:up<cr>
 
     augroup MagicMapAugroup
         autocmd!

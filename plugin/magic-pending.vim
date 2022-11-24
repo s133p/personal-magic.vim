@@ -34,9 +34,9 @@ function! MagicPaste(type, ...)
 endfunction
 
 " Stamp system clipboard over motion/selection
-function! MagicCalc(type, ...)
-    call s:MagicDo(a:type, "c\<c-r>=\<c-r>\"\<cr>", a:000)
-endfunction
+" function! MagicCalc(type, ...)
+"     call s:MagicDo(a:type, "c\<c-r>=\<c-r>\"\<cr>", a:000)
+" endfunction
 
 function! MagicWikiSearch(type, ...)
     call s:MagicDo(a:type, "\"sy:VGwiki \<c-r>\"\<cr>", a:000)
@@ -50,6 +50,10 @@ function! MagicCinderSearch(type, ...)
     call s:MagicDo(a:type, "\"sy:VGcin \<c-r>\"\<cr>", a:000)
 endfunction
 
+function! MagicNoteSearch(type, ...)
+    call s:MagicDo(a:type, "\"sy:VGnot \<c-r>\"\<cr>", a:000)
+endfunction
+
 
 nnoremap <Plug>(MagicStamp) :set opfunc=MagicStamp<CR>g@
 vnoremap <Plug>(MagicStamp) :<C-U>call MagicStamp(visualmode())<CR>
@@ -60,8 +64,8 @@ vnoremap <Plug>(MagicClip) :<C-U>call MagicClip(visualmode())<CR>
 nnoremap <Plug>(MagicPaste) :set opfunc=MagicPaste<CR>g@
 vnoremap <Plug>(MagicPaste) :<C-U>call MagicPaste(visualmode())<CR>
 
-nnoremap <Plug>(MagicCalc) :set opfunc=MagicCalc<CR>g@
-vnoremap <Plug>(MagicCalc) :<C-U>call MagicCalc(visualmode())<CR>
+" nnoremap <Plug>(MagicCalc) :set opfunc=MagicCalc<CR>g@
+" vnoremap <Plug>(MagicCalc) :<C-U>call MagicCalc(visualmode())<CR>
 
 nnoremap <Plug>(MagicSearch) :set opfunc=MagicSearch<CR>g@
 vnoremap <Plug>(MagicSearch) :<C-U>call MagicSearch(visualmode())<CR>
@@ -71,3 +75,6 @@ vnoremap <Plug>(MagicWikiSearch) :<C-U>call MagicWikiSearch(visualmode())<CR>
 
 nnoremap <Plug>(MagicCinderSearch) :set opfunc=MagicCinderSearch<CR>g@
 vnoremap <Plug>(MagicCinderSearch) :<C-U>call MagicCinderSearch(visualmode())<CR>
+
+nnoremap <Plug>(MagicNoteSearch) :set opfunc=MagicNoteSearch<CR>g@
+vnoremap <Plug>(MagicNoteSearch) :<C-U>call MagicNoteSearch(visualmode())<CR>

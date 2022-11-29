@@ -57,11 +57,6 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     nnoremap <silent> <leader>bk :AsyncStop<cr>
     nnoremap <silent> <leader>bK :AsyncStop<cr>
 
-    " Alternate files (from LucHermitte/alternate-lite)
-    nnoremap <silent> <leader>av :AV<cr>
-    nnoremap <silent> <leader>ah :AS<cr>
-    nnoremap <silent> <leader>as :A<cr>
-
     " Helpful ds_cinder jumps
     nnoremap <leader>sa :sav <c-r>=expand('%:h')<cr>/
 
@@ -93,7 +88,6 @@ if exists('g:MagicMapAll') && g:MagicMapAll == 1
     "Replacements for vim-unimpaired
     nnoremap <silent> coh :set hlsearch!<cr>
     nnoremap <silent> cos :set spell!<cr>
-    " nnoremap <silent> cow :CleanWhitespace<cr>
     nnoremap <silent> cox :XmlClean<cr>
     nnoremap <silent> cob :BufWipe<cr>
     nnoremap <silent> coB :BufWipe!<cr>
